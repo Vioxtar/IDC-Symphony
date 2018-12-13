@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class EventDataParser {
 
-    // In charge of parsing event data from a file to output an Events list
+    // In charge of parsing event data
 
     File file;
 
@@ -28,8 +28,9 @@ public class EventDataParser {
                 .setReadOnly(true)
                 .open()) {
 
-            Table table = db.getTable("DiscreteEvents");
-            for(Row row : table) {
+            // Iterate & enlist
+            Table table = db.getTable("Events");
+            for (Row row : table) {
                 Event event = makeEvent(row);
                 list.add(event);
             }
@@ -49,8 +50,6 @@ public class EventDataParser {
         event.year = Short.parseShort(row.get("EventYear").toString());
         event.month = Byte.parseByte(row.get("EventMonth").toString());
         event.day = Byte.parseByte(row.get("EventDay").toString());
-
-        System.out.println(event.year);
 
         return event;
     }
