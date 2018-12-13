@@ -49,7 +49,7 @@ public class Parser {
 	}
 	
 	//
-	// Event firing methods
+	// EventModel.Event firing methods
 	//
 	
 	public void fireBeforeParsingStarts() {
