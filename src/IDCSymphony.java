@@ -1,28 +1,16 @@
-import java.io.File;
-import java.io.IOException;
+import EventModel.EventDataParser;
 
-import com.healthmarketscience.jackcess.Database;
-import com.healthmarketscience.jackcess.DatabaseBuilder;
-import com.healthmarketscience.jackcess.Row;
-import com.healthmarketscience.jackcess.Table;
+import java.io.File;
 
 
 public class IDCSymphony {
 
     public static void main(String [] args) {
 
-        try (Database db = new DatabaseBuilder(new File("data/IDC Events.accdb"))
-            .setReadOnly(true)
-            .open()) {
+        String filePath = "data/IDC Events.accdb";
+        EventDataParser eventDataParser = new EventDataParser(new File(filePath));
+        eventDataParser.createEventList();
 
-            Table table = db.getTable("DiscreteEvents");
-            for(Row row : table) {
-                System.out.println(row);
-            }
-
-        } catch (IOException e){
-            e.printStackTrace();
-        }
     }
 
 }
