@@ -1,19 +1,23 @@
+import java.io.File;
+import java.io.IOException;
+
 import com.healthmarketscience.jackcess.Database;
-import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
-import org.jfugue.rhythm.Rhythm;
-import org.jfugue.theory.Chord;
-import org.jfugue.theory.ChordProgression;
-import org.jfugue.theory.Note;
+import com.healthmarketscience.jackcess.DatabaseBuilder;
 
 
 public class IDCSymphony {
 
     public static void main(String [] args) {
-        Player p1 = new Player();
-        p1.play("Ewwwd4");
+        try {
+            Database db = new DatabaseBuilder(new File("data/IDC Events.mdb"))
+                .setReadOnly(true)
+                .open();
 
-        
+            } catch (IOException e){
+            e.printStackTrace();
+        } finally {
+
+        }
     }
 
 }
