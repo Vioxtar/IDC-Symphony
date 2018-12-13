@@ -28,7 +28,6 @@ public class Event implements Comparable<Event> {
         return 0;
     }
 
-
     public short getYear() {
         return year;
     }

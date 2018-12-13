@@ -25,7 +25,6 @@ public class IDCSymphony {
 
         EventTypeDataParser eventTypeParser = new EventTypeDataParser(file);
         Map<String, EventType> eventTypes = eventTypeParser.createEventTypesMap();
-
         
     }
 
