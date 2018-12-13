@@ -2,7 +2,7 @@ package EventModel;
 
 public class Event {
 
-    byte year;
+    short year;
     byte month;
     byte day;
 

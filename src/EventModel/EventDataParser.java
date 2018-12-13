@@ -30,14 +30,15 @@ public class EventDataParser {
 
             Table table = db.getTable("DiscreteEvents");
             for(Row row : table) {
-                System.out.println(row);
+                Event event = makeEvent(row);
+                list.add(event);
             }
 
         } catch (IOException e){
             e.printStackTrace();
         }
 
-        return null;
+        return list;
     }
 
     // The actual parsing of each event data is done here
@@ -45,7 +46,11 @@ public class EventDataParser {
 
         Event event = new Event();
 
-        
+        event.year = Short.parseShort(row.get("EventYear").toString());
+        event.month = Byte.parseByte(row.get("EventMonth").toString());
+        event.day = Byte.parseByte(row.get("EventDay").toString());
+
+        System.out.println(event.year);
 
         return event;
     }
