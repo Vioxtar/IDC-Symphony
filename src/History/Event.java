@@ -1,7 +1,7 @@
-package EventModel;
+package History;
 
-import FacultyModel.Faculty;
-import javafx.event.EventType;
+import History.EventTypeModel.EventType;
+import History.FacultyModel.Faculty;
 
 
 public class Event implements Comparable<Event> {
@@ -19,13 +19,6 @@ public class Event implements Comparable<Event> {
     String richDescription;
 
     public Event() {
-    }
-
-    public int compareTo(Event other) {
-        if (year > other.year) { return 1; } else if (year < other.year) { return -1; }
-        if (month > other.month) { return 1; } else if (month < other.month) { return -1; }
-        if (day > other.day) { return 1; } else if (day < other.day) { return -1; }
-        return 0;
     }
 
     public short getYear() {
@@ -54,6 +47,19 @@ public class Event implements Comparable<Event> {
 
     public String getRichDescription() {
         return richDescription;
+    }
+
+    @Override
+    public int compareTo(Event other) {
+        if (year > other.year) { return 1; } else if (year < other.year) { return -1; }
+        if (month > other.month) { return 1; } else if (month < other.month) { return -1; }
+        if (day > other.day) { return 1; } else if (day < other.day) { return -1; }
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "["+year+" "+month+" "+day+"] ["+type+"] ["+faculty+"] // "+shortDescription;
     }
 
 }

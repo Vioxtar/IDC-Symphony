@@ -1,6 +1,5 @@
-package FacultyModel;
+package History.EventTypeModel;
 
-import EventModel.Event;
 import com.healthmarketscience.jackcess.Database;
 import com.healthmarketscience.jackcess.DatabaseBuilder;
 import com.healthmarketscience.jackcess.Row;
@@ -11,28 +10,28 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FacultiesDataParser {
+public class EventTypeDataParser {
 
     // In charge of parsing faculty data
 
     File file;
 
-    public FacultiesDataParser(File file) {
+    public EventTypeDataParser(File file) {
         this.file = file;
     }
 
-    public Map<String, Faculty> createFacultiesMap() {
-        Map<String, Faculty> map = new HashMap<String, Faculty>();
+    public Map<Integer, EventType> createEventTypesMap() {
+        Map<Integer, EventType> map = new HashMap<Integer, EventType>();
 
         try (Database db = new DatabaseBuilder(file)
                 .setReadOnly(true)
                 .open()) {
 
             // Iterate & map
-            Table table = db.getTable("Faculties");
+            Table table = db.getTable("EventTypes");
             for (Row row : table) {
-                Faculty faculty = makeFaculty(row);
-                map.put(faculty.getName(), faculty);
+                EventType eventType = makeEventType(row);
+                map.put(eventType.getID(), eventType);
             }
 
         } catch (IOException e){
@@ -42,10 +41,11 @@ public class FacultiesDataParser {
         return map;
     }
 
-    Faculty makeFaculty(Row row) {
-        Faculty faculty = new Faculty();
-        faculty.name = row.get("FacultyName").toString();
-        return faculty;
+    EventType makeEventType(Row row) {
+        EventType eventType = new EventType();
+        eventType.id = Integer.parseInt(row.get("ID").toString());
+        eventType.name = row.get("EventType").toString();
+        return eventType;
     }
 
 }
