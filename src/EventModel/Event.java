@@ -1,13 +1,24 @@
 package EventModel;
 
-public class Event implements Comparable {
+import FacultyModel.Faculty;
+import javafx.event.EventType;
+
+
+public class Event implements Comparable<Event> {
+
+    short id;
 
     short year;
     byte month;
     byte day;
 
-    public Event() {
+    EventType type;
+    Faculty faculty;
 
+    String shortDescription;
+    String richDescription;
+
+    public Event() {
     }
 
     public int compareTo(Event other) {

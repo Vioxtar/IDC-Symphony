@@ -29,7 +29,7 @@ public class EventDataParser {
                 .open()) {
 
             // Iterate & enlist
-            Table table = db.getTable("DiscreteEvents");
+            Table table = db.getTable("Events");
             for (Row row : table) {
                 Event event = makeEvent(row);
                 list.add(event);
