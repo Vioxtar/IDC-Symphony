@@ -771,7 +771,7 @@ public final class MusicXmlParser extends Parser {
 	}
 
 	/**
-	 * parses <code>inst</code> and fires an Instrument EventModel.Event
+	 * parses <code>inst</code> and fires an Instrument History.Event
 	 * 
 	 * @param name
 	 *            is a String that represents the instrument. If it is a numeric

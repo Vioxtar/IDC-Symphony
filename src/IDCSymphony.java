@@ -1,13 +1,6 @@
-import EventModel.Event;
-import EventModel.EventDataParser;
-import EventTypeModel.EventType;
-import EventTypeModel.EventTypeDataParser;
-import FacultyModel.FacultiesDataParser;
-import FacultyModel.Faculty;
+import History.History;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Map;
 
 
 public class IDCSymphony {
@@ -15,17 +8,19 @@ public class IDCSymphony {
     public static void main(String [] args) {
 
         String filePath = "data/IDC Events.accdb";
-        File file = new File(filePath);
+        File dbFile = new File(filePath);
 
-        EventDataParser eventDataParser = new EventDataParser(file);
-        ArrayList<Event> eventsList = eventDataParser.createEventList();
+        // Build the events data class
+        History history = new History(dbFile);
 
-        FacultiesDataParser facultyParser = new FacultiesDataParser(file);
-        Map<String, Faculty> faculties = facultyParser.createFacultiesMap();
+        // Sort the events list by date
+        history.sortEvents();
 
-        EventTypeDataParser eventTypeParser = new EventTypeDataParser(file);
-        Map<String, EventType> eventTypes = eventTypeParser.createEventTypesMap();
-        
+        // Print all event information
+        for (int i = 0; i < history.getEventCount(); i++) {
+            System.out.println(history.getEvent(i));
+        }
+
     }
 
 }
