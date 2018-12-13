@@ -28,4 +28,33 @@ public class Event implements Comparable<Event> {
         return 0;
     }
 
+
+    public short getYear() {
+        return year;
+    }
+
+    public byte getMonth() {
+        return month;
+    }
+
+    public byte getDay() {
+        return day;
+    }
+
+    public EventType getEventType() {
+        return type;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public String getRichDescription() {
+        return richDescription;
+    }
+
 }
