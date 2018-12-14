@@ -1,24 +1,24 @@
-import History.History;
-
-import java.io.File;
+import java.sql.*;
 
 
 public class IDCSymphony {
 
-    public static void main(String [] args) {
+    public static void main(String [] args) throws ClassNotFoundException {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:data/IDC Events.db");
+            Statement statement = connection.createStatement();
 
-        String filePath = "data/IDC Events.accdb";
-        File dbFile = new File(filePath);
+            ResultSet bla = statement.executeQuery("select * from events;");
+            ResultSetMetaData blaMD = bla.getMetaData();
+            while (bla.next()) {
+                for (int col = 1; col <= blaMD.getColumnCount(); col++) {
+                    System.out.println(bla.getObject(col));
+                }
+            }
 
-        // Build the events data class
-        History history = new History(dbFile);
-
-        // Sort the events list by date
-        history.sortEvents();
-
-        // Print all event information
-        for (int i = 0; i < history.getEventCount(); i++) {
-            System.out.println(history.getEvent(i));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
