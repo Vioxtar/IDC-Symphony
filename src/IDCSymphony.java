@@ -1,6 +1,5 @@
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
-import org.jfugue.rhythm.Rhythm;
 
 import java.sql.*;
 
@@ -9,8 +8,9 @@ public class IDCSymphony {
 
     public static void main(String [] args) throws ClassNotFoundException {
 
+        System.out.println(p1 == p2);
 
-
+        // Connect to database and perform a test read
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:data/IDC Events.db");
@@ -20,7 +20,7 @@ public class IDCSymphony {
             ResultSetMetaData blaMD = bla.getMetaData();
             while (bla.next()) {
                 for (int col = 1; col <= blaMD.getColumnCount(); col++) {
-                    System.out.println(bla.getObject(col));
+//                    System.out.println(bla.getObject(col));
                 }
             }
 
