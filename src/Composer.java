@@ -4,7 +4,6 @@ import org.jfugue.rhythm.Rhythm;
 import org.jfugue.theory.ChordProgression;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Map;
 
 /*
@@ -13,7 +12,7 @@ import java.util.Map;
 public class Composer {
 
     // A map of usable patterns, whose keys are pattern names and values are pattern instances
-    private Map<String, Pattern> loadedPatterns;
+    private Map<String, Pattern> usablePatterns;
 
     // The sequence of patterns to construct our composition from
     private Map<Integer, Sequence> sequences;
@@ -28,8 +27,7 @@ public class Composer {
                 .distribute("7%6")
                 .allChordsAs("$0 $0 $0 $0 $1 $1 $0 $0 $2 $1 $0 $0")
                 .eachChordAs("$0ia100 $1ia80 $2ia80 $3ia80 $4ia100 $3ia80 $2ia80 $1ia80")
-                .getPattern()
-                .setInstrument("Acoustic_Bass"));
+                .getPattern());
 
         loadPattern("Bye",
             new Rhythm()
@@ -41,12 +39,12 @@ public class Composer {
     }
 
     public void loadPatternsFromDirectory(File dir) {
-        // TODO: Implement :DDD
+        // TODO: Load a bunch of usable patterns from a directory
     }
 
     // Loads a pattern to be made usable by the composer
     public void loadPattern(String name, Pattern pattern) {
-        loadedPatterns.put(name, pattern);
+        usablePatterns.put(name, pattern);
     }
 
     public Composer() {
@@ -59,25 +57,23 @@ public class Composer {
         // Compose our composition
         Pattern composition = new Pattern();
 
+        // TODO: iterate sequences, build the final pattern, consider time and shit, voice management too!
+
         // Play the composition
         Player player = new Player();
         player.play(composition);
     }
 
     // Add a sequence to the composition
-    public int addSequence(String seqName, byte instrument, byte voice, float time, short reps) {
-
+    public int addSequence(String patternName, byte instrument, byte voice, float time, short reps) {
         seqID++;
 
         // Add the sequence
-        Sequence seq = new Sequence(seqName, instrument, voice, time, reps);
+        Sequence seq = new Sequence(seqID, patternName, instrument, voice, time, reps);
         sequences.put(seqID, seq);
 
         // Return the sequence ID
-
         return seqID;
-
-        // TODO: Return an ID representing the pattern placement to be used in remSeq
     }
 
     // Remove a sequence from the composition
@@ -89,14 +85,16 @@ public class Composer {
     // the voice to be played on, the time the sequence should play, and the repetitions of the sequence.
     private class Sequence{
 
-        String seqName;
+        int id; // We may not need this
+        String patternName;
         byte instrument;
         byte voice;
         float time;
         short reps;
 
-        public Sequence(String seqName, byte instrument, byte voice, float time, short reps) {
-            this.seqName = seqName;
+        public Sequence(int id, String patternName, byte instrument, byte voice, float time, short reps) {
+            this.id = id;
+            this.patternName = patternName;
             this.instrument = instrument;
             this.voice = voice;
             this.time = time;

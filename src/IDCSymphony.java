@@ -8,7 +8,20 @@ public class IDCSymphony {
 
     public static void main(String [] args) throws ClassNotFoundException {
 
-        System.out.println(p1 == p2);
+        // This is how we'd be able to use the composer:
+
+        // Composer composer = new Composer();
+        // composer.loadPatternsFromDirectory(some directory with usable patterns in it);
+
+        // Add a bunch of sequences:
+        // composer.addSequence(String patternName, byte instrument, byte voice, float time, short reps)...
+        // where patternName is retrieved from the directory of usable patterns
+        // (time can be replaced with something more comfortable/descriptive than a float)
+
+        // composer.play();
+
+        
+
 
         // Connect to database and perform a test read
         Connection connection = null;
