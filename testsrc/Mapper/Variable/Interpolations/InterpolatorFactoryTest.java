@@ -1,4 +1,4 @@
-package Interpolations;
+package Mapper.Variable.Interpolations;
 
 import org.junit.jupiter.api.Test;
 

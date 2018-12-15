@@ -1,4 +1,4 @@
-package Interpolations;
+package Mapper.Variable.Interpolations;
 
 public class ExponentialInterpolator extends Interpolator {
     private float coef;

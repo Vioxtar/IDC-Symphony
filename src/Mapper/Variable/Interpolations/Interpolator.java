@@ -1,4 +1,4 @@
-package Interpolations;
+package Mapper.Variable.Interpolations;
 
 public abstract class Interpolator {
     /**

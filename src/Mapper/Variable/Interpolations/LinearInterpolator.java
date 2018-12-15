@@ -1,4 +1,4 @@
-package Interpolations;
+package Mapper.Variable.Interpolations;
 
 public class LinearInterpolator extends Interpolator {
     @Override
