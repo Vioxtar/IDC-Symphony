@@ -1,15 +1,15 @@
-package Mapper.Variable.Interpolations;
+package composition.variables.Interpolations;
 
 public abstract class Interpolator {
     /**
-     * Interpolates a linear percentage variable to its resulting true percentage
-     * @param t - Variable [0.0 .. 1.0]
+     * Interpolates a linear percentage variables to its resulting true percentage
+     * @param t - variables [0.0 .. 1.0]
      * @return Result in [0.0 .. 1.0]
      */
     public abstract float interpolate(float t);
 
     /**
-     * Interpolates a linear percentage variable to its resulting proportion between start and end
+     * Interpolates a linear percentage variables to its resulting proportion between start and end
      * @param start Minimum Value
      * @param end Maximum Value
      * @param t

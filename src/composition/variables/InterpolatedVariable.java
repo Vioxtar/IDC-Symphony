@@ -1,7 +1,7 @@
-package Mapper.Variable;
+package composition.variables;
 
-import Mapper.MapperContext;
-import Mapper.Variable.Interpolations.Interpolator;
+import composition.CompositionContext;
+import composition.variables.Interpolations.Interpolator;
 
 public class InterpolatedVariable implements Variable {
     private Interpolator interpolator;
@@ -23,10 +23,10 @@ public class InterpolatedVariable implements Variable {
 
 
     @Override
-    public float getValue(MapperContext context) {
+    public Object getValue(CompositionContext context) {
         return interpolator.interpolate(
                 startVal,
                 endVal,
-                (context.getCurrentTime() - startTime) / (endTime - startTime));
+                (context.getTime() - startTime) / (endTime - startTime));
     }
 }

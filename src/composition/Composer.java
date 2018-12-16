@@ -1,3 +1,5 @@
+package composition;
+
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 import org.jfugue.rhythm.Rhythm;
