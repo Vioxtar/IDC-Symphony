@@ -1,5 +1,6 @@
 package composition;
 
+import composition.functions.CompositionFunction;
 import org.jfugue.pattern.Pattern;
 
 import java.sql.Connection;
@@ -67,6 +68,7 @@ public class DBCompositionBuilder {
         return composer;
     }
     public Connection getDbConnection() { return dbConnection; }
+    public CompositionContext getContext() { return context; }
 
     /**
      * Executes prepared statement and pushes result into stack if result succeeded
@@ -154,6 +156,10 @@ public class DBCompositionBuilder {
         controlPatternHeap.removeIf(p -> {
             return (p.time == time);
         });
+    }
+
+    public void call(CompositionFunction func) throws SQLException {
+        func.call(context);
     }
 
     /**

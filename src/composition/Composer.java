@@ -6,6 +6,7 @@ import org.jfugue.rhythm.Rhythm;
 import org.jfugue.theory.ChordProgression;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -51,6 +52,7 @@ public class Composer {
 
     public Composer() {
         // Load all usable patterns
+        usablePatterns = new HashMap<>();
         loadPatterns();
     }
 

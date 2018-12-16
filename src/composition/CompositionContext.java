@@ -1,5 +1,6 @@
 package composition;
 
+import composition.variables.ConstantVariable;
 import composition.variables.Variable;
 import org.jfugue.pattern.Pattern;
 
@@ -60,8 +61,16 @@ public class CompositionContext {
         resultSet = rs;
     };
 
-    public Map<String, Variable> getVariables() {
-        return variables;
+    public Object getVariable(String varname) {
+        return this.variables.getOrDefault(varname, null).getValue(this);
+    }
+
+    public void setVariable(String varname, Variable value) {
+        this.variables.put(varname, value);
+    }
+
+    public void setVariable(String varname, Object value) {
+        this.variables.put(varname, new ConstantVariable(value));
     }
 
     public DBCompositionBuilder getBuilder() {

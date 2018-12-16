@@ -12,10 +12,6 @@ public class VarArgument implements Argument {
 
     @Override
     public Object value(CompositionContext context) {
-        if (!context.getVariables().containsKey(varname)) {
-            return null;
-        }
-
-        return context.getVariables().get(varname).getValue(context);
+        return context.getVariable(varname);
     }
 }

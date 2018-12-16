@@ -1,8 +1,12 @@
+import composition.DBCompositionBuilder;
+import composition.variables.ConstantVariable;
+import composition.variables.Variable;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.pattern.TrackTable;
 import org.jfugue.player.Player;
 
 import java.sql.*;
+import java.util.Map;
 
 
 public class IDCSymphony {
@@ -33,26 +37,24 @@ public class IDCSymphony {
         //         .add(new Pattern("V2 @#YES1 I[VIOLIN] C3 R R D3 R R | @#YES2 C3 R G3 D3 R R").addToEachNoteToken("a40"));
         // fin.add(p2, 2);
         // player.play(fin);
-        
 
-        /*
         // Connect to database and perform a test read
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:data/IDC Events.db");
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement("select * from events;");
 
-            ResultSet bla = statement.executeQuery("select * from events;");
-            ResultSetMetaData blaMD = bla.getMetaData();
-            while (bla.next()) {
-                for (int col = 1; col <= blaMD.getColumnCount(); col++) {
-//                    System.out.println(bla.getObject(col));
-                }
-            }
+            DBCompositionBuilder compBuilder = new DBCompositionBuilder(connection);
+            compBuilder.getContext().setVariable("Hello", "World");
+            compBuilder.pushQuery(statement);
+            compBuilder.call(context -> {
+                System.out.println(context.getVariable("Hello"));
+                System.out.println(context.getResultSet().getString(7));
+            });
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        */
+
     }
 }
