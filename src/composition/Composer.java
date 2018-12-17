@@ -1,17 +1,19 @@
 package composition;
 
+import org.apache.commons.io.FilenameUtils;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
-import org.jfugue.rhythm.Rhythm;
-import org.jfugue.theory.ChordProgression;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-/*
-* A JFugue wrapper for easy composition purposes
-*/
+/**
+ * A JFugue wrapper for easy composition purposes
+ */
 public class Composer {
 
     // A map of usable patterns, whose keys are pattern names and values are pattern instances
@@ -23,40 +25,79 @@ public class Composer {
     // Keeps track of unique sequence IDs for easy sequence management
     private int seqID = 0;
 
-    // Load all usable patterns from the pattern arsenal
-    private void loadPatterns() { // TODO: We may not need this, instead just have the external class give the composer its own patterns
-        loadPattern("Aye",
-            new ChordProgression("I IV V")
-                .distribute("7%6")
-                .allChordsAs("$0 $0 $0 $0 $1 $1 $0 $0 $2 $1 $0 $0")
-                .eachChordAs("$0ia100 $1ia80 $2ia80 $3ia80 $4ia100 $3ia80 $2ia80 $1ia80")
-                .getPattern());
-
-        loadPattern("Bye",
-            new Rhythm()
-                .addLayer("O..oO...O..oOO..")
-                .addLayer("..S...S...S...S.")
-                .addLayer("````````````````")
-                .addLayer("...............+")
-                .getPattern());
-    }
-
-    public void loadPatternsFromDirectory(File dir) {
-        // TODO: Load a bunch of usable patterns from a directory
-    }
-
-    // Loads a pattern to be made usable by the composer
-    public void loadPattern(String name, Pattern pattern) {
-        usablePatterns.put(name, pattern);
-    }
 
     public Composer() {
         // Load all usable patterns
         usablePatterns = new HashMap<>();
-        loadPatterns();
     }
 
-    // Called at the very end - plays the final composition
+
+    /**
+     * Loads a set of usable patterns from a file. The file object can also be a directory,
+     * in which case all .jfugue pattern files in the directory will be loaded.
+     * @return an array of all names whose patterns were successfully loaded
+     */
+    public String[] loadPatternsFromFile(File f) throws IOException {
+
+        String desiredExtension = ".jfugue";
+
+        String[] loadedNames = null;
+
+        // Treat the given file as a directory
+        if (f.isDirectory()) {
+
+            ArrayList<String> goodNamesList = new ArrayList<>();
+
+            File[] filesInDir = f.listFiles();
+            if (filesInDir != null) {
+                for (File file : filesInDir) {
+                    String fileName = file.getName();
+                    if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
+                        Pattern pattern = Pattern.load(file);
+                        String name = FilenameUtils.removeExtension(fileName);
+                        loadPattern(name, pattern);
+
+                        goodNamesList.add(name);
+                    }
+                }
+            }
+
+            int goodNamesCount = goodNamesList.size();
+            loadedNames = new String[goodNamesCount];
+            for (int i = 0; i < goodNamesCount; i++) {
+                loadedNames[i] = goodNamesList.get(i);
+            }
+
+        // Treat the given file as a single file
+        } else if (f.isFile()) {
+
+            String fileName = f.getName();
+            if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
+                Pattern pattern = Pattern.load(f);
+                String name = FilenameUtils.removeExtension(fileName);
+                loadPattern(name, pattern);
+
+                loadedNames = new String[1];
+                loadedNames[0] = name;
+            }
+
+        }
+
+        return loadedNames;
+    }
+
+    /**
+     * Loads a usable pattern into the composer. The same pattern may then be re-used in multiple sequences.
+     * @param name a unique string representing the name of the pattern
+     * @param pattern the pattern object - built in property tokens (e.g. instrument/voice)  will be ignored
+     */
+    public void loadPattern(String name, Pattern pattern) {
+        usablePatterns.put(name, pattern);
+    }
+
+    /**
+     * Composes all sequences into a final composition, and plays it.
+     */
     public void play() {
         // Compose our composition
         Pattern composition = new Pattern();
@@ -68,8 +109,17 @@ public class Composer {
         player.play(composition);
     }
 
-    // Add a sequence to the composition
+    /**
+     * Adds a sequence to the composition.
+     * @param patternName name of the pattern to be used (must be loaded in the composer in advance)
+     * @param instrument instrument to be used
+     * @param voice target voice
+     * @param time sequence start time
+     * @param reps repetitions count
+     * @return
+     */
     public int addSequence(String patternName, byte instrument, byte voice, float time, short reps) {
+
         seqID++;
 
         // Add the sequence
@@ -80,13 +130,22 @@ public class Composer {
         return seqID;
     }
 
-    // Remove a sequence from the composition
+    /**
+     * Removes a sequence related to a given ID from the composition.
+     * @param id the id of the sequence
+     */
     public void remSequence(int id) {
         sequences.remove(id);
     }
 
-    // A sequence is simply a packet of information containing the sequence name, the instrument to be used,
-    // the voice to be played on, the time the sequence should play, and the repetitions of the sequence.
+    /**
+     * A sequence is a packet of information containing:
+     * - the sequence name
+     * - the instrument to be used
+     * - the target voice
+     * - the sequence start time
+     * - the sequence repetition count
+     */
     private class Sequence{
 
         int id; // We may not need this
