@@ -5,17 +5,16 @@ import composition.CompositionContext;
 /**
  * Constant parameter - always returns value instantiated with,
  * regardless of context.
- * @param <T> Value Type
  */
-public class ConstantArgument<T> implements Argument {
-    T myValue;
+public class ConstantArgument implements Argument {
+    Object myValue;
 
-    public ConstantArgument(T value) {
+    public ConstantArgument(Object value) {
         this.myValue = value;
     }
 
     @Override
-    public T value(CompositionContext context) {
+    public Object value(CompositionContext context) {
         return myValue;
     }
 }

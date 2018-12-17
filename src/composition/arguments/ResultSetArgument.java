@@ -19,6 +19,7 @@ public class ResultSetArgument implements Argument {
     }
 
     public Object value(CompositionContext context) {
+        
         try {
             return useName
                     ? context.getResultSet().getObject(columnName)
