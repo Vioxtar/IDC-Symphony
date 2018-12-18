@@ -16,8 +16,8 @@ import java.util.Map;
  */
 public class Composer {
 
-    // A map of usable patterns, whose keys are pattern names and values are pattern instances
-    private Map<String, Pattern> usablePatterns;
+    private Pattern lastComposition;
+    private int tempo;
 
     // The sequence of patterns to construct our composition from
     private Map<Integer, Sequence> sequences;
@@ -27,85 +27,19 @@ public class Composer {
 
     public Composer() {
         // Load all usable patterns
-        usablePatterns = new HashMap<>();
         sequences = new HashMap<>();
+
+        this.tempo = 120; // JFuguge's default tempo
     }
 
-
-    /**
-     * Loads a set of usable patterns from a file. The file object can also be a directory,
-     * in which case all .jfugue pattern files in the directory will be loaded.
-     * @return an array of all names whose patterns were successfully loaded
-     */
-    public String[] loadPatternsFromFile(File f) {
-
-        String desiredExtension = "jfugue";
-
-        String[] loadedNames = null;
-
-        try {
-
-            // Treat the given file as a directory
-            if (f.isDirectory()) {
-
-                ArrayList<String> goodNamesList = new ArrayList<>();
-
-                File[] filesInDir = f.listFiles();
-                if (filesInDir != null) {
-                    for (File file : filesInDir) {
-
-                        String fileName = file.getName();
-
-                        if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
-
-                            Pattern pattern = Pattern.load(file);
-                            String name = FilenameUtils.removeExtension(fileName);
-                            loadPattern(name, pattern);
-
-                            goodNamesList.add(name);
-                        }
-                    }
-                }
-
-                int goodNamesCount = goodNamesList.size();
-                loadedNames = new String[goodNamesCount];
-                for (int i = 0; i < goodNamesCount; i++) {
-                    loadedNames[i] = goodNamesList.get(i);
-                }
-
-            } else if (f.isFile()) { // Treat the given file as a single file
-
-                String fileName = f.getName();
-                if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
-                    Pattern pattern = Pattern.load(f);
-                    String name = FilenameUtils.removeExtension(fileName);
-                    loadPattern(name, pattern);
-
-                    loadedNames = new String[1];
-                    loadedNames[0] = name;
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return loadedNames;
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
     }
 
     /**
-     * Loads a usable pattern into the composer. The same pattern may then be re-used in multiple sequences.
-     * @param name a unique string representing the name of the pattern
-     * @param pattern the pattern object - built in property tokens (e.g. instrument/voice)  will be ignored
+     * Composes all sequences into a final composition
      */
-    public void loadPattern(String name, Pattern pattern) {
-        usablePatterns.put(name, pattern);
-    }
-
-    /**
-     * Composes all sequences into a final composition, and plays it.
-     */
-    public void play() {
+    public Composer compose() {
         // Compose our composition
         Pattern composition = new Pattern();
 
@@ -116,40 +50,59 @@ public class Composer {
             SequenceTransformer transformer = new SequenceTransformer(seq);
 
             transformer.addParserListener(patternBuilder);
-            Pattern patternToBeTransformed = usablePatterns.get(seq.getPatternName());
+            Pattern patternToBeTransformed = seq.getPattern();
 
             patternToBeTransformed.transform(transformer);
             Pattern newPattern = patternBuilder.getPattern();
 
+            composition.add("\n"); // Used to differentiate between different sequences, ignored by JFugue
             composition.add(newPattern);
         }
 
-//        System.out.println("Final composition looks like this:");
-//        System.out.println(composition);
+        composition.setTempo(tempo);
 
+        lastComposition = composition;
+
+        return this;
+    }
+
+    public Composer play() {
         // Play the composition
         Player player = new Player();
-        player.play(composition);
+        player.play(lastComposition);
+
+        return this;
+    }
+
+    public Composer print() {
+
+        System.out.println(lastComposition.toString());
+
+        return this;
     }
 
     /**
      * Adds a sequence to the composition.
-     * @param patternName name of the pattern to be used (must be loaded in the composer in advance)
+     * @param pattern pattern to be used
      * @param instrument instrument to be used
      * @param voice target voice
      * @param time sequence start time
      * @return
      */
-    public int addSequence(String patternName, int instrument, int voice, float amp, float time) {
+    public int addSequence(Pattern pattern, int instrument, int voice, float amp, float time) {
 
         seqID++;
 
         // Add the sequence
-        Sequence seq = new Sequence(seqID, patternName, (byte)instrument, (byte)voice, amp, time);
+        Sequence seq = new Sequence(seqID, pattern, (byte)instrument, (byte)voice, amp, time);
         sequences.put(seqID, seq);
 
         // Return the sequence ID
         return seqID;
+    }
+
+    public Sequence getSequence(int seqID) {
+        return sequences.getOrDefault(seqID, null);
     }
 
     /**
