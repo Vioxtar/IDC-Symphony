@@ -73,11 +73,6 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
             layerTimeChanged[0] = true;
         }
 
-        // Then - change track at given time
-        if (voice != -1) {
-            fireTrackChanged(voice);
-        }
-
         // Then - change instrument for given track
         if (instrumentValid) {
             fireInstrumentParsed(instrument);

@@ -23,6 +23,7 @@ public class Sequence{
         this.patternName = patternName;
         this.instrument = instrument;
         this.voice = voice;
+        this.amp = amp;
         this.time = time;
         this.reps = reps;
     }

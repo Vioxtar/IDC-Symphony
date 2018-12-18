@@ -124,7 +124,6 @@ public class Composer {
             Pattern newPattern = patternBuilder.getPattern();
 
             composition.add(newPattern);
-
         }
 
         System.out.println("Final composition looks like this:");
