@@ -60,10 +60,6 @@ public class IDCSymphony {
             DBCompositionBuilder compBuilder = new DBCompositionBuilder(connection);
             compBuilder.getContext().setVariable("Hello", "World");
             compBuilder.pushQuery(statement);
-            compBuilder.call(context -> {
-//                System.out.println(context.getVariable("Hello"));
-//                System.out.println(context.getResultSet().getString(7));
-            });
 
         } catch (SQLException e) {
             e.printStackTrace();

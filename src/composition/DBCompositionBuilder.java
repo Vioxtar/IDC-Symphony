@@ -1,5 +1,6 @@
 package composition;
 
+import composition.arguments.Argument;
 import composition.functions.CompositionFunction;
 import org.jfugue.pattern.Pattern;
 
@@ -158,8 +159,8 @@ public class DBCompositionBuilder {
         });
     }
 
-    public void call(CompositionFunction func) throws SQLException {
-        func.call(context);
+    public void execute(CompositionFunction func, Argument... Arguments) throws SQLException {
+        func.call(context, Arguments);
     }
 
     /**
