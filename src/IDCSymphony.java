@@ -1,3 +1,4 @@
+import composition.Composer;
 import composition.DBCompositionBuilder;
 import composition.variables.ConstantVariable;
 import composition.variables.Variable;
@@ -5,6 +6,8 @@ import org.jfugue.pattern.Pattern;
 import org.jfugue.pattern.TrackTable;
 import org.jfugue.player.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Map;
 
@@ -38,6 +41,16 @@ public class IDCSymphony {
         // fin.add(p2, 2);
         // player.play(fin);
 
+        Composer composer = new Composer();
+        File dir = new File("usablepatterns");
+        String[] goodNames = composer.loadPatternsFromFile(dir);
+
+        for (int i = 0; i < goodNames.length; i++) {
+            composer.addSequence(goodNames[i], 1, 0, 0.5f, 0f, 1);
+        }
+
+        composer.play();
+
         // Connect to database and perform a test read
         Connection connection = null;
         try {
@@ -48,8 +61,8 @@ public class IDCSymphony {
             compBuilder.getContext().setVariable("Hello", "World");
             compBuilder.pushQuery(statement);
             compBuilder.call(context -> {
-                System.out.println(context.getVariable("Hello"));
-                System.out.println(context.getResultSet().getString(7));
+//                System.out.println(context.getVariable("Hello"));
+//                System.out.println(context.getResultSet().getString(7));
             });
 
         } catch (SQLException e) {

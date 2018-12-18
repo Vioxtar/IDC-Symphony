@@ -3,12 +3,12 @@ package composition;
 import org.apache.commons.io.FilenameUtils;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,10 +25,10 @@ public class Composer {
     // Keeps track of unique sequence IDs for easy sequence management
     private int seqID = 0;
 
-
     public Composer() {
         // Load all usable patterns
         usablePatterns = new HashMap<>();
+        sequences = new HashMap<>();
     }
 
 
@@ -37,50 +37,57 @@ public class Composer {
      * in which case all .jfugue pattern files in the directory will be loaded.
      * @return an array of all names whose patterns were successfully loaded
      */
-    public String[] loadPatternsFromFile(File f) throws IOException {
+    public String[] loadPatternsFromFile(File f) {
 
-        String desiredExtension = ".jfugue";
+        String desiredExtension = "jfugue";
 
         String[] loadedNames = null;
 
-        // Treat the given file as a directory
-        if (f.isDirectory()) {
+        try {
 
-            ArrayList<String> goodNamesList = new ArrayList<>();
+            // Treat the given file as a directory
+            if (f.isDirectory()) {
 
-            File[] filesInDir = f.listFiles();
-            if (filesInDir != null) {
-                for (File file : filesInDir) {
-                    String fileName = file.getName();
-                    if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
-                        Pattern pattern = Pattern.load(file);
-                        String name = FilenameUtils.removeExtension(fileName);
-                        loadPattern(name, pattern);
+                ArrayList<String> goodNamesList = new ArrayList<>();
 
-                        goodNamesList.add(name);
+                File[] filesInDir = f.listFiles();
+                if (filesInDir != null) {
+                    for (File file : filesInDir) {
+
+                        String fileName = file.getName();
+
+                        if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
+
+                            Pattern pattern = Pattern.load(file);
+                            String name = FilenameUtils.removeExtension(fileName);
+                            loadPattern(name, pattern);
+
+                            goodNamesList.add(name);
+                        }
                     }
+                }
+
+                int goodNamesCount = goodNamesList.size();
+                loadedNames = new String[goodNamesCount];
+                for (int i = 0; i < goodNamesCount; i++) {
+                    loadedNames[i] = goodNamesList.get(i);
+                }
+
+            } else if (f.isFile()) { // Treat the given file as a single file
+
+                String fileName = f.getName();
+                if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
+                    Pattern pattern = Pattern.load(f);
+                    String name = FilenameUtils.removeExtension(fileName);
+                    loadPattern(name, pattern);
+
+                    loadedNames = new String[1];
+                    loadedNames[0] = name;
                 }
             }
 
-            int goodNamesCount = goodNamesList.size();
-            loadedNames = new String[goodNamesCount];
-            for (int i = 0; i < goodNamesCount; i++) {
-                loadedNames[i] = goodNamesList.get(i);
-            }
-
-        // Treat the given file as a single file
-        } else if (f.isFile()) {
-
-            String fileName = f.getName();
-            if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
-                Pattern pattern = Pattern.load(f);
-                String name = FilenameUtils.removeExtension(fileName);
-                loadPattern(name, pattern);
-
-                loadedNames = new String[1];
-                loadedNames[0] = name;
-            }
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return loadedNames;
@@ -102,7 +109,26 @@ public class Composer {
         // Compose our composition
         Pattern composition = new Pattern();
 
-        // TODO: iterate sequences, build the final pattern, consider time and shit, voice management too!
+        for (Map.Entry<Integer, Sequence> seqEntry : sequences.entrySet()) {
+
+            Sequence seq = seqEntry.getValue();
+            StaccatoParserListener patternBuilder = new StaccatoParserListener();
+            SequenceTransformer transformer = new SequenceTransformer(seq);
+
+            transformer.addParserListener(patternBuilder);
+
+            Pattern patternToBeTransformed = usablePatterns.get(seq.getPatternName());
+
+            patternToBeTransformed.transform(transformer);
+
+            Pattern newPattern = patternBuilder.getPattern();
+
+            composition.add(newPattern);
+
+        }
+
+        System.out.println("Final composition looks like this:");
+        System.out.println(composition);
 
         // Play the composition
         Player player = new Player();
@@ -118,12 +144,12 @@ public class Composer {
      * @param reps repetitions count
      * @return
      */
-    public int addSequence(String patternName, byte instrument, byte voice, float time, short reps) {
+    public int addSequence(String patternName, int instrument, int voice, float amp, float time, int reps) {
 
         seqID++;
 
         // Add the sequence
-        Sequence seq = new Sequence(seqID, patternName, instrument, voice, time, reps);
+        Sequence seq = new Sequence(seqID, patternName, (byte)instrument, (byte)voice, amp, time, (short)reps);
         sequences.put(seqID, seq);
 
         // Return the sequence ID
@@ -136,32 +162,5 @@ public class Composer {
      */
     public void remSequence(int id) {
         sequences.remove(id);
-    }
-
-    /**
-     * A sequence is a packet of information containing:
-     * - the sequence name
-     * - the instrument to be used
-     * - the target voice
-     * - the sequence start time
-     * - the sequence repetition count
-     */
-    private class Sequence{
-
-        int id; // We may not need this
-        String patternName;
-        byte instrument;
-        byte voice;
-        float time;
-        short reps;
-
-        public Sequence(int id, String patternName, byte instrument, byte voice, float time, short reps) {
-            this.id = id;
-            this.patternName = patternName;
-            this.instrument = instrument;
-            this.voice = voice;
-            this.time = time;
-            this.reps = reps;
-        }
     }
 }

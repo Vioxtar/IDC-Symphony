@@ -1,9 +1,8 @@
-package composition.transformer;
+package composition;
 
 import org.jfugue.midi.MidiDefaults;
 import org.jfugue.midi.MidiDictionary;
 import org.jfugue.parser.ChainingParserListenerAdapter;
-import org.jfugue.parser.ParserListenerAdapter;
 import org.jfugue.theory.Note;
 
 /**
@@ -20,21 +19,20 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
     float   amplitude;
     byte    instrument;
     boolean instrumentValid;
-    byte    track;
+    byte    voice;
 
     boolean[] layerTimeChanged;
 
     /**
-     *
      * @param time Time offset pattern should start with (0 is start of song, -1 is don't set)
      * @param amplitude Amplitude coefficient for each note (1 or -1 is don't set)
      * @param instrument Instrument pattern should play
-     * @param track Track pattern should play on
+     * @param voice Voice pattern should play on
      */
-    public SequenceTransformer(float time, float amplitude, String instrument, byte track) {
+    public SequenceTransformer(float time, float amplitude, String instrument, byte voice) {
         this.time = time;
         this.amplitude = amplitude;
-        this.track = track;
+        this.voice = voice;
         this.instrumentValid = MidiDictionary.INSTRUMENT_STRING_TO_BYTE.containsKey(instrument);
         this.layerTimeChanged = new boolean[MidiDefaults.LAYERS];
 
@@ -43,13 +41,30 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
         }
     }
 
+    /**
+     * @param sequence the sequence to be transformed
+     */
+    public SequenceTransformer(Sequence sequence) {
+        this.time = sequence.getTime();
+        this.amplitude = sequence.getAmplitude();
+        this.voice = sequence.getVoice();
+
+        this.layerTimeChanged = new boolean[MidiDefaults.LAYERS];
+
+        byte seqInstrument = sequence.getInstrument();
+        this.instrumentValid = MidiDictionary.INSTRUMENT_STRING_TO_BYTE.containsKey(seqInstrument);
+        if (instrumentValid) {
+            this.instrument = MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get(seqInstrument);
+        }
+    }
+
     @Override
     public void beforeParsingStarts() {
         super.beforeParsingStarts();
 
         // First and foremost - track
-        if (track != -1) {
-            fireTrackChanged(track);
+        if (voice != -1) {
+            fireTrackChanged(voice);
         }
 
         // Then - change current time within track
@@ -59,8 +74,8 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
         }
 
         // Then - change track at given time
-        if (track != -1) {
-            fireTrackChanged(track);
+        if (voice != -1) {
+            fireTrackChanged(voice);
         }
 
         // Then - change instrument for given track
