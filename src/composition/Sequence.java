@@ -1,5 +1,7 @@
 package composition;
 
+import org.jfugue.pattern.Pattern;
+
 /**
  * A sequence is a packet of information containing:
  * - the sequence name
@@ -11,15 +13,15 @@ package composition;
 public class Sequence{
 
     int id; // We may not need this
-    String patternName;
+    Pattern pattern;
     byte instrument;
     byte voice;
     float time;
     float amp;
 
-    public Sequence(int id, String patternName, byte instrument, byte voice, float amp, float time) {
+    public Sequence(int id, Pattern pattern, byte instrument, byte voice, float amp, float time) {
         this.id = id;
-        this.patternName = patternName;
+        this.pattern = pattern;
         this.instrument = instrument;
         this.voice = voice;
         this.amp = amp;
@@ -30,8 +32,8 @@ public class Sequence{
         return time;
     }
 
-    public String getPatternName() {
-        return patternName;
+    public Pattern getPattern() {
+        return pattern;
     }
 
     public byte getInstrument() {
