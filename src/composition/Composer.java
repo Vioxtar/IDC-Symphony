@@ -110,24 +110,22 @@ public class Composer {
         Pattern composition = new Pattern();
 
         for (Map.Entry<Integer, Sequence> seqEntry : sequences.entrySet()) {
-
             Sequence seq = seqEntry.getValue();
+
             StaccatoParserListener patternBuilder = new StaccatoParserListener();
             SequenceTransformer transformer = new SequenceTransformer(seq);
 
             transformer.addParserListener(patternBuilder);
-
             Pattern patternToBeTransformed = usablePatterns.get(seq.getPatternName());
 
             patternToBeTransformed.transform(transformer);
-
             Pattern newPattern = patternBuilder.getPattern();
 
             composition.add(newPattern);
         }
 
-        System.out.println("Final composition looks like this:");
-        System.out.println(composition);
+//        System.out.println("Final composition looks like this:");
+//        System.out.println(composition);
 
         // Play the composition
         Player player = new Player();
@@ -140,15 +138,14 @@ public class Composer {
      * @param instrument instrument to be used
      * @param voice target voice
      * @param time sequence start time
-     * @param reps repetitions count
      * @return
      */
-    public int addSequence(String patternName, int instrument, int voice, float amp, float time, int reps) {
+    public int addSequence(String patternName, int instrument, int voice, float amp, float time) {
 
         seqID++;
 
         // Add the sequence
-        Sequence seq = new Sequence(seqID, patternName, (byte)instrument, (byte)voice, amp, time, (short)reps);
+        Sequence seq = new Sequence(seqID, patternName, (byte)instrument, (byte)voice, amp, time);
         sequences.put(seqID, seq);
 
         // Return the sequence ID

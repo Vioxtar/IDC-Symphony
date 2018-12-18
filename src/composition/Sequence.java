@@ -16,16 +16,14 @@ public class Sequence{
     byte voice;
     float time;
     float amp;
-    short reps;
 
-    public Sequence(int id, String patternName, byte instrument, byte voice, float amp, float time, short reps) {
+    public Sequence(int id, String patternName, byte instrument, byte voice, float amp, float time) {
         this.id = id;
         this.patternName = patternName;
         this.instrument = instrument;
         this.voice = voice;
         this.amp = amp;
         this.time = time;
-        this.reps = reps;
     }
 
     public float getTime() {
@@ -46,9 +44,5 @@ public class Sequence{
 
     public float getAmplitude() {
         return amp;
-    }
-
-    public short getReps() {
-        return reps;
     }
 }

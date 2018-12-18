@@ -46,7 +46,7 @@ public class IDCSymphony {
         String[] goodNames = composer.loadPatternsFromFile(dir);
 
         for (int i = 0; i < goodNames.length; i++) {
-            composer.addSequence(goodNames[i], 1, 0, 0.5f, 0f, 1);
+            composer.addSequence(goodNames[i], 34, 0, 0.5f, 0f + 5 * i);
         }
 
         composer.play();
