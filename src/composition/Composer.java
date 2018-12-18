@@ -16,6 +16,9 @@ import java.util.Map;
  */
 public class Composer {
 
+    private Pattern lastComposition;
+    private int tempo;
+
     // A map of usable patterns, whose keys are pattern names and values are pattern instances
     private Map<String, Pattern> usablePatterns;
 
@@ -29,6 +32,12 @@ public class Composer {
         // Load all usable patterns
         usablePatterns = new HashMap<>();
         sequences = new HashMap<>();
+
+        this.tempo = 120; // JFuguge's default tempo
+    }
+
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
     }
 
 
@@ -103,9 +112,9 @@ public class Composer {
     }
 
     /**
-     * Composes all sequences into a final composition, and plays it.
+     * Composes all sequences into a final composition
      */
-    public void play() {
+    public Composer compose() {
         // Compose our composition
         Pattern composition = new Pattern();
 
@@ -121,15 +130,30 @@ public class Composer {
             patternToBeTransformed.transform(transformer);
             Pattern newPattern = patternBuilder.getPattern();
 
+            composition.add("\n"); // Used to differentiate between different sequences, ignored by JFugue
             composition.add(newPattern);
         }
 
-//        System.out.println("Final composition looks like this:");
-//        System.out.println(composition);
+        composition.setTempo(tempo);
 
+        lastComposition = composition;
+
+        return this;
+    }
+
+    public Composer play() {
         // Play the composition
         Player player = new Player();
-        player.play(composition);
+        player.play(lastComposition);
+
+        return this;
+    }
+
+    public Composer print() {
+
+        System.out.println(lastComposition.toString());
+
+        return this;
     }
 
     /**
