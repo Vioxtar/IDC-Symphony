@@ -1,4 +1,4 @@
-package Stats;
+package idc.symphony.stats;
 
 import java.util.HashMap;
 import java.util.Map;

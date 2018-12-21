@@ -1,3 +1,5 @@
+package idc.symphony.music;
+
 import org.apache.commons.io.FilenameUtils;
 import org.jfugue.pattern.Pattern;
 

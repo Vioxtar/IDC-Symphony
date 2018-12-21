@@ -1,7 +1,7 @@
-package db.events;
+package idc.symphony.db;
 
-import Stats.YearStat;
-import Stats.YearStats;
+import idc.symphony.stats.YearStat;
+import idc.symphony.stats.YearStats;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

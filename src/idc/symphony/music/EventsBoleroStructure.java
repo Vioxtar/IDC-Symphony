@@ -1,5 +1,7 @@
-import Stats.YearStat;
-import Stats.YearStats;
+package idc.symphony.music;
+
+import idc.symphony.stats.YearStat;
+import idc.symphony.stats.YearStats;
 
 import java.sql.SQLException;
 import java.util.Arrays;

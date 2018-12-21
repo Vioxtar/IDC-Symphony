@@ -1,4 +1,4 @@
-package Stats;
+package idc.symphony.stats;
 
 public class YearStat {
     int events;

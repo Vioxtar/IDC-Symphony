@@ -1,5 +1,7 @@
-import Stats.YearStats;
-import db.events.YearStatsFactory;
+package idc.symphony.music;
+
+import idc.symphony.stats.YearStats;
+import idc.symphony.db.YearStatsFactory;
 import org.jfugue.pattern.Pattern;
 
 import java.sql.Connection;
@@ -11,9 +13,12 @@ public class DBConductor {
     public static final float DEFAULT_SECONDS_PER_EMPTY_YEAR = 2;
 
     private Connection dbConnection;
+
     private int tempo = DEFAULT_TEMPO;
     private float secsPerSequence = DEFAULT_SECONDS_PER_SEQUENCE;
     private float secsPerEmptyYear = DEFAULT_SECONDS_PER_EMPTY_YEAR;
+
+
 
     public DBConductor(Connection dbConnection) {
         this.dbConnection = dbConnection;

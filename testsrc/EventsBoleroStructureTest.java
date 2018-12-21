@@ -1,4 +1,5 @@
-import db.events.YearStatsFactory;
+import idc.symphony.db.YearStatsFactory;
+import idc.symphony.music.EventsBoleroStructure;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sqlite.SQLiteConfig;
