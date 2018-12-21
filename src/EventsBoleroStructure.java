@@ -1,61 +1,54 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import Stats.YearStat;
+import Stats.YearStats;
+
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EventsBoleroStructure {
-    // TODO: Turn into one select using window function
-    // For some reason, SQLite JDBC does not support window functions even though SQLite does
-    //
-    private static final String SELECT_EVENTS_PER_YEAR =
-            "SELECT COUNT(*) as NumEvents " +
-            "FROM Events " +
-            "WHERE EventYear = ?";
+    public static final int[] EMPTY_SEQUENCES = new int[0];
+    private Map<Integer, int[]> eventsPerYearSequence = new HashMap<>();
 
-
-    private Map<Integer, int[]> eventsPerSequence = new HashMap<>();
-
-    public int[] getEventsPerSequence(int year) {
-        return eventsPerSequence.getOrDefault(year, new int[0]);
-    }
-
-    public int getTotalNumSequences() {
+    public int totalNumSequences() {
         int[] numSequences = {0};
-        eventsPerSequence.values().forEach(a -> numSequences[0] += a.length);
+        eventsPerYearSequence.values().forEach(a -> numSequences[0] += a.length);
         return numSequences[0];
     }
 
-    public void buildBolero(Connection dbConnection, float sequenceLength, float minSecPerEvent) throws SQLException {
-        eventsPerSequence.clear();
-        PreparedStatement eventsPerYearStatement = dbConnection.prepareStatement(SELECT_EVENTS_PER_YEAR);
-        for (int year = 1994; year < 2019; year++) {
-            eventsPerYearStatement.setInt(1, year);
-            ResultSet eventsPerYear = eventsPerYearStatement.executeQuery();
-
-            if (eventsPerYear.next()) {
-                int numEvents = eventsPerYear.getInt("NumEvents");
-                if (numEvents == 0) continue;
-
-                int[] eventsPerSequence = new int[(int)Math.ceil(numEvents * minSecPerEvent / sequenceLength)];
-
-                // Events Per Seq = Num Events / Num of Sequences
-                int eventsPerSeq = numEvents / eventsPerSequence.length;
-                int remainder = numEvents % eventsPerSequence.length;
-
-                for (int i = 0; i < eventsPerSequence.length; i++) {
-                    eventsPerSequence[i] = eventsPerSeq;
-
-                    if (remainder > 0) {
-                        eventsPerSequence[i]++;
-                        remainder--;
-                    }
-                }
-
-                this.eventsPerSequence.put(year, eventsPerSequence);
-            }
-        }
+    public int[] eventsPerSequence(int year) {
+        return eventsPerYearSequence.getOrDefault(year, EMPTY_SEQUENCES);
     }
 
+
+    /**
+     * Create Bolero Structure with year sequence repetitions
+     * based on how interesting that year was compared to the average year.
+     * @param stats
+     * @throws SQLException
+     */
+    public EventsBoleroStructure(YearStats stats) throws SQLException {
+        eventsPerYearSequence.clear();
+
+        stats.statsMap().forEach((year, yearStat) -> {
+            int numOfSeqs = 1 + (int)(yearRelativeDensity(yearStat, stats) / 3);
+            int[] sequenceEvents = new int[numOfSeqs];
+
+
+            int eventsPerSeq = yearStat.events() / numOfSeqs;
+            int remainder = yearStat.events() % numOfSeqs;
+
+            Arrays.setAll(
+                    sequenceEvents,
+                    (index) -> eventsPerSeq + (index < remainder ? 1 : 0)
+            );
+
+            eventsPerYearSequence.put(year, sequenceEvents);
+        });
+    }
+
+    private float yearRelativeDensity(YearStat yearStat, YearStats stats) {
+        return (yearStat.events() * yearStat.faculties() * yearStat.types()) /
+                (stats.averageEvents() * stats.averageFaculties() * stats.averageTypes());
+    }
 }
