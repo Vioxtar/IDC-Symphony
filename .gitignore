@@ -2,3 +2,6 @@
 .idea/workspace.xml
 out/
 *.laccdb
+.idea/dbnavigator.xml
+.idea/codeStyles/Project.xml
+*.pdf
