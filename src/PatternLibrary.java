@@ -4,11 +4,17 @@ import org.jfugue.pattern.Pattern;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PatternLibrary {
     // A map of usable patterns, whose keys are pattern names and values are pattern instances
     private Map<String, Pattern> patterns;
+
+
+    public PatternLibrary() {
+        patterns = new HashMap<String, Pattern>();
+    }
 
     /**
      * Loads a set of usable patterns from a file. The file object can also be a directory,
