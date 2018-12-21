@@ -1,4 +1,4 @@
-package MusicBand;
+package idc.symphony.music.band;
 
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;

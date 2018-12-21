@@ -1,6 +1,5 @@
-import MusicBand.BandMember;
-import MusicBand.CS;
-import MusicBand.Faculty;
+import idc.symphony.music.band.CS;
+import idc.symphony.music.band.Faculty;
 import org.jfugue.player.Player;
 import org.jfugue.theory.Key;
 

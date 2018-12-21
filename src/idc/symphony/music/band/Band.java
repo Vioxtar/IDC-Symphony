@@ -1,4 +1,4 @@
-package MusicBand;
+package idc.symphony.music.band;
 
 public class Band {
 

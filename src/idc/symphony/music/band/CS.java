@@ -1,10 +1,8 @@
-package MusicBand;
+package idc.symphony.music.band;
 
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 import org.jfugue.theory.Note;
-
-import java.util.List;
 
 public class CS extends Faculty {
 
@@ -12,6 +10,10 @@ public class CS extends Faculty {
 
     public CS() {
         this.instrument = 50;
+
+        // Set a seed for this generator
+        long seed = 31;
+        this.gen.setSeed(seed);
     }
 
     @Override
@@ -27,20 +29,22 @@ public class CS extends Faculty {
         while (added < t) {
 
             // Establish next note duration
-            int nextNoteDur = ranRange(1, 4);
-            nextNoteDur = Math.min(nextNoteDur * (ranRange(0, 1) == 1 ? 16:32), t - added);
+            int nextNoteDur = ranRange(1, 3);
+            nextNoteDur = Math.min(nextNoteDur * ((int)Math.pow(2, ranRange(1, 6))), t - added);
             added += nextNoteDur;
 
-            String nextNote;
+            Note nextNote;
 
             if (lastNotePlayed != null) {
-                nextNote = getCloseNote(getKeyNotes(key), lastNotePlayed, ranRange(1,2)).toString();
+                nextNote = getCloseNote(getKeyNotes(key), lastNotePlayed, 2);
             } else {
-                nextNote = getRandomKeyNote(key).toString();
+                nextNote = getRandomKeyNote(key);
             }
 
+            lastNotePlayed = nextNote;
+
             // Decide if we're resting
-            boolean isRest = ranRange(0d, 1d) < 0.1;
+            boolean isRest = ranRange(0d, 1d) < 0;
 
             if (isRest) {
                 p.add("R/" + toNoteDur(nextNoteDur));

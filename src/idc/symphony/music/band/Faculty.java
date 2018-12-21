@@ -1,10 +1,9 @@
-package MusicBand;
+package idc.symphony.music.band;
 
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 import org.jfugue.theory.Note;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -88,23 +87,51 @@ public class Faculty implements BandMember {
         return t; // :D
     }
 
+    /**
+     * Returns the note-duration of a given note given by a number of 128ths.
+     * @param t
+     * @return
+     */
     public static float toNoteDur(int t) {
         return (float)t / 128;
     }
 
+    /**
+     * Returns a list of notes from a given key.
+     * @param key
+     * @return
+     */
     public static List<Note> getKeyNotes(Key key) {
         return key.getScale().getIntervals().setRoot(key.getRoot()).getNotes();
     }
 
-    public static Note getRandomKeyNote(List<Note> keyNotes) {
+    /**
+     * Returns a random note from a given list of key notes.
+     * @param keyNotes
+     * @return
+     */
+    public Note getRandomKeyNote(List<Note> keyNotes) {
         return keyNotes.get(ranRange(0, keyNotes.size() - 1));
     }
 
-    public static Note getRandomKeyNote(Key key) {
+    /**
+     * Returns a random note from a given key.
+     * @param key
+     * @return
+     */
+    public Note getRandomKeyNote(Key key) {
         return getRandomKeyNote(getKeyNotes(key));
     }
 
-    public static Note getCloseNote(List<Note> list, Note currNote, int distFromCurr) {
+    /**
+     * Given a list of notes (assumed to be sorted) and a current note,
+     * returns a neighboring note within a certain distance.
+     * @param list
+     * @param currNote
+     * @param distFromCurr
+     * @return
+     */
+    public Note getCloseNote(List<Note> list, Note currNote, int distFromCurr) {
         int currIndex = list.indexOf(currNote);
         if (currIndex == -1) {
             // We don't have the key, return a random one from the list
@@ -115,31 +142,48 @@ public class Faculty implements BandMember {
         int closeIndex = currIndex + offSet;
 
         // Clamp so we're within list index range
-        closeIndex = closeIndex % (list.size() - 1);
+        closeIndex = Math.floorMod(closeIndex, list.size());
+
         return list.get(closeIndex);
     }
 
-//    Random gen = new Random();
+    // Random functionality
+    Random gen = new Random();
+    public void setRanSeed(long seed) {
+        gen.setSeed(seed);
+    }
 
-    public static int ranRange(int a, int b){
+    /**
+     * Returns a uniform-random integer between any two numbers.
+     * @param a
+     * @param b
+     * @return
+     */
+    public int ranRange(int a, int b){
         if (a == b) {
             return a;
         }
         int min = Math.min(a, b);
         int max = Math.max(a, b);
-        double ranBase = Math.random();
+        double ranBase = gen.nextDouble();
         int diff = max - min + 1;
         int ran = (int)((ranBase * diff) + min);
         return ran;
     }
 
-    public static double ranRange(double a, double b){
+    /**
+     * Returns a uniform-random double between any two numbers.
+     * @param a
+     * @param b
+     * @return
+     */
+    public double ranRange(double a, double b){
         if (a == b) {
             return a;
         }
         double min = Math.min(a, b);
         double max = Math.max(a, b);
-        double ranBase = Math.random();
+        double ranBase = gen.nextDouble();
         double diff = max - min;
         double ran = (ranBase * diff) + min;
         return ran;
