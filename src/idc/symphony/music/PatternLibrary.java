@@ -1,5 +1,6 @@
 package idc.symphony.music;
 
+import idc.symphony.music.sequence.MidiTrimmer;
 import org.apache.commons.io.FilenameUtils;
 import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
@@ -32,6 +33,8 @@ public class PatternLibrary {
 
         String jFugueExtension = "jfugue"; String midiExtension = "mid";
 
+        MidiTrimmer trimmer = null;
+
         try {
 
             // Treat the given file as a directory
@@ -58,7 +61,11 @@ public class PatternLibrary {
                         // Load MIDI files
                         if (FilenameUtils.getExtension(fileName).equals(midiExtension)) {
 
-                            Pattern pattern = MidiFileManager.loadPatternFromMidi(file);
+                            if (trimmer == null) {
+                                trimmer = new MidiTrimmer();
+                            }
+
+                            Pattern pattern = trimmer.trim(MidiFileManager.loadPatternFromMidi(file));
                             String name = FilenameUtils.removeExtension(fileName);
                             loadPattern(name, pattern);
 
@@ -86,7 +93,12 @@ public class PatternLibrary {
                 }
 
                 if (FilenameUtils.getExtension(fileName).equals(midiExtension)) {
-                    Pattern pattern = MidiFileManager.loadPatternFromMidi(f);
+
+                    if (trimmer == null) {
+                        trimmer = new MidiTrimmer();
+                    }
+
+                    Pattern pattern = trimmer.trim(MidiFileManager.loadPatternFromMidi(f));
                     String name = FilenameUtils.removeExtension(fileName);
                     loadPattern(name, pattern);
 

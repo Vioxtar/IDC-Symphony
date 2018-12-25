@@ -17,47 +17,9 @@ public class CS extends Faculty {
     }
 
     @Override
-    public Pattern playMainMelody(int t, Key key) {
-
-        int added = 0;
+    public Pattern playMainMelody(int wholes, Key key) {
 
         Pattern p = new Pattern();
-        p.setInstrument(instrument);
-
-        Note lastNotePlayed = null;
-
-        int c = -1; // Iterations passed
-
-        while (added < t) {
-
-            c++;
-
-            // Establish next note duration
-            int nextNoteDur = (c % 3 == 0 ? 16:64);
-
-            // Clamp so we don't over play
-            nextNoteDur = Math.min(nextNoteDur, t - added);
-            added += nextNoteDur;
-
-            Note nextNote;
-
-            if (lastNotePlayed != null) {
-                nextNote = getCloseNote(getKeyNotes(key), lastNotePlayed, 4);
-            } else {
-                nextNote = getRandomKeyNote(key);
-            }
-
-            lastNotePlayed = nextNote;
-
-            // Decide if we're resting
-            boolean isRest = ranRange(0d, 1d) < 0;
-
-            if (isRest) {
-                p.add("R/" + toNoteDur(nextNoteDur));
-            } else {
-                p.add("" + nextNote + '/' + toNoteDur(nextNoteDur));
-            }
-        }
 
         return p;
     }
