@@ -33,7 +33,7 @@ public class MidiTrimmer extends ChainingParserListenerAdapter {
     public void onTempoChanged(int BPM) {
 
     }
-    
+
     @Override
     public void onTrackChanged(byte track) {
 

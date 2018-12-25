@@ -13,14 +13,14 @@ public class IDCSymphony {
 //        Key key = new Key("Gmaj");
 //        player.play(cs.playMainMelody(1000, key));
 
-        PatternLibrary patternLib = new PatternLibrary();
-        String[] goodNames = patternLib.loadPatternsFromFile(new File("usableplaceholderpatterns"));
-
-        for (int i = 0; i < goodNames.length; i++) {
-            System.out.println(goodNames[i]);
-        }
-
-        Player player = new Player();
-        player.play(patternLib.getAllPatternsMap().get("chords_progv2"));
+//        PatternLibrary patternLib = new PatternLibrary();
+//        String[] goodNames = patternLib.loadPatternsFromFile(new File("usableplaceholderpatterns"));
+//
+//        for (int i = 0; i < goodNames.length; i++) {
+//            System.out.println(goodNames[i]);
+//        }
+//
+//        Player player = new Player();
+//        player.play(patternLib.getAllPatternsMap().get("chords_progv2"));
     }
 }
