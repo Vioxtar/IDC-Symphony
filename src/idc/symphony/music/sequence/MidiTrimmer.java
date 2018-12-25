@@ -23,11 +23,23 @@ public class MidiTrimmer extends ChainingParserListenerAdapter {
         return builder.getPattern();
     }
 
+    @Override
     public void beforeParsingStarts() {
         firstBeat = true;
         firstNote = true;
     }
 
+    @Override
+    public void onTempoChanged(int BPM) {
+
+    }
+    
+    @Override
+    public void onTrackChanged(byte track) {
+
+    }
+
+    @Override
     public void onTrackBeatTimeRequested(double time) {
         if (firstBeat) {
             offset = time;
@@ -37,6 +49,7 @@ public class MidiTrimmer extends ChainingParserListenerAdapter {
         fireTrackBeatTimeRequested(time - offset);
     }
 
+    @Override
     public void onNoteParsed(Note note) {
         if (firstNote) {
             if (!note.isRest()) {
