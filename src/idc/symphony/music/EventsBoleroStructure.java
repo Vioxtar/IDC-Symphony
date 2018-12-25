@@ -11,6 +11,8 @@ import java.util.Map;
 public class EventsBoleroStructure {
     public static final int[] EMPTY_SEQUENCES = new int[0];
     private Map<Integer, int[]> eventsPerYearSequence = new HashMap<>();
+    private int minYear;
+    private int maxYear;
 
     public int totalNumSequences() {
         int[] numSequences = {0};
@@ -22,6 +24,13 @@ public class EventsBoleroStructure {
         return eventsPerYearSequence.getOrDefault(year, EMPTY_SEQUENCES);
     }
 
+    public int getMinYear() {
+        return minYear;
+    }
+
+    public int getMaxYear() {
+        return maxYear;
+    }
 
     /**
      * Create Bolero Structure with year sequence repetitions
@@ -32,7 +41,18 @@ public class EventsBoleroStructure {
     public EventsBoleroStructure(YearStats stats) throws SQLException {
         eventsPerYearSequence.clear();
 
+        minYear = Integer.MAX_VALUE;
+        maxYear = Integer.MIN_VALUE;
+
         stats.statsMap().forEach((year, yearStat) -> {
+            if (year < minYear) {
+                minYear = year;
+            }
+
+            if (year > maxYear) {
+                maxYear = year;
+            }
+
             int numOfSeqs = 1 + (int)(yearRelativeDensity(yearStat, stats) / 3);
             int[] sequenceEvents = new int[numOfSeqs];
 
