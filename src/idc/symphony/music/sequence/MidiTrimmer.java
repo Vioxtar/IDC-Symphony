@@ -39,7 +39,7 @@ public class MidiTrimmer extends ChainingParserListenerAdapter {
 
     public void onNoteParsed(Note note) {
         if (firstNote) {
-            if (note.isRest()) {
+            if (!note.isRest()) {
                 firstNote = false;
                 fireNoteParsed(note);
             }
