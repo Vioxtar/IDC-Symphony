@@ -26,17 +26,23 @@ public class CS extends Faculty {
 
         Note lastNotePlayed = null;
 
+        int c = -1; // Iterations passed
+
         while (added < t) {
 
+            c++;
+
             // Establish next note duration
-            int nextNoteDur = ranRange(1, 3);
-            nextNoteDur = Math.min(nextNoteDur * ((int)Math.pow(2, ranRange(1, 6))), t - added);
+            int nextNoteDur = (c % 3 == 0 ? 16:64);
+
+            // Clamp so we don't over play
+            nextNoteDur = Math.min(nextNoteDur, t - added);
             added += nextNoteDur;
 
             Note nextNote;
 
             if (lastNotePlayed != null) {
-                nextNote = getCloseNote(getKeyNotes(key), lastNotePlayed, 2);
+                nextNote = getCloseNote(getKeyNotes(key), lastNotePlayed, 4);
             } else {
                 nextNote = getRandomKeyNote(key);
             }

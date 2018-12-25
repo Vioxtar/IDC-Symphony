@@ -1,8 +1,11 @@
 package idc.symphony.music;
 
 import org.apache.commons.io.FilenameUtils;
+import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
 
+import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +28,9 @@ public class PatternLibrary {
      */
     public String[] loadPatternsFromFile(File f) {
 
-        String desiredExtension = "jfugue";
-
         String[] loadedNames = null;
+
+        String jFugueExtension = "jfugue"; String midiExtension = "mid";
 
         try {
 
@@ -42,9 +45,20 @@ public class PatternLibrary {
 
                         String fileName = file.getName();
 
-                        if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
+                        // Load straight up JFugue pattern files
+                        if (FilenameUtils.getExtension(fileName).equals(jFugueExtension)) {
 
                             Pattern pattern = Pattern.load(file);
+                            String name = FilenameUtils.removeExtension(fileName);
+                            loadPattern(name, pattern);
+
+                            goodNamesList.add(name);
+                        }
+
+                        // Load MIDI files
+                        if (FilenameUtils.getExtension(fileName).equals(midiExtension)) {
+
+                            Pattern pattern = MidiFileManager.loadPatternFromMidi(file);
                             String name = FilenameUtils.removeExtension(fileName);
                             loadPattern(name, pattern);
 
@@ -62,8 +76,17 @@ public class PatternLibrary {
             } else if (f.isFile()) { // Treat the given file as a single file
 
                 String fileName = f.getName();
-                if (FilenameUtils.getExtension(fileName).equals(desiredExtension)) {
+                if (FilenameUtils.getExtension(fileName).equals(jFugueExtension)) {
                     Pattern pattern = Pattern.load(f);
+                    String name = FilenameUtils.removeExtension(fileName);
+                    loadPattern(name, pattern);
+
+                    loadedNames = new String[1];
+                    loadedNames[0] = name;
+                }
+
+                if (FilenameUtils.getExtension(fileName).equals(midiExtension)) {
+                    Pattern pattern = MidiFileManager.loadPatternFromMidi(f);
                     String name = FilenameUtils.removeExtension(fileName);
                     loadPattern(name, pattern);
 
@@ -73,6 +96,8 @@ public class PatternLibrary {
             }
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
 
@@ -90,5 +115,17 @@ public class PatternLibrary {
 
     public Pattern getPattern(String name) {
         return patterns.get(name);
+    }
+
+    public ArrayList<Pattern> getAllPatternsList() {
+        ArrayList<Pattern> patternList = new ArrayList<>();
+        for (Pattern pattern : patterns.values()) {
+            patternList.add(pattern);
+        }
+        return patternList;
+    }
+
+    public Map<String, Pattern> getAllPatternsMap() {
+        return patterns;
     }
 }
