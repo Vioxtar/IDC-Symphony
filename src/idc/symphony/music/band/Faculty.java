@@ -42,7 +42,7 @@ public class Faculty implements BandMember {
      * @param numOfNotes
      * @return an array of floats containing note durations
      */
-    public float[] divideDuration(int wholes, int numOfNotes) {
+    public float[] divideDuration(int wholes, int numOfNotes) { // TODO: Outputs that pass through the recursion come out with wholes + 1 duration sum, fix this you mong
         if (wholes <= 0 || numOfNotes < 1) {
             return null;
         }
@@ -59,11 +59,13 @@ public class Faculty implements BandMember {
         ArrayList<Integer> seps = new ArrayList<>();
         HashMap<Integer, Character> expanded = new HashMap<>();
 
+
         for (int i = 0; i < dividedDurs.size(); i++) {
             char c = dividedDurs.get(i);
             expanded.put(i * 2, c);
             if (i > 0) { seps.add(i * 2 - 1); }
         }
+
 
         // Add seperators
         int sepsLeft = Math.min(dividedDurs.size(), numOfNotes) - 1;
@@ -75,7 +77,7 @@ public class Faculty implements BandMember {
             sepsLeft--;
         }
 
-        // Finally, parse the output and return it as an array
+        // Finally, parse the output (from characters to float array) and return it as an array
         float[] output = new float[numOfNotes];
         int i = 0;
         for (Character c : expanded.values()) {
@@ -85,7 +87,7 @@ public class Faculty implements BandMember {
                 case 'h': t /= 2; break;
                 case 'q': t /= 4; break;
                 case 'i': t /= 8; break;
-                case ',': i++; break;
+                case ',': t = 0; i++; break;
             }
             output[i] += t;
             if (i >= output.length) { break; }

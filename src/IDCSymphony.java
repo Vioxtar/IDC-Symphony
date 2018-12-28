@@ -13,15 +13,15 @@ public class IDCSymphony {
     public static void main(String [] args) {
         Faculty cs = new CS();
 
-//        Player player = new Player();
-//        Key key = new Key("Gmaj");
-//        player.play(cs.playMainMelody(1000, key));
 
-        float[] help = cs.divideDuration(4, 10);
-        for (int i = 0; i < help.length; i++) {
-            System.out.println(help[i]);
-        }
-
+        Player player = new Player();
+        Key key = new Key("Gmaj");
+        player.play(cs.playMainMelody(100, key));
+//
+//        float[] help = cs.divideDuration(4, 2);
+//        for (int i = 0; i < help.length; i++) {
+//            System.out.println(help[i]);
+//        }
 
 //        PatternLibrary patternLib = new PatternLibrary();
 //        String[] goodNames = patternLib.loadPatternsFromFile(new File("usableplaceholderpatterns"));
@@ -31,8 +31,7 @@ public class IDCSymphony {
 //        }
 //
 //        Player player = new Player();
-//        player.play(patternLib.getAllPatternsMap().get("chords_prog_v1").setTempo(69));
-
+//        player.play(patternLib.getAllPatternsMap().get("chords_progv2").setTempo(130));
 
     }
 }

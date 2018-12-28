@@ -21,7 +21,7 @@ class EventsBoleroStructureTest {
         sqlConf.setReadOnly(true);
 
         dbConnection = sqlConf.createConnection("jdbc:sqlite:data/IDC Events.db");
-        structure = new EventsBoleroStructure(YearStatsFactory.fromDB(dbConnection));
+        structure = new EventsBoleroStructure(YearStatsFactory.fromDB(dbConnection, null));
 
         if(PRINT_DEBUG) {
             printStructure();
