@@ -1,10 +1,9 @@
 package idc.symphony.music;
 
-import idc.symphony.music.sequence.MidiTrimmer;
+import idc.symphony.music.transformers.MidiTrimmer;
 import org.apache.commons.io.FilenameUtils;
 import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;

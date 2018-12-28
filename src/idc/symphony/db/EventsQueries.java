@@ -5,7 +5,7 @@ public class EventsQueries {
             "SELECT EventYear as \"Year\", EventType as \"Type\", " +
                     "EventFaculty as Faculty, EventShortDescription as Description\n" +
             "FROM Events\n" +
-            "SORT BY \"Year\"";
+            "ORDER BY EventYear";
 
     public static final String YEAR = "Year";
     public static final String TYPE = "Type";

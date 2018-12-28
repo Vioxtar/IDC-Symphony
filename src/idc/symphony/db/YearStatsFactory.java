@@ -52,6 +52,7 @@ public class YearStatsFactory {
         int currentEvents = 0;
         Set<Integer> currentFaculties = new HashSet<>();
         Set<Integer> currentTypes = new HashSet<>();
+
         while (events.next()) {
             int eventYear = events.getInt("Year");
             int eventFaculty = events.getInt("Faculty");
@@ -78,6 +79,15 @@ public class YearStatsFactory {
                 currentFaculties.add(eventFaculty);
                 currentTypes.add(eventType);
             }
+        }
+
+        if (currentYear != -1) {
+            totalEvents += currentEvents;
+            totalFaculties += currentFaculties.size();
+            totalTypes += currentTypes.size();
+
+            yearStats.put(currentYear,
+                    new YearStat(currentEvents, currentFaculties.size(), currentTypes.size()));
         }
 
         YearStat total = new YearStat(totalEvents, totalFaculties, totalTypes);
