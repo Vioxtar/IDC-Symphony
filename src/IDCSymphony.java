@@ -20,8 +20,8 @@ public class IDCSymphony {
 
         Player player = new Player();
         Key key = new Key("Gmaj");
-        player.play(admin.playCarpet3(7, key));
-//
+        player.play(admin.playMainMelody(7, key));
+
 //        float[] help = cs.divideDuration(4, 2);
 //        for (int i = 0; i < help.length; i++) {
 //            System.out.println(help[i]);

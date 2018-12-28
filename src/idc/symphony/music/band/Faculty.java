@@ -56,7 +56,7 @@ public class Faculty implements BandMember {
         Note[] nots = new Note[durs.length];
         for (int i = 0; i < durs.length; i++) {
             nots[i] = getRandomKeyNote(key);
-            if (ranRange(0d, 1d) < restProb) {
+            if (ranRange(0d, 1d) < restProb && i != 0) {
                 nots[i] = Note.REST;
             }
         }
@@ -74,7 +74,7 @@ public class Faculty implements BandMember {
                     for (int j = 1; j <= notesToChange; j++) {
                         int noteToChange = ranRange(0, nots.length - 1);
                         nots[noteToChange] = getCloseNote(getKeyNotes(key), nots[noteToChange], 2);
-                        if (ranRange(0d, 1d) < restProb) {
+                        if (ranRange(0d, 1d) < restProb && i != 0) {
                             nots[i] = Note.REST;
                         }
                     }
