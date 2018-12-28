@@ -11,7 +11,7 @@ public class International extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 962222432;
+        long seed = 314159265;
         this.gen.setSeed(seed);
     }
 
@@ -36,6 +36,7 @@ public class International extends Faculty {
 
         Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
         p.setInstrument(instrument);
+        p.addToEachNoteToken("a45");
         return p;
 
     }
@@ -43,9 +44,8 @@ public class International extends Faculty {
     @Override
     public Pattern playCarpet3(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 1, 0.6f, 0.2f, 0.05f);
+        Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
-        p.addToEachNoteToken("a20");
         return p;
 
     }
@@ -53,9 +53,8 @@ public class International extends Faculty {
     @Override
     public Pattern playCarpet2(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 1, 0.6f, 0.1f, 0f);
+        Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
-        p.addToEachNoteToken("a13");
         return p;
 
     }
@@ -63,9 +62,8 @@ public class International extends Faculty {
     @Override
     public Pattern playCarpet1(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 1, 0.7f, 0f, 0f);
+        Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
-        p.addToEachNoteToken("a6");
         return p;
 
     }

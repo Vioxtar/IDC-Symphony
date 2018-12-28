@@ -1,4 +1,4 @@
-package idc.symphony.music.sequence;
+package idc.symphony.music.transformers;
 
 import org.jfugue.parser.ChainingParserListenerAdapter;
 import org.jfugue.pattern.Pattern;
@@ -36,6 +36,11 @@ public class MidiTrimmer extends ChainingParserListenerAdapter {
 
     @Override
     public void onTrackChanged(byte track) {
+
+    }
+
+    @Override
+    public void onTimeSignatureParsed(byte numerator, byte powerOfTwo) {
 
     }
 

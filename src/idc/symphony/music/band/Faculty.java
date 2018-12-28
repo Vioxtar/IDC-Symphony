@@ -1,12 +1,26 @@
 package idc.symphony.music.band;
 
+import idc.symphony.music.PatternLibrary;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 import org.jfugue.theory.Note;
 
+import java.io.File;
 import java.util.*;
 
 public class Faculty implements BandMember {
+
+    /**
+     *  Generic library implementation for each library - with one library instance shared for all by default.
+     */
+
+    public static final PatternLibrary patterns = new PatternLibrary() {{
+       this.loadPatternsFromFile(new File("usableplaceholderpatterns"));
+    }};
+
+    public PatternLibrary getLibrary() {
+        return Faculty.patterns;
+    }
 
     /*************************************************************************************************
      * Overrides - to be re-implemented by each child

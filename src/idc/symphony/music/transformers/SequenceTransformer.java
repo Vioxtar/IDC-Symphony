@@ -1,4 +1,4 @@
-package idc.symphony.music.sequence;
+package idc.symphony.music.transformers;
 
 import org.jfugue.midi.MidiDefaults;
 import org.jfugue.midi.MidiDictionary;

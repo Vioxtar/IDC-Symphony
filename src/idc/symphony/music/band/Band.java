@@ -24,31 +24,12 @@ public class Band {
     Faculty bmPsychology;
     Faculty bmSustainability;
 
-    private Map<Integer, Faculty> facultyCodeToBandMember = new HashMap<Integer, Faculty>() {
-        {
-
-            this.put(1, bmLaw);
-            this.put(2, bmGovernDiplo);
-            this.put(3, bmBusiness);
-            this.put(4, bmCS);
-            this.put(5, bmCommunication);
-            this.put(6, bmEconomy);
-            this.put(7, bmEntrepreneurship);
-            this.put(9, bmAlumni);
-            this.put(10, bmSocialCommit);
-            this.put(11, bmSports);
-            this.put(13, bmInternational);
-            this.put(14, bmAdministration);
-            this.put(15, bmPsychology);
-            this.put(16, bmSustainability);
-
-        }
-    };
+    private Map<Integer, Faculty> facultyCodeToBandMember = new HashMap<>();
 
     public Band() {
 
         bmLaw = new Law
-                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("VIOLIN"));
+                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("SYNTH_STRINGS_2"));
 
         bmGovernDiplo = new GovernDiplo
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("TRUMPET"));
@@ -66,7 +47,7 @@ public class Band {
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("TREMOLO_STRINGS"));
 
         bmEntrepreneurship = new Entrepreneurship
-                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("PAD_CHOIR"));
+                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("CHOIR"));
 
         bmAlumni = new Alumni
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("FIDDLE"));
@@ -89,6 +70,20 @@ public class Band {
         bmSustainability = new Sustainability
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("PICCOLO"));
 
+        facultyCodeToBandMember.put(1, bmLaw);
+        facultyCodeToBandMember.put(2, bmGovernDiplo);
+        facultyCodeToBandMember.put(3, bmBusiness);
+        facultyCodeToBandMember.put(4, bmCS);
+        facultyCodeToBandMember.put(5, bmCommunication);
+        facultyCodeToBandMember.put(6, bmEconomy);
+        facultyCodeToBandMember.put(7, bmEntrepreneurship);
+        facultyCodeToBandMember.put(9, bmAlumni);
+        facultyCodeToBandMember.put(10, bmSocialCommit);
+        facultyCodeToBandMember.put(11, bmSports);
+        facultyCodeToBandMember.put(13, bmInternational);
+        facultyCodeToBandMember.put(14, bmAdministration);
+        facultyCodeToBandMember.put(15, bmPsychology);
+        facultyCodeToBandMember.put(16, bmSustainability);
     }
 
     public Map<Integer, Faculty> bandMembers() {
