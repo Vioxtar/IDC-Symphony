@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Band {
 
+    public static final int RHYTHM_FACULTY = 14;
+
     Faculty bmLaw;
     Faculty bmGovernDiplo;
     Faculty bmBusiness;
@@ -55,7 +57,7 @@ public class Band {
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("GUITAR"));
 
         bmCS = new CS
-                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("LEAD_SQUARE"));
+                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("SQUARE"));
 
         bmCommunication = new Communication
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("CELLO"));
