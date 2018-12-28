@@ -35,7 +35,7 @@ public class Administration extends Faculty {
     public Pattern playSecondary(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("O.O.O.O.");
+        rhythm.addLayer("o.o.^.^.");
         rhythm.setLength(wholes);
         return rhythm.getPattern();
 
@@ -45,7 +45,7 @@ public class Administration extends Faculty {
     public Pattern playCarpet3(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("O.O.O.O.");
+        rhythm.addLayer("^^^^^^^^");
         rhythm.setLength(wholes);
         return rhythm.getPattern();
 
@@ -55,7 +55,7 @@ public class Administration extends Faculty {
     public Pattern playCarpet2(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("O.O.O.O.");
+        rhythm.addLayer("^^^.^^^.");
         rhythm.setLength(wholes);
         return rhythm.getPattern();
 
@@ -65,7 +65,7 @@ public class Administration extends Faculty {
     public Pattern playCarpet1(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("O.O.O.O.");
+        rhythm.addLayer("..^.^.^.");
         rhythm.setLength(wholes);
         return rhythm.getPattern();
 
