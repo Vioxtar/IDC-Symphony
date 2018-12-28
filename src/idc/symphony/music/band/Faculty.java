@@ -32,6 +32,75 @@ public class Faculty implements BandMember {
         return null;
     }
 
+
+    /*************************************************************************************************
+     * Misc functionality
+     *************************************************************************************************/
+    /**
+     * A retarded melodical generator for really any role - placeholder
+     * @param key
+     * @param wholes
+     * @param repLength
+     * @param noteDensity
+     * @param restProb
+     * @return
+     */
+    public Pattern genMusic(Key key, int wholes, int repLength, int noteDensity, float restProb, float changeNoteProb, float changeDurProb) {
+
+        Pattern p = new Pattern();
+
+        float[] durs = divideDuration(repLength, noteDensity);
+        Note[] nots = new Note[durs.length];
+        for (int i = 0; i < durs.length; i++) {
+            nots[i] = getRandomKeyNote(key);
+            if (ranRange(0d, 1d) < restProb) {
+                nots[i] = Note.REST;
+            }
+        }
+
+        int wholesPlayed = 0;
+
+        while (wholesPlayed < wholes) {
+            for (int i = 0; i < durs.length; i++) {
+
+                Note n = nots[i];
+                float dur = durs[i];
+
+                if (ranRange(0d, 1d) < changeDurProb) { // Randomly randomize a random number of randomly selected notes in a random fashion
+                    int notesToChange = ranRange(1, noteDensity / 3);
+                    for (int j = 1; j <= notesToChange; j++) {
+                        int noteToChange = ranRange(0, nots.length - 1);
+                        nots[noteToChange] = getCloseNote(getKeyNotes(key), nots[noteToChange], 2);
+                        if (ranRange(0d, 1d) < restProb) {
+                            nots[i] = Note.REST;
+                        }
+                    }
+                }
+
+                if (ranRange(0d, 1d) < changeNoteProb) { // Perform a single shuffle in the durations
+
+                    int durChanges = ranRange(1,1);
+
+                    for (int j = 1; j <= durChanges; j++) {
+                        int indxA = ranRange(0, durs.length - 1);
+                        int indxB = ranRange(0, durs.length - 1);
+                        float aDur = durs[indxA];
+                        durs[indxA] = durs[indxB];
+                        durs[indxB] = aDur;
+                    }
+                }
+
+                n.setDuration(dur);
+                p.add(n);
+            }
+
+            wholesPlayed += repLength;
+        }
+
+        return p;
+    }
+
+
     /*************************************************************************************************
      * Durations functionality
      *************************************************************************************************/

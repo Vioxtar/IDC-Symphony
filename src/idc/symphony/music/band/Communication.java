@@ -3,15 +3,15 @@ package idc.symphony.music.band;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 
-public class CS extends Faculty {
+public class Communication extends Faculty {
 
     byte instrument;
 
-    public CS(byte instrument) {
+    public Communication(byte instrument) {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 15;
+        long seed = 152316693;
         this.gen.setSeed(seed);
     }
 

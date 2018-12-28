@@ -11,12 +11,12 @@ import java.io.IOException;
 
 public class IDCSymphony {
     public static void main(String [] args) {
-        Faculty cs = new CS();
+        Faculty cs = new CS((byte) 40);
 
 
         Player player = new Player();
         Key key = new Key("Gmaj");
-        player.play(cs.playMainMelody(100, key));
+        player.play(cs.playMainMelody(5, key));
 //
 //        float[] help = cs.divideDuration(4, 2);
 //        for (int i = 0; i < help.length; i++) {

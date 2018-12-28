@@ -26,7 +26,7 @@ public class Band {
     };
 
     public Band() {
-        bmCS = new CS();
+        bmCS = new CS((byte)40);
     }
 
     public Map<Integer, Faculty> bandMembers() {
