@@ -1,6 +1,7 @@
 package idc.symphony.music.band;
 
 import org.jfugue.pattern.Pattern;
+import org.jfugue.rhythm.Rhythm;
 import org.jfugue.theory.Key;
 
 public class Administration extends Faculty {
@@ -23,45 +24,50 @@ public class Administration extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 20, 0.5f, 0.2f, 0.2f);
-        p.setInstrument(instrument);
-        return p;
+        Rhythm rhythm = new Rhythm();
+        rhythm.addLayer("O.O.O.O.");
+        rhythm.setLength(wholes);
+        return rhythm.getPattern();
 
     }
 
     @Override
     public Pattern playSecondary(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
-        p.setInstrument(instrument);
-        return p;
+        Rhythm rhythm = new Rhythm();
+        rhythm.addLayer("O.O.O.O.");
+        rhythm.setLength(wholes);
+        return rhythm.getPattern();
 
     }
 
     @Override
     public Pattern playCarpet3(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 4, 6, 0.6f, 0.2f, 0.05f);
-        p.setInstrument(instrument);
-        return p;
+        Rhythm rhythm = new Rhythm();
+        rhythm.addLayer("O.O.O.O.");
+        rhythm.setLength(wholes);
+        return rhythm.getPattern();
 
     }
 
     @Override
     public Pattern playCarpet2(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 8, 15, 0.6f, 0.1f, 0f);
-        p.setInstrument(instrument);
-        return p;
+        Rhythm rhythm = new Rhythm();
+        rhythm.addLayer("O.O.O.O.");
+        rhythm.setLength(wholes);
+        return rhythm.getPattern();
 
     }
 
     @Override
     public Pattern playCarpet1(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 8, 14, 0.7f, 0f, 0f);
-        p.setInstrument(instrument);
-        return p;
+        Rhythm rhythm = new Rhythm();
+        rhythm.addLayer("O.O.O.O.");
+        rhythm.setLength(wholes);
+        return rhythm.getPattern();
 
     }
 }
