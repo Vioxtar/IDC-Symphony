@@ -12,6 +12,10 @@ public class Faculty implements BandMember {
      * Overrides - to be re-implemented by each child
      *************************************************************************************************/
 
+    public int getTargetTrack() {
+        return -1;
+    }
+
     public Pattern playMainMelody(int wholes, Key key) {
         return null;
     }
@@ -31,7 +35,6 @@ public class Faculty implements BandMember {
     public Pattern playCarpet1(int wholes, Key key) {
         return null;
     }
-
 
     /*************************************************************************************************
      * Misc functionality

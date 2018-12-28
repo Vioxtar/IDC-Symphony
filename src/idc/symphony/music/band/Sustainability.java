@@ -15,6 +15,13 @@ public class Sustainability extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 12;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

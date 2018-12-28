@@ -15,6 +15,13 @@ public class International extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 7;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

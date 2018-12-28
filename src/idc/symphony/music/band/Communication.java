@@ -15,6 +15,13 @@ public class Communication extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 2;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

@@ -15,6 +15,13 @@ public class Sports extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 11;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

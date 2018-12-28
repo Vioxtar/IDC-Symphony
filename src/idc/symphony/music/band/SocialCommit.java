@@ -15,6 +15,13 @@ public class SocialCommit extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 10;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

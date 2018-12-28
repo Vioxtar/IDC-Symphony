@@ -15,6 +15,13 @@ public class CS extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 3;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

@@ -15,6 +15,13 @@ public class Economy extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 4;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

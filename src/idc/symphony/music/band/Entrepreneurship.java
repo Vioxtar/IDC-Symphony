@@ -15,6 +15,13 @@ public class Entrepreneurship extends Faculty {
         this.gen.setSeed(seed);
     }
 
+
+    @Override
+    public int getTargetTrack() {
+        return 5;
+    }
+
+
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 

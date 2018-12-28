@@ -16,6 +16,11 @@ public class Alumni extends Faculty {
     }
 
     @Override
+    public int getTargetTrack() {
+        return 0;
+    }
+
+    @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
         Pattern p = genMusic(key, wholes, 1, 20, 0.5f, 0.2f, 0.2f);
