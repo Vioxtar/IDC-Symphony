@@ -43,8 +43,9 @@ public class Economy extends Faculty {
     @Override
     public Pattern playCarpet3(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 4, 6, 0.6f, 0.2f, 0.05f);
+        Pattern p = genMusic(key, wholes, 1, 1, 0.6f, 0.2f, 0.05f);
         p.setInstrument(instrument);
+        p.addToEachNoteToken("a20");
         return p;
 
     }
@@ -52,8 +53,9 @@ public class Economy extends Faculty {
     @Override
     public Pattern playCarpet2(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 8, 15, 0.6f, 0.1f, 0f);
+        Pattern p = genMusic(key, wholes, 1, 1, 0.6f, 0.1f, 0f);
         p.setInstrument(instrument);
+        p.addToEachNoteToken("a13");
         return p;
 
     }
@@ -61,8 +63,9 @@ public class Economy extends Faculty {
     @Override
     public Pattern playCarpet1(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 8, 14, 0.7f, 0f, 0f);
+        Pattern p = genMusic(key, wholes, 1, 1, 0.7f, 0f, 0f);
         p.setInstrument(instrument);
+        p.addToEachNoteToken("a6");
         return p;
 
     }
