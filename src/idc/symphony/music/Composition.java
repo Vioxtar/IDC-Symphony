@@ -1,6 +1,6 @@
 package idc.symphony.music;
 
-import idc.symphony.music.sequence.SequenceTransformer;
+import idc.symphony.music.transformers.SequenceTransformer;
 import org.jfugue.midi.MidiDefaults;
 import org.jfugue.pattern.Pattern;
 import org.staccato.StaccatoParserListener;
