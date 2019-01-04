@@ -2,10 +2,7 @@ package visual;
 
 import javax.swing.text.Position;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.*;
 
 public class Trail {
 
@@ -16,16 +13,15 @@ public class Trail {
     TPoint head; TPoint tail;
     LinkedList<TPoint> trail;
 
-    int maxTrailLength = 200;
-    double trailInterval = 0.5; double lastExtend;
+    int maxTrailLength = 50;
+    double trailInterval = 1; double lastExtend;
 
     double targetR;
     double exp; double targetExp;
     double targetX; double targetY;
     double originX; double originY;
 
-
-    public Trail(int id, Color headColor, Color trailColor, double xPos, double yPos) {
+    public Trail(int id, Color headColor, Color trailColor, double xPos, double yPos, Trail parent) {
         this.id = id;
         this.headColor = headColor;
         this.trailColor = trailColor;
@@ -36,10 +32,22 @@ public class Trail {
 
         head.x = xPos;
         head.y = yPos;
-        head.r = 10;
 
         tail.x = xPos;
         tail.y = yPos;
+
+        if (parent != null) {
+
+            head.x = parent.head.x;
+            head.y = parent.head.y;
+
+            tail.x = parent.head.x;
+            tail.y = parent.head.y;
+
+            this.tail.follow(parent.head);
+        }
+
+        head.r = 10;
         tail.r = 1;
 
         originX = xPos;
@@ -62,14 +70,39 @@ public class Trail {
 
     public void setImmExp(double exp) { this.exp = exp; }
 
+    /**
+     * Extend the trail by adding a new point from the head.
+     */
     public void extendTrail() {
+
         TPoint newTPoint = new TPoint();
         newTPoint.x = head.x;
         newTPoint.y = head.y;
         newTPoint.r = 0;
         trail.addFirst(newTPoint);
 
+        // If the head has followers, make them follow the new point instead
+        ArrayList<TPoint> followersToAdd = new ArrayList<>();
+        for (TPoint follower : head.followers) {
+            followersToAdd.add(follower);
+        }
+        for (TPoint followerToAdd : followersToAdd) {
+            followerToAdd.follow(newTPoint);
+        }
+
+        // If we've exceeded our limit, cut off the last point
         if (trail.size() > maxTrailLength) {
+            TPoint last = trail.getLast();
+
+            // If the last point has followers, make them follow the tail instead
+            followersToAdd = new ArrayList<>();
+            for (TPoint follower : last.followers) {
+                followersToAdd.add(follower);
+            }
+            for (TPoint followerToAdd : followersToAdd) {
+                followerToAdd.follow(tail);
+            }
+
             trail.removeLast();
         }
     }
@@ -83,16 +116,10 @@ public class Trail {
         double rDiff = targetR - head.r;
         head.r += rDiff * timeMul * 5; // TODO: Make this a parameter - the longer the release of a note the slower the change
 
-        // Head aim
+        // Update our head
         head.aimToXY(targetX, targetY, timeMul);
-
-        // Head friction
-        double slide = 0.2; // The smaller the higher the friction - 1 maintains constant energy
-        head.vx *= Math.pow(slide, timeMul); head.vy *= Math.pow(slide, timeMul);
-
-        // Head velocities
-        head.x += head.vx * timeMul;
-        head.y += head.vy * timeMul;
+        head.applySlide(0.2, timeMul);
+        head.applyVel(timeMul);
 
         // Same idea for the trail itself
         if (trail.isEmpty()) { extendTrail(); return; }
@@ -106,7 +133,10 @@ public class Trail {
         // Iterate the trail downwards from head to tail
         ListIterator trailIt = trail.listIterator(trail.size());
         while (trailIt.hasPrevious()) {
-            TPoint tPoint = (TPoint)trailIt.previous(); // Get the next trail point
+
+            TPoint tPoint = (TPoint)trailIt.previous();
+
+            // The point above, used for radius propagation
             TPoint aboveTPoint = head;
             if (trailIt.hasPrevious()) {aboveTPoint = (TPoint)trailIt.previous(); trailIt.next();}
 
@@ -119,30 +149,21 @@ public class Trail {
             tPoint.r = aboveTPoint.r * 0.975;
 
             // Trail aim
-            tPoint.aimToX(tail.x, timeMul * fracExpRev);
-            tPoint.aimToY(tail.y, timeMul * fracRev * 0.3);
+            double speed = 1; // The speed of the trail flow
+            tPoint.aimToX(tail.x, timeMul * fracExpRev * speed);
+            tPoint.aimToY(tail.y, timeMul * fracRev * speed);
 
-            // Trail friction
-            slide = 0.2;
-            tPoint.vx *= Math.pow(slide, timeMul); tPoint.vy *= Math.pow(slide, timeMul);
-
-            // Trail velocities
-            tPoint.x += tPoint.vx * timeMul;
-            tPoint.y += tPoint.vy * timeMul;
+            tPoint.applySlide(0.2, timeMul);
+            tPoint.applyVel(timeMul);
 
             // Update the fraction for the next iteration
             frac += seg;
         }
 
         // Tail aim
-        tail.aimToXY(originX, originY, timeMul);
-
-        // Tail friction
-        tail.vx *= Math.pow(slide, timeMul); tail.vy *= Math.pow(slide, timeMul);
-
-        // Tail velocities
-        tail.x += tail.vx * timeMul;
-        tail.y += tail.vy * timeMul;
+        tail.aimToXY(originX, originY, timeMul); // Aim to the origin if we're not following anything
+        tail.applySlide(0.2, timeMul);
+        tail.applyVel(timeMul);
 
         // Extend trail when enough time passes
         lastExtend += timeMul;
@@ -175,10 +196,13 @@ public class Trail {
                 g.drawLine((int) (tPointA.x + offX), (int) (tPointA.y + offY), (int) (tPointB.x + offX), (int) (tPointB.y + offY));
                 trailIt.previous();
             }
-            g.fillOval((int)(tPointA.x - tPointA.r / 2 + offX), (int)(tPointA.y - tPointA.r / 2 + offY), (int)tPointA.r, (int)tPointA.r);
+
+            if (tPointA.r > 5) {
+                g.fillOval((int)(tPointA.x - tPointA.r / 2 + offX), (int)(tPointA.y - tPointA.r / 2 + offY), (int)tPointA.r, (int)tPointA.r);
+            }
         }
 
-        g.fillOval((int)(tail.x - tail.r / 2 + offX), (int)(tail.y - tail.r / 2 + offY), (int)tail.r, (int)tail.r);
+//        g.fillOval((int)(tail.x - tail.r / 2 + offX), (int)(tail.y - tail.r / 2 + offY), (int)tail.r, (int)tail.r);
 
         TPoint last = trail.getLast();
         g.drawLine((int)(last.x + offX), (int)(last.y + offY), (int)(tail.x + offX), (int)(tail.y + offY));
@@ -189,11 +213,48 @@ public class Trail {
         public double y, vy;
         public double r;
 
+        HashSet<TPoint> followers;
+        TPoint followed;
+
         public TPoint() {
             this.x = 0;
             this.y = 0;
             this.vx = 0;
             this.vy = 0;
+
+            this.followers = new HashSet<>(); // Who is following us?
+            this.followed = null; // Who are we following?
+        }
+
+        public void applyVel(double timeMul) {
+            this.setX(this.x + this.vx * timeMul);
+            this.setY(this.y + this.vy * timeMul);
+        }
+
+        public void applySlide(double slide, double timeMul) {
+            this.vx *= Math.pow(slide, timeMul); this.vy *= Math.pow(slide, timeMul);
+        }
+
+        public void setX(double x) {
+            // Set X only if we're not following someone else
+            if (followed == null) { this.x = x; }
+
+            // Set the value of our followers as well
+            for (TPoint follower : followers) {
+                follower.setX(x); // We use this call to support follow cycles
+                follower.x = x; // But following points won't set their own values, so set them ourselves
+            }
+        }
+
+        public void setY(double y) {
+            // Set Y only if we're not following someone else
+            if (followed == null) { this.y = y; }
+
+            // Set the value of our followers as well
+            for (TPoint follower : followers) {
+                follower.setY(y); // We use this call to support follow cycles
+                follower.y = y; // But following points won't set their own values, so set them ourselves
+            }
         }
 
         public void aimToX(double targetX, double timeMul) {
@@ -207,6 +268,25 @@ public class Trail {
         public void aimToXY(double targetX, double targetY, double timeMul) {
             aimToX(targetX, timeMul);
             aimToY(targetY, timeMul);
+        }
+
+        public void stopFollowing() {
+            // Remove ourselves from the followed's followers list
+            if (followed != null) {
+                if (followed.followers.contains(this)) {
+                    followed.followers.remove(this);
+                }
+            }
+            followed = null;
+        }
+
+        public void follow(TPoint newFollowed) {
+            // Stop following whoever we might be following
+            stopFollowing();
+
+            // Start following the new followed
+            followed = newFollowed;
+            newFollowed.followers.add(this);
         }
 
         public double distToSqr(TPoint othr) {

@@ -26,14 +26,14 @@ public class Visualizer extends JFrame {
 
         trails = new ArrayList<Trail>();
 
-        for (int i = 1; i <= 16; i++) {
+        for (int i = 1; i <= 1; i++) {
             addTrail();
         }
     }
 
     public void visualize(double timeMul, Graphics g) {
         // Scroll up
-        double scrollSpeed = 0.015;
+        double scrollSpeed = 0.01;
         frameY += scrollSpeed * timeMul;
 
         // Update trail behavior
@@ -49,6 +49,20 @@ public class Visualizer extends JFrame {
             ran.setImmRadius(50);
         }
 
+        // Simualte adding trails
+        if (ranRange(1, 800) == 1) {
+            Trail ran = trails.get(ranRange(0, trails.size() - 1));
+            double xOrigin = window.getWidth() / 2;
+            Color c = new Color(ranRange(0,255), ranRange(0,255), ranRange(0,255));
+            Trail newTrail = new Trail(++trailID, c, c, xOrigin, 300, ran);
+            newTrail.setTargetX(window.getWidth() / 2 + ranRange(-400, 400));
+            newTrail.setTargetRadius(5);
+            newTrail.setTargetExp(0.25);
+            newTrail.setImmRadius(100);
+            trails.add(newTrail);
+
+        }
+
         // Draw all trails
         for (Trail trail : trails) {
             trail.draw(g, 0, frameY);
@@ -58,8 +72,14 @@ public class Visualizer extends JFrame {
     int trailID = -1;
     public void addTrail() {
         double xOrigin = window.getWidth() / 2;
-        if (!trails.isEmpty()) { xOrigin = trails.get(ranRange(0, trails.size() - 1)).targetX; }
-        Trail newTrail = new Trail(++trailID, Color.WHITE, Color.LIGHT_GRAY, xOrigin, 300);
+        Trail ran = null;
+        if (!trails.isEmpty()) {
+            xOrigin = trails.get(ranRange(0, trails.size() - 1)).targetX;
+            if (ranRange(0, 3) == 1) {
+                ran = trails.get(ranRange(0, trails.size() - 1));
+            }
+        }
+        Trail newTrail = new Trail(++trailID, Color.WHITE, Color.LIGHT_GRAY, xOrigin, 300, ran);
         newTrail.setTargetX(window.getWidth() / 2 + ranRange(-400, 400));
         newTrail.setTargetRadius(5);
         newTrail.setTargetExp(0.25);

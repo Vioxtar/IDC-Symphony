@@ -31,14 +31,14 @@ public class Window extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        setBackground(Color.DARK_GRAY);
+        setBackground(Color.BLACK);
 
         long currTime = System.nanoTime();
         long dltaTime = currTime - prevTime; prevTime = currTime;
         double timeMul = (double) dltaTime / 1000000; // 1 ms = 10^6 ns
 
         Graphics2D g2d = (Graphics2D) g;
-//        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         visParent.visualize(timeMul, g2d);
 
         tm.start(); // Start the timer to call future draws
