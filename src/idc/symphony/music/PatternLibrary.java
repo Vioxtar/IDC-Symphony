@@ -125,15 +125,11 @@ public class PatternLibrary {
     }
 
     public Pattern getPattern(String name) {
-        return patterns.get(name);
+        return new Pattern(patterns.get(name));
     }
 
     public ArrayList<Pattern> getAllPatternsList() {
-        ArrayList<Pattern> patternList = new ArrayList<>();
-        for (Pattern pattern : patterns.values()) {
-            patternList.add(pattern);
-        }
-        return patternList;
+        return new ArrayList<>(patterns.values());
     }
 
     public Map<String, Pattern> getAllPatternsMap() {

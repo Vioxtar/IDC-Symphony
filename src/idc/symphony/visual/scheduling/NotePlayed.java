@@ -1,26 +1,22 @@
 package idc.symphony.visual.scheduling;
 
-public class NotePlayed implements VisualEvent {
-    private double time;
-    private int facultyID;
-    private double amp;
+import idc.symphony.data.FacultyData;
 
-    public NotePlayed(double time, int facultyID, double amp) {
+public class NotePlayed implements VisualEvent {
+    public final double time;
+    public final double duration;
+    public final double amp;
+    public final FacultyData faculty;
+
+    public NotePlayed(FacultyData faculty, double time, double duration, double amp) {
         this.time = time;
-        this.facultyID = facultyID;
+        this.faculty = faculty;
+        this.duration = duration;
         this.amp = amp;
     }
 
     @Override
     public double time() {
         return this.time;
-    }
-
-    public double amp() {
-        return amp;
-    }
-
-    public int facultyID() {
-        return facultyID;
     }
 }

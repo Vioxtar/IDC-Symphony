@@ -1,26 +1,21 @@
 package idc.symphony.visual.scheduling;
 
-public class FacultyRoleChanged implements VisualEvent {
-    private double time;
-    private int facultyID;
-    private int roleID;
+import idc.symphony.data.FacultyData;
+import idc.symphony.music.band.BandRole;
 
-    public FacultyRoleChanged(double time, int facultyID, int roleID) {
+public class FacultyRoleChanged implements VisualEvent {
+    public final double time;
+    public final FacultyData faculty;
+    public final BandRole    role;
+
+    public FacultyRoleChanged(double time, FacultyData faculty, BandRole role) {
         this.time = time;
-        this.facultyID = facultyID;
-        this.roleID = roleID;
+        this.faculty = faculty;
+        this.role = role;
     }
 
     @Override
     public double time() {
         return time;
-    }
-
-    public int facultyID() {
-        return facultyID;
-    }
-
-    public int roleID() {
-        return roleID;
     }
 }

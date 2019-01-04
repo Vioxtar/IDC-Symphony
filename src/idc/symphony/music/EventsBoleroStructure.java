@@ -1,7 +1,7 @@
 package idc.symphony.music;
 
-import idc.symphony.stats.YearStat;
-import idc.symphony.stats.YearStats;
+import idc.symphony.data.YearData;
+import idc.symphony.data.YearCollection;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -38,13 +38,13 @@ public class EventsBoleroStructure {
      * @param stats
      * @throws SQLException
      */
-    public EventsBoleroStructure(YearStats stats) throws SQLException {
+    public EventsBoleroStructure(YearCollection stats) throws SQLException {
         eventsPerYearSequence.clear();
 
         minYear = Integer.MAX_VALUE;
         maxYear = Integer.MIN_VALUE;
 
-        stats.statsMap().forEach((year, yearStat) -> {
+        stats.statsMap().forEach((year, yearData) -> {
             if (year < minYear) {
                 minYear = year;
             }
@@ -53,12 +53,12 @@ public class EventsBoleroStructure {
                 maxYear = year;
             }
 
-            int numOfSeqs = 1 + (int)(yearRelativeDensity(yearStat, stats) / 3);
+            int numOfSeqs = 1 + (int)(yearRelativeDensity(yearData, stats) / 3);
             int[] sequenceEvents = new int[numOfSeqs];
 
 
-            int eventsPerSeq = yearStat.events() / numOfSeqs;
-            int remainder = yearStat.events() % numOfSeqs;
+            int eventsPerSeq = yearData.events() / numOfSeqs;
+            int remainder = yearData.events() % numOfSeqs;
 
             Arrays.setAll(
                     sequenceEvents,
@@ -69,8 +69,8 @@ public class EventsBoleroStructure {
         });
     }
 
-    private float yearRelativeDensity(YearStat yearStat, YearStats stats) {
-        return (yearStat.events() * yearStat.faculties() * yearStat.types()) /
+    private float yearRelativeDensity(YearData yearData, YearCollection stats) {
+        return (yearData.events() * yearData.faculties() * yearData.types()) /
                 (stats.averageEvents() * stats.averageFaculties() * stats.averageTypes());
     }
 }

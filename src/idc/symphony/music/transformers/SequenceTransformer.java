@@ -15,7 +15,7 @@ import org.jfugue.theory.Note;
  * Intended for patterns that don't state the latter three; explicitly or via staccato string.
  */
 public class SequenceTransformer extends ChainingParserListenerAdapter {
-    float   time;
+    double time;
     float   amplitude;
     byte     instrument;
     byte    voice;
@@ -31,7 +31,7 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
         this.layerTimeChanged = new boolean[MidiDefaults.LAYERS];
     }
 
-    public void setTime(float time) {
+    public void setTime(double time) {
         this.time = time;
     }
 
@@ -76,9 +76,13 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
         }
     }
 
+    public void onTrackBeatTimeRequested(double time) {
+        this.fireTrackBeatTimeRequested(time + this.time);
+    }
+
     /**
      * Each layer has its own beattime bookmark
-     * @param layer
+     * @param layer target layer
      */
     public void onLayerChanged(byte layer) {
         super.onLayerChanged(layer);

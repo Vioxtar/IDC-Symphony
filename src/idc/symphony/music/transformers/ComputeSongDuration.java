@@ -11,9 +11,6 @@ public class ComputeSongDuration extends ParserListenerAdapter implements Parser
     private double currentTrackBeatTime = 1;
     private int tempo = 120;
 
-    public ComputeSongDuration() {
-    }
-
     public void onTempoChanged(int tempoBPM) {
         tempo = tempoBPM;
     }
@@ -41,6 +38,10 @@ public class ComputeSongDuration extends ParserListenerAdapter implements Parser
             max = Math.max(max, durations[i]);
         }
 
-        return (max * 4 * 60) / tempo;
+        return beatTimeToDuration(max);
+    }
+
+    private double beatTimeToDuration(double beatTime) {
+        return (beatTime * 4 * 60) / tempo;
     }
 }

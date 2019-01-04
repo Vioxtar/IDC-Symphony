@@ -45,4 +45,5 @@ public interface BandMember {
      */
     Pattern playCarpet1(int wholes, Key key);
 
+    int getTargetTrack();
 }

@@ -1,26 +1,18 @@
 package idc.symphony.visual.scheduling;
 
-public class FacultyJoined implements VisualEvent {
-    private double time;
-    private int facultyID;
-    private int parentID;
+import idc.symphony.data.FacultyData;
 
-    public FacultyJoined(double time, int facultyID, int parentID){
+public class FacultyJoined implements VisualEvent {
+    public final double time;
+    public final FacultyData faculty;
+
+    public FacultyJoined(double time, FacultyData faculty){
         this.time = time;
-        this.facultyID = facultyID;
-        this.parentID = parentID;
+        this.faculty = faculty;
     }
 
     @Override
     public double time() {
         return time;
-    }
-
-    public int facultyID() {
-        return facultyID;
-    }
-
-    public int parentID() {
-        return parentID;
     }
 }

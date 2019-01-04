@@ -1,4 +1,4 @@
-import idc.symphony.db.YearStatsFactory;
+import idc.symphony.db.YearDataFactory;
 import idc.symphony.music.EventsBoleroStructure;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ class EventsBoleroStructureTest {
         sqlConf.setReadOnly(true);
 
         dbConnection = sqlConf.createConnection("jdbc:sqlite:data/IDC Events.db");
-        structure = new EventsBoleroStructure(YearStatsFactory.fromDB(dbConnection, null));
+        structure = new EventsBoleroStructure(YearDataFactory.fromDB(dbConnection, null));
 
         if(PRINT_DEBUG) {
             printStructure();
