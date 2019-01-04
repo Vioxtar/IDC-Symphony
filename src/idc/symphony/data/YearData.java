@@ -1,11 +1,11 @@
-package idc.symphony.stats;
+package idc.symphony.data;
 
-public class YearStat {
-    int events;
-    int faculties;
-    int types;
+public class YearData {
+    private int events;
+    private int faculties;
+    private int types;
 
-    public YearStat(int numEvents, int numFaculties, int types) {
+    public YearData(int numEvents, int numFaculties, int types) {
         this.events = numEvents;
         this.faculties = numFaculties;
         this.types = types;

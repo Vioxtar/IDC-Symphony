@@ -1,23 +1,23 @@
-package idc.symphony.stats;
+package idc.symphony.data;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  Per-Year + Total statistics;
+ *  Per-Year + Total Years Data;
  *  Num of Events in Year
  *  Num of Distinct Faculties in Year
  *  Num of Distinct Event Types in Year
  */
-public class YearStats {
-    public static final YearStat EMPTY_YEAR = new YearStat(0,0, 0);
+public class YearCollection {
+    public static final YearData EMPTY_YEAR = new YearData(0,0, 0);
 
-    private YearStat total;
-    private HashMap<Integer, YearStat> yearStatMap;
+    private YearData total;
+    private HashMap<Integer, YearData> yearStatMap;
 
-    public YearStats(
-            HashMap<Integer,YearStat> yearStats,
-            YearStat total) {
+    public YearCollection(
+            HashMap<Integer,YearData> yearStats,
+            YearData total) {
         this.yearStatMap = yearStats;
         this.total = total;
     }
@@ -39,8 +39,8 @@ public class YearStats {
     public float averageTypes() { return (float)total.types() / yearStatMap.size();}
 
     // Per year map - getter + indexed getter for simplified access
-    public Map<Integer,YearStat> statsMap() { return yearStatMap; }
-    public YearStat yearStat(int year) {
+    public Map<Integer,YearData> statsMap() { return yearStatMap; }
+    public YearData yearStat(int year) {
         return yearStatMap.getOrDefault(year, EMPTY_YEAR);
     }
 }

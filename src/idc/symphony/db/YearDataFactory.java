@@ -1,14 +1,14 @@
 package idc.symphony.db;
 
-import idc.symphony.stats.YearStat;
-import idc.symphony.stats.YearStats;
+import idc.symphony.data.YearData;
+import idc.symphony.data.YearCollection;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class YearStatsFactory {
+public class YearDataFactory {
     private static final String SELECT_EVENTS_PER_YEAR =
             "SELECT\n" +
             "   DISTINCT e1.EventYear" +
@@ -37,13 +37,13 @@ public class YearStatsFactory {
     /**
      * Generates Year-based event statistics, only taking into account accepted faculties.
      */
-    public static YearStats fromDB(Connection connection, Set<Integer> acceptedFaculties) throws SQLException {
+    public static YearCollection fromDB(Connection connection, Set<Integer> acceptedFaculties) throws SQLException {
         if (acceptedFaculties == null) {
             return fromDBAll(connection);
         }
 
         int totalEvents = 0, totalFaculties = 0, totalTypes = 0;
-        HashMap<Integer,YearStat> yearStats = new HashMap<>();
+        HashMap<Integer,YearData> yearStats = new HashMap<>();
 
         PreparedStatement eventsDistinctFacultyType = connection.prepareStatement(SELECT_EVENTS_DISTINCT_FACULTY_TYPE);
         ResultSet events = eventsDistinctFacultyType.executeQuery();
@@ -65,7 +65,7 @@ public class YearStatsFactory {
                     totalTypes += currentTypes.size();
 
                     yearStats.put(currentYear,
-                            new YearStat(currentEvents, currentFaculties.size(), currentTypes.size()));
+                            new YearData(currentEvents, currentFaculties.size(), currentTypes.size()));
                 }
 
                 currentEvents = 0;
@@ -87,38 +87,38 @@ public class YearStatsFactory {
             totalTypes += currentTypes.size();
 
             yearStats.put(currentYear,
-                    new YearStat(currentEvents, currentFaculties.size(), currentTypes.size()));
+                    new YearData(currentEvents, currentFaculties.size(), currentTypes.size()));
         }
 
-        YearStat total = new YearStat(totalEvents, totalFaculties, totalTypes);
-        return new YearStats(yearStats, total);
+        YearData total = new YearData(totalEvents, totalFaculties, totalTypes);
+        return new YearCollection(yearStats, total);
     }
 
-    public static YearStats fromDBAll(Connection connection) throws SQLException {
+    public static YearCollection fromDBAll(Connection connection) throws SQLException {
         int totalEvents = 0, totalFaculties = 0, totalTypes = 0;
-        HashMap<Integer, YearStat> yearStats = new HashMap<>();
+        HashMap<Integer, YearData> yearStats = new HashMap<>();
 
         PreparedStatement eventsPerYearStatement = connection.prepareStatement(SELECT_EVENTS_PER_YEAR);
         ResultSet eventsPerYears = eventsPerYearStatement.executeQuery();
 
         while (eventsPerYears.next()) {
-            YearStat currYearStat = new YearStat(
+            YearData currYearData = new YearData(
                     eventsPerYears.getInt("NumEvents"),
                     eventsPerYears.getInt("NumFaculties"),
                     eventsPerYears.getInt("NumTypes")
             );
 
-            totalEvents += currYearStat.events();
-            totalFaculties += currYearStat.faculties();
-            totalTypes += currYearStat.types();
+            totalEvents += currYearData.events();
+            totalFaculties += currYearData.faculties();
+            totalTypes += currYearData.types();
 
             yearStats.put(
                     eventsPerYears.getInt("Year"),
-                    currYearStat
+                    currYearData
             );
         }
 
-        YearStat total = new YearStat(totalEvents, totalFaculties, totalTypes);
-        return new YearStats(yearStats, total);
+        YearData total = new YearData(totalEvents, totalFaculties, totalTypes);
+        return new YearCollection(yearStats, total);
     }
 }
