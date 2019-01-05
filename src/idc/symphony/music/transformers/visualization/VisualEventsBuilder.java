@@ -94,6 +94,10 @@ public class VisualEventsBuilder extends ParserListenerAdapter {
                     (double)note.getOnVelocity() / MidiDefaults.MAX_ON_VELOCITY
             ));
         }
+
+        if (!note.isHarmonicNote()) {
+            timeManager.advanceTrackBeatTime(note.getDuration());
+        }
     }
 
     private boolean isMelodicOrMainPercussive(Note note) {
