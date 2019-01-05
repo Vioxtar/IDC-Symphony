@@ -9,6 +9,7 @@ import idc.symphony.music.conducting.logging.YearLogger;
 import idc.symphony.music.conducting.rules.*;
 import idc.symphony.music.transformers.visualization.VisualEventsBuilder;
 import idc.symphony.music.transformers.visualization.factory.VisualEventManager;
+import idc.symphony.visual.scheduling.VisualEvent;
 import org.jfugue.pattern.Pattern;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,9 @@ import org.sqlite.SQLiteConfig;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Map;
+import java.util.Queue;
 import java.util.logging.Logger;
 
 class DBConductorTest {
@@ -37,8 +40,10 @@ class DBConductorTest {
                 "%5$s%6$s%n");
         Logger logger = Logger.getAnonymousLogger();
 
+        long before = System.currentTimeMillis();
         DBConductor conductor = new DBConductor(dbConnection);
-
+        System.out.println(String.format("Connection time: %f", (System.currentTimeMillis() - before) / 1000.0));
+        before = System.currentTimeMillis();
         conductor.addCommand(1000, Recurrence.Year, new YearLogger(logger));
 
         conductor.addCommand(0, Recurrence.Sequence, new DuetMelody());
@@ -56,13 +61,20 @@ class DBConductorTest {
 
         conductor.addCommand(0, Recurrence.Event, new LyricEvents());
         conductor.addCommand(1000, Recurrence.Event, new EventLogger(logger));
-
+        System.out.println(String.format("Conductor config time: %f", (System.currentTimeMillis() - before) / 1000.0));
+        before = System.currentTimeMillis();
         Pattern song = conductor.conduct();
+        System.out.println(String.format("Conducting time: %f", (System.currentTimeMillis() - before) / 1000.0));
 
+        before = System.currentTimeMillis();
         VisualEventManager eventManager = new VisualEventManager(
             VisualEventManager.defaultConverters(conductor.getFacultyMap()));
         VisualEventsBuilder eventsBuilder = new VisualEventsBuilder(eventManager);
+        System.out.println(String.format("Events init time: %f", (System.currentTimeMillis() - before) / 1000.0));
 
-        System.out.println(eventsBuilder.build(song).size());
+        before = System.currentTimeMillis();
+        Deque<VisualEvent> scheduledEvents = (Deque<VisualEvent>)eventsBuilder.build(song);
+        System.out.println(String.format("Events build time: %f", (System.currentTimeMillis() - before) / 1000.0));
+        System.out.println(scheduledEvents.size());
     }
 }
