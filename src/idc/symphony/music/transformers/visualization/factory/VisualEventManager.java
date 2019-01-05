@@ -23,7 +23,7 @@ public class VisualEventManager {
     }
 
     public List<VisualEvent> getEventsFromLyric(double time, String lyric) {
-        String lyrics[] = lyric.split(String.valueOf(LyricEventConverter.EVENT_TYPE_DELIM), 2);
+        String lyrics[] = lyric.split(LyricEventConverter.EVENT_TYPE_DELIM, 2);
 
         if (lyrics.length == 2) {
             for (LyricEventConverter converter : converters) {
@@ -57,7 +57,7 @@ public class VisualEventManager {
 
         @Override
         public List<VisualEvent> convert(double time, String lyric) {
-            String[] args = lyric.split(",", 3);
+            String[] args = lyric.split(LyricEventConverter.EVENT_ARG_DELIM, 3);
 
             return Collections.singletonList(new EventOccured(
                     time,
@@ -88,7 +88,7 @@ public class VisualEventManager {
 
         @Override
         public List<VisualEvent> convert(double time, String lyric) {
-            String[] args = lyric.split(",", 3);
+            String[] args = lyric.split(LyricEventConverter.EVENT_ARG_DELIM, 3);
             LinkedList<VisualEvent> result = new LinkedList<>();
             int facultyID = Integer.parseInt(args[0]);
 
@@ -126,7 +126,7 @@ public class VisualEventManager {
 
         @Override
         public List<VisualEvent> convert(double time, String lyric) {
-            String[] args = lyric.split(",", 2);
+            String[] args = lyric.split(LyricEventConverter.EVENT_ARG_DELIM, 2);
 
             return Collections.singletonList(new FacultyRoleChanged(
                     time,
@@ -147,7 +147,7 @@ public class VisualEventManager {
 
         @Override
         public List<VisualEvent> convert(double time, String lyric) {
-            String[] args = lyric.split(",", 1);
+            String[] args = lyric.split(LyricEventConverter.EVENT_ARG_DELIM, 1);
 
             return Collections.singletonList(new YearChanged(
                     time,

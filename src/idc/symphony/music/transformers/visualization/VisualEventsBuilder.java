@@ -86,14 +86,19 @@ public class VisualEventsBuilder extends ParserListenerAdapter {
 
     public void onNoteParsed(Note note) {
         FacultyData noteFaculty = trackToFacultyMap.get(timeManager.getCurrentTrackNumber());
-        if (noteFaculty != null) {
+        if (noteFaculty != null && isMelodicOrMainPercussive(note)) {
             events.add(new NotePlayed(
                     noteFaculty,
                     beatTimeToDuration(timeManager.getTrackBeatTime()),
                     beatTimeToDuration(note.getDuration()),
-                    note.getOnVelocity()
+                    (double)note.getOnVelocity() / MidiDefaults.MAX_ON_VELOCITY
             ));
         }
+    }
+
+    private boolean isMelodicOrMainPercussive(Note note) {
+        return  !note.isRest() &&
+                (!(timeManager.getCurrentTrackNumber() == 9) || timeManager.getCurrentLayerNumber() == 0);
     }
 
     private double beatTimeToDuration(double beatTime) {
