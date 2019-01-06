@@ -24,7 +24,8 @@ public enum BandRole {
             patternGetter = (member) ->
                 getters[counter++ % 3].apply(member);
         }
-    };
+    },
+    None(null);
 
     GetterProducer patternGetter;
 
