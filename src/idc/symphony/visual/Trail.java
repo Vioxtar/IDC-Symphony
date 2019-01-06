@@ -1,6 +1,7 @@
 package idc.symphony.visual;
 
 import javafx.scene.Group;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -11,68 +12,85 @@ import java.util.*;
 
 public class Trail {
 
-    int id;
-    Color headColor;
-    Color trailColor;
-
     TPoint head; TPoint tail;
     LinkedList<TPoint> trail;
 
-    int maxTrailLength = 200;
-    double trailInterval = 10; double lastExtend;
-
-    double targetR;
-    double exp; double targetExp;
-    double targetX; double targetY;
-    double originX; double originY;
-
-    public Trail(int id, Color headColor, Color trailColor, double xPos, double yPos, Trail parent) {
-        this.id = id;
-        this.headColor = headColor;
-        this.trailColor = trailColor;
-
+    public Trail() {
         this.head = new TPoint();
         this.trail = new LinkedList<TPoint>();
         this.tail = new TPoint();
-
-        head.x = xPos;
-        head.y = yPos;
-
-        tail.x = xPos;
-        tail.y = yPos;
-
-        if (parent != null) {
-            head.x = parent.head.x;
-            head.y = parent.head.y;
-
-            tail.x = parent.head.x;
-            tail.y = parent.head.y;
-
-            tail.follow(parent.head);
-        }
-
-        head.r = 10;
-        tail.r = 1;
-
-        originX = xPos;
-        originY = yPos;
     }
 
+
+    int maxTrailLength = 200;
+    public void setMaxTrailLength(int length) { maxTrailLength = length; }
+
+    double trailInterval = 10; double lastExtend;
+    public void setTrailInterval(int interval) { trailInterval = interval; }
+
+    Color headColor;
+    public void setHeadColor(Color headCol) { headColor = headCol; }
+
+    Color trailColor;
+    public void setTrailColor(Color trailCol) { trailColor = trailCol; }
+
+    Color lineColor;
+    public void setLineColor(Color lineCol) { lineColor = lineCol; }
+
+    double originX;
+    public void setOriginX(double x) { originX = x; }
+
+    double originY;
+    public void setOriginY(double y) { originY = y; }
+
+    public void setHeadX(double x) { head.x = x; }
+    public void setHeadY(double y) { head.y = y; }
+
+    public void setTailX(double x) { tail.x = x; }
+    public void setTailY(double y) { tail.y = y; }
+
+    double targetX;
     public void setTargetX(double x) {
         targetX = x;
     }
+    public double getTargetX() { return targetX; }
 
+    double targetY;
     public void setTargetY(double y) {
         targetY = y;
     }
+    public double getTargetY() { return targetY; }
 
+    double targetR;
     public void setTargetRadius(double r) { targetR = r; }
-
     public void setImmRadius(double r) { head.r = r; }
 
-    public void setTargetExp(double exp) { targetExp = exp; }
+    double changeRSpeed;
+    public void setChangeRadiusSpeed(double chngeSpd) {
+        changeRSpeed = chngeSpd;
+    }
 
-    public void setImmExp(double exp) { this.exp = exp; }
+    Trail followTarget;
+    ArrayList<Trail> followers;
+    public void setFollowTarget(Trail newTarget) {
+
+        if (followTarget != null) {
+            if (followTarget.followers == null) {
+                followTarget.followers = new ArrayList<>();
+            }
+            followTarget.followers.remove(this);
+        }
+
+        followTarget = newTarget;
+        tail.follow(newTarget.head);
+
+        if (newTarget.followers == null) {
+            newTarget.followers = new ArrayList<>();
+        }
+        newTarget.followers.add(this);
+    }
+    public Trail getFollowTarget(Trail followTarget) { return followTarget; }
+    public ArrayList<Trail> getFollowers() { return followers; }
 
     public double[] getMaxs() {
         return new double[] {Math.max(head.x, tail.x), Math.max(head.y, tail.y)};
@@ -104,7 +122,7 @@ public class Trail {
         double mul = 0.005;
 
         // Update our head
-        head.aimToRadius(targetR, 5 * mul);
+        head.aimToRadius(targetR, changeRSpeed * mul);
         head.aimToXY(targetX, targetY, 10 * mul);
         head.applySlide(0.01, mul);
         head.applyVel(mul);
@@ -113,9 +131,6 @@ public class Trail {
         if (trail.isEmpty()) { extendTrail(); return; }
 
         double frac = 0; double seg = 1 / (double)trail.size(); // The fraction in the linked list
-
-        // Update the trail exponent before iteration
-        exp += (targetExp - exp) * 20 * mul;
 
         // Iterate the trail downwards from head to tail
         ListIterator trailIt = trail.listIterator(trail.size());
@@ -129,7 +144,7 @@ public class Trail {
 
             // When frac is closer to 1, we're closer to the tail
             // When fracRev is closer to 1, we're closer to the head
-            double fracExp = Math.pow(frac, tPoint.r);
+            double fracExp = Math.pow(frac, tPoint.r * 0.2);
             double fracExpRev = 1 - fracExp;
             double fracRev = 1 - frac;
 
@@ -145,7 +160,7 @@ public class Trail {
             // Trail aim
             double speed = 5; // The speed of the trail flow
             tPoint.aimToX(tail.x, fracExpRev * speed * mul);
-            tPoint.aimToY(tail.y, fracRev * speed * mul);
+            tPoint.aimToY(tail.y, frac * speed * mul);
 
             // Trail slide
             double slide = 0.1;
@@ -175,7 +190,8 @@ public class Trail {
         Group lines = new Group();
 
         Circle circ = new Circle();
-        circ.relocate(head.x, head.y); circ.setRadius(head.r); circles.getChildren().add(circ);
+        circ.relocate(head.x, head.y); circ.setRadius(head.r); circ.setFill(headColor);
+        circles.getChildren().add(circ);
 
         // Nothing to work with if we don't have a trail
         if (trail.isEmpty()) { return; }
@@ -185,6 +201,8 @@ public class Trail {
         Line line = new Line();
         line.setStartX(head.x); line.setStartY(head.y);
         line.setEndX(firstPoint.x); line.setEndY(firstPoint.y);
+        line.setStroke(lineColor);
+        line.setStrokeWidth(head.r);
         lines.getChildren().add(line);
 
         // Draw the trail itself
@@ -197,6 +215,8 @@ public class Trail {
                 line = new Line();
                 line.setStartX(tPointA.x); line.setStartY(tPointA.y);
                 line.setEndX(tPointB.x); line.setEndY(tPointB.y);
+                line.setStroke(lineColor);
+                line.setStrokeWidth(tPointA.r);
                 lines.getChildren().add(line);
 
                 trailIt.previous();
@@ -204,7 +224,8 @@ public class Trail {
 
             if (tPointA.r > 0) {
                 circ = new Circle();
-                circ.relocate(tPointA.x, tPointA.y); circ.setRadius(tPointA.r); circles.getChildren().add(circ);
+                circ.relocate(tPointA.x, tPointA.y); circ.setRadius(tPointA.r); circ.setFill(trailColor);
+                circles.getChildren().add(circ);
             }
         }
 
@@ -212,6 +233,8 @@ public class Trail {
         line = new Line();
         line.setStartX(last.x); line.setStartY(last.y);
         line.setEndX(tail.x); line.setEndY(tail.y);
+        line.setStroke(lineColor);
+        line.setStrokeWidth(last.r);
         lines.getChildren().add(line);
 
         g.getChildren().add(circles);

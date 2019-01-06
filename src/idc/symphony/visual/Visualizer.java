@@ -1,5 +1,7 @@
 package idc.symphony.visual;
 
+import idc.symphony.data.FacultyData;
+import idc.symphony.visual.scheduling.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Camera;
@@ -18,7 +20,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -26,80 +28,187 @@ import static java.lang.Math.random;
 
 public class Visualizer extends Application {
 
-    final int CAN_WDTH = 800;
-    final int CAN_HGHT = 600;
+    final int CAN_WDTH = 720;
+    final int CAN_HGHT = 680;
+    final Color BG_COLR = Color.BLACK;
+
+    final double yJump = 700;
+
 
     ArrayList<Trail> trails;
+    Queue<VisualEvent> schedEvents;
+    HashMap<Integer, Integer> facIDtoTrails;
 
     Scene trailsScene;
     Pane camera;
     double camCenterX, camCenterY, camZoom;
+    long simStartTime;
 
-    public Visualizer() {}
+    public Visualizer(Queue<VisualEvent> schedEvents) {
+        // Initialize schedueled events queue as soon as we're up
+        // for loading prior to simulation
+        this.schedEvents = schedEvents;
+    }
 
     @Override
     public void start(Stage primaryStage) {
 
         // Initialization
-        this.camera = new Pane(); this.camZoom = 1;
-        this.trailsScene = new Scene(this.camera, CAN_WDTH, CAN_HGHT, Color.DARKGREY);
+        this.camera = new Pane();
+        this.trailsScene = new Scene(this.camera, CAN_WDTH, CAN_HGHT, BG_COLR);
         this.trails = new ArrayList<>();
-
+        this.simStartTime = System.nanoTime();
+        this.facIDtoTrails = new HashMap<>();
 
         // Take control of the primary stage
-//        primaryStage.setResizable(false);
         primaryStage.setScene(trailsScene);
         primaryStage.show();
-
-        // TODO: DEBUG
-        addTrail();
 
         // Start the main loop timer
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                simulationTick(now); // For update calls
+                simulationTick(now); // For simulation update calls
                 stageTick(now); // For drawing calls
             }
         }.start();
     }
 
-    long simTime = -1;
+    long simBefore = -1;
     final long simTickInterval = TimeUnit.NANOSECONDS.convert(5, TimeUnit.MILLISECONDS);
     public void simulationTick(long now) {
-        if (simTime == -1) {
-            simTime = now;
+        if (simBefore == -1) {
+            simBefore = now;
         }
-        while(simTime < now) {
-            simulate();
-            simTime += simTickInterval;
+        while(simBefore < now) {
+            simulate(now);
+            simBefore += simTickInterval;
         }
     }
 
-    long stageTime = -1;
-    final long stageTickInterval = TimeUnit.NANOSECONDS.convert(10, TimeUnit.MILLISECONDS);;
+    long stageBefore = -1;
+    final long stageTickInterval = TimeUnit.NANOSECONDS.convert(16, TimeUnit.MILLISECONDS);;
     public void stageTick(long now) {
-        if (stageTime == -1) {
-            stageTime = now;
+        if (stageBefore == -1) {
+            stageBefore = now;
         }
-        if (stageTime <= now) {
+        if (stageBefore <= now) {
             visualize();
-            stageTime += stageTickInterval;
+            stageBefore += stageTickInterval;
         }
     }
 
-    public void simulate() {
-        // TODO: This is where we do future event calls...
-            /*
-            for all future events, if simTime >= eventTime, then apply event, remove event from futureevents
-             */
+
+    /**
+     * Simulates a given visual event.
+     * @param event
+     */
+    public void visualizeEvent(VisualEvent event) {
+        if (event instanceof NotePlayed) {
+//            System.out.println("Note Played");
+
+            // TODO: Set a higher immediate radius, draw an additive spreading blur to the background with the trail color
+            FacultyData fD = ((NotePlayed) event).faculty;
+            if (facIDtoTrails.containsKey(fD.ID)) {
+                int trailID = facIDtoTrails.get(fD.ID);
+                Trail trail = trails.get(trailID);
+                trail.setImmRadius(100);
+                trail.setChangeRadiusSpeed(1 / ((NotePlayed) event).duration);
+            }
+
+        } else if (event instanceof EventOccured) {
+//            System.out.println("Event Occured");
+
+            // TODO: Display text alligned with the corresponding trail
+
+        } else if (event instanceof FacultyRoleChanged) {
+//            System.out.println("Faculty Role Changed");
+
+            // TODO: Change the saturation of every trail color, shift target positions
+
+        } else if (event instanceof FacultyJoined) {
+//            System.out.println("Faculty Joined");
+
+            FacultyData fD = ((FacultyJoined) event).faculty;
+
+            Trail trail = new Trail();
+            {
+                // Radius
+                trail.setTargetRadius(20);
+                trail.setImmRadius(0);
+                trail.setChangeRadiusSpeed(5);
+
+                // Color TODO: Make this hard coded or something, give fancier colors
+                Color tempCol = Color.rgb(ranRange(0, 255), ranRange(0, 255), ranRange(0, 255));
+                trail.setHeadColor(tempCol); trail.setTrailColor(tempCol); trail.setLineColor(tempCol);
+
+                // Obtain our parent and emerge from it
+                Trail parent = null;
+                if (fD.parent != null && facIDtoTrails.containsKey(fD.parent.ID)) {
+                    // Make sure that we have a parent
+                    parent = trails.get(facIDtoTrails.get(fD.parent.ID));
+                }
+                if (parent != null && parent != trail) {
+                    // Originate from our parent's head
+                    trail.setOriginX(parent.head.x);
+                    trail.setOriginY(parent.head.y);
+                    trail.setHeadX(parent.head.x); trail.setHeadY(parent.head.y);
+                    trail.setTailX(parent.head.x); trail.setTailY(parent.head.y);
+
+                    // Have the trail follow its parent
+                    trail.setFollowTarget(parent);
+
+                    // Aim slightly above the parent
+                    trail.setTargetY(parent.getTargetY() - yJump);
+
+                    // Reorganize the parent's children to add room for the new child
+                    organizeChildXTargets(parent, parent.getTargetY());
+
+                } else {
+
+                    // Set starting position
+                    trail.setOriginX(0);
+                    trail.setOriginY(0);
+                    trail.setHeadX(0); trail.setHeadY(0);
+                    trail.setTailX(0); trail.setTailY(0);
+
+                    trail.setTargetY(-yJump);
+                }
+            }
+            // Register the new trail
+            int size = trails.size();
+            trails.add(size, trail);
+            facIDtoTrails.put(fD.ID, size);
+
+
+        } else if (event instanceof YearChanged) {
+//            System.out.println("Year Changed");
+
+            // TODO: Do something in the background to show the year...?
+
+        }
+    }
+
+    public void simulate(long now) {
+
+        // Update the simulation time
+        double simTime = (double)(now - simStartTime) / 10e8;
+
+        // Peek at our next event and determine if we should simulate it
+        double simReadRate = 1; // TODO: DEBUG
+        VisualEvent nextEvent = schedEvents.peek();
+        while (nextEvent != null && nextEvent.time() / simReadRate <= (simTime)) {
+            schedEvents.poll();
+            visualizeEvent(nextEvent);
+            nextEvent = schedEvents.peek();
+        }
 
         // Update all trails
         trails.parallelStream().forEach((trail) -> {
             trail.update();
         });
 
-        // Obtain mins/maxs of all trails
+        // Obtain mins/maxs of all trails for framing purposes
         double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE;
         double minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
 
@@ -122,24 +231,14 @@ public class Visualizer extends Application {
             }
         }
 
-        // Determine the camera center to be the average of our mins/maxs
+
+        // Camera center is always the average of our mins/maxs
         camCenterX = (maxX + minX) / 2;
         camCenterY = (maxY + minY) / 2;
 
+        // Camera zoom is linearly correlated with the biggest span of the scene
         double dist = Math.max((maxX - minX), (maxY - minY));
         camZoom = 1 / dist;
-
-        // Simulate new joins
-        if (ranRange(1, 500) == 1 && trails.size() < 16) {
-            addTrail();
-        }
-
-        // Simulate note plays
-        if (ranRange(1, 50) == 1) {
-            Trail ran = trails.get(ranRange(0, trails.size() - 1));
-            ran.setImmExp(5);
-            ran.setImmRadius(50);
-        }
     }
 
     public void visualize() {
@@ -147,7 +246,9 @@ public class Visualizer extends Application {
         Pane camera = new Pane();
 
         // Have every trail draw into the new camera
-        for (Trail trail : trails) {
+        int i = trails.size() - 1;
+        while (i >= 0) {
+            Trail trail = trails.get(i--);
             trail.draw(camera);
         }
 
@@ -156,25 +257,46 @@ public class Visualizer extends Application {
         double sceneW = trailsScene.getWidth();
         double sceneH = trailsScene.getHeight();
 
-        // Add a small buffer to the frame
-        double frameBuffer = 50;
-        sceneW -= frameBuffer;
-        sceneH -= frameBuffer;
 
-        // We consider our window size when determining the final zoom
-        double sceneRange = Math.min(sceneW, sceneH);
+        // We consider our window size (scene range) when determining the final zoom
+        double minSceneRange = Math.min(sceneW, sceneH);
 
-        double scale = camZoom * sceneRange;
+        double scaleBuffer = 0.8;
+        double scale = camZoom * minSceneRange * scaleBuffer;
+        scale = Math.min(scale, 1); // We can only zoom out from 1
         camera.setScaleX(scale); camera.setScaleY(scale);
 
-        // Place the camera in the scene (negated because camera positioning is reversed...)
-        camera.setLayoutX(scale * -(camCenterX - sceneW / 2));
-        camera.setLayoutY(scale * -(camCenterY - sceneH / 2));
+        // Place the camera in the scene (negated because camera positioning is reversed)
+        double camX = camCenterX;
+        double camY = camCenterY;
+        camera.setLayoutX(scale * -(camX - sceneW / 2));
+        camera.setLayoutY(scale * -(camY - sceneH / 2));
+
 
         // TODO: Interpolate the camera movement... mainly good for fresh trail spawns
 
         // Finalize
         trailsScene.setRoot(camera);
+    }
+
+    public void organizeChildXTargets(Trail parent, double y) {
+        ArrayList<Trail> children = parent.getFollowers();
+        if (children == null) { return; }
+        int size = children.size();
+        int frac = 0;
+        double spread = spreadByY(y);
+        double leftMost = parent.getTargetX() - (spread * (size - 1)) / 2;
+        for (Trail child : children) {
+            double targetX = leftMost + (spread * frac);
+            child.setTargetX(targetX);
+            frac++;
+
+            organizeChildXTargets(child, child.getTargetY());
+        }
+    }
+
+    public double spreadByY(double y) {
+        return 250000 * (yJump / Math.pow(y, 2));
     }
 
     public void testDraw(Pane root) {
@@ -207,28 +329,6 @@ public class Visualizer extends Application {
         root.getChildren().add(blendModeGroup);
         circles.setEffect(new BoxBlur(ranRange(0, 100), ranRange(0, 100), ranRange(1, 1)));
 
-    }
-
-    int trailID = -1;
-    public void addTrail() {
-        double xOrigin = CAN_WDTH / 2;
-        Trail ran = null;
-        if (!trails.isEmpty()) {
-            xOrigin = trails.get(ranRange(0, trails.size() - 1)).targetX;
-            if (ranRange(1, 2) == 1) {
-                ran = trails.get(ranRange(0, trails.size() - 1));
-            }
-        }
-        Trail newTrail = new Trail(++trailID, Color.WHITE, Color.LIGHTGRAY, xOrigin, CAN_HGHT, ran);
-        newTrail.setTargetX(CAN_WDTH / 2 + ranRange(-400, 400) * 3);
-        newTrail.setTargetY(ranRange(-400, 400) * 3);
-        newTrail.setTargetRadius(5);
-        newTrail.setTargetExp(0.25);
-        newTrail.setImmRadius(100);
-        trails.add(newTrail);
-        // TODO: Support connecting trails by having the new tail spawn on the parent's head,
-        // TODO: and every time the parent extends its trail, it pushes the child's tail with it
-        // TODO: until it reaches its tail, and stays there?
     }
 
     public static int ranRange(int a, int b){
