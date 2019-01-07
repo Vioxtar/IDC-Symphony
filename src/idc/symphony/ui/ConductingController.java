@@ -29,8 +29,10 @@ import java.util.logging.Logger;
 
 /**
  * Controller in charge of the conducting process
+ *
  */
 public class ConductingController {
+    private static Logger logger = Logger.getLogger("idc.symphony");
     private static SQLiteConfig SQL_CONF = new SQLiteConfig();
     static {
         SQL_CONF.setReadOnly(true);
@@ -115,7 +117,7 @@ public class ConductingController {
                     try {
                         return createsNewMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
                     } catch (Exception ex) {
-                        Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
+                        logger.log(Level.SEVERE, ex.getMessage(), ex);
                         throw ex;
                     } finally {
                         Platform.runLater(() -> conductingProperty.set(false));
@@ -133,18 +135,21 @@ public class ConductingController {
      * Generates a task that creates an info MIDI pattern that does not contain musical data.
      * Purely for visualization, can be attached to pattern extracted from existing MIDI.
      *
-     * @param file     Database file to generate pattern from
+     * @param dbFile   Database file to generate pattern from
+     * @param midiFile Existing MIDI to draw musical information from
      * @param callback Called when finished with resulting pattern
      */
-    public void getInfoMIDIAsync(File file, Consumer<Pattern> callback) {
+    public void getInfoMIDIAsync(File dbFile, File midiFile, Consumer<Pattern> callback) {
         if (!conductingProperty.get()) {
             Task<Pattern> task = new Task<Pattern>() {
                 @Override
                 protected Pattern call() throws Exception {
                     try {
-                        return preparesForExistingMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
+                        Pattern existingSong = MidiFileManager.loadPatternFromMidi(midiFile);
+                        return existingSong.add(
+                                preparesForExistingMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(dbFile))));
                     } catch (Exception ex) {
-                        Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
+                        logger.log(Level.SEVERE, ex.getMessage(), ex);
                         throw ex;
                     } finally {
                         Platform.runLater(() -> conductingProperty.set(false));

@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Creates EventTypes data structure
+ */
 public class EventTypesFactory {
     private static String SELECT_TYPES =
             "SELECT ID as TypeID, EventType as TypeName FROM EventTypes";

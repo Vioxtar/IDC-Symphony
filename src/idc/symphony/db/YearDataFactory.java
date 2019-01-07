@@ -8,44 +8,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *  Creates year-based statistical event data, filtered by supported faculties
+ *  TODO: Convert YearDataFactory into a single-row SQL query using joined tables and variable-length IN
+ */
 public class YearDataFactory {
-    private static final String SELECT_EVENTS_PER_YEAR =
-            "SELECT\n" +
-            "   DISTINCT e1.EventYear" +
-            "       as \"Year\",\n" +
-            "   (SELECT COUNT(*) FROM Events AS e2 WHERE e2.EventYear = e1.EventYear\n" +
-                    "AND e2.EventFaculty IN ?) " +
-            "       as NumEvents,\n" +
-            "   (SELECT COUNT(*) FROM" +
-            "       (SELECT DISTINCT EventFaculty FROM Events AS e2\n" +
-                    "WHERE e2.EventYear = e1.EventYear" +
-                    "       AND e2.EventFaculty IN ?))" +
-            "       as NumFaculties,w\n" +
-            "   (SELECT COUNT(*) FROM" +
-            "       (SELECT DISTINCT EventType FROM Events AS e2 WHERE e2.EventYear = e1.EventYear" +
-                    "   AND e2.EventFaculty IN ?)) " +
-            "       AS NumTypes\n" +
-            "FROM Events AS e1\n" +
-            "GROUP BY EventYear\n" +
-            "ORDER BY EventYear";
-
-    private static final String SELECT_EVENTS_DISTINCT_FACULTY_TYPE =
+    private static final String SELECT_YEAR_ORDERED_EVENTS =
             "SELECT EventYear as \"Year\", EventFaculty as \"Faculty\", EventType as \"Type\"\n" +
             "FROM Events\n" +
             "ORDER BY \"Year\"";
 
     /**
-     * Generates Year-based event statistics, only taking into account accepted faculties.
+     * Generates Year-based event statistics, only taking into account supported faculties.
      */
-    public static YearCollection fromDB(Connection connection, Set<Integer> acceptedFaculties) throws SQLException {
-        if (acceptedFaculties == null) {
-            return fromDBAll(connection);
-        }
-
+    public static YearCollection fromDB(Connection connection, Set<Integer> supportedFaculties) throws SQLException {
         int totalEvents = 0, totalFaculties = 0, totalTypes = 0;
         HashMap<Integer,YearData> yearStats = new HashMap<>();
 
-        PreparedStatement eventsDistinctFacultyType = connection.prepareStatement(SELECT_EVENTS_DISTINCT_FACULTY_TYPE);
+        PreparedStatement eventsDistinctFacultyType = connection.prepareStatement(SELECT_YEAR_ORDERED_EVENTS);
         ResultSet events = eventsDistinctFacultyType.executeQuery();
 
         int currentYear = -1;
@@ -74,7 +54,7 @@ public class YearDataFactory {
                 currentYear = eventYear;
             }
 
-            if (acceptedFaculties.contains(eventFaculty)) {
+            if (supportedFaculties == null || supportedFaculties.contains(eventFaculty)) {
                 currentEvents++;
                 currentFaculties.add(eventFaculty);
                 currentTypes.add(eventType);
@@ -88,34 +68,6 @@ public class YearDataFactory {
 
             yearStats.put(currentYear,
                     new YearData(currentEvents, currentFaculties.size(), currentTypes.size()));
-        }
-
-        YearData total = new YearData(totalEvents, totalFaculties, totalTypes);
-        return new YearCollection(yearStats, total);
-    }
-
-    public static YearCollection fromDBAll(Connection connection) throws SQLException {
-        int totalEvents = 0, totalFaculties = 0, totalTypes = 0;
-        HashMap<Integer, YearData> yearStats = new HashMap<>();
-
-        PreparedStatement eventsPerYearStatement = connection.prepareStatement(SELECT_EVENTS_PER_YEAR);
-        ResultSet eventsPerYears = eventsPerYearStatement.executeQuery();
-
-        while (eventsPerYears.next()) {
-            YearData currYearData = new YearData(
-                    eventsPerYears.getInt("NumEvents"),
-                    eventsPerYears.getInt("NumFaculties"),
-                    eventsPerYears.getInt("NumTypes")
-            );
-
-            totalEvents += currYearData.events();
-            totalFaculties += currYearData.faculties();
-            totalTypes += currYearData.types();
-
-            yearStats.put(
-                    eventsPerYears.getInt("Year"),
-                    currYearData
-            );
         }
 
         YearData total = new YearData(totalEvents, totalFaculties, totalTypes);

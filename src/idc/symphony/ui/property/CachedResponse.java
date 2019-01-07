@@ -66,8 +66,10 @@ public class CachedResponse<T> {
             throw new IllegalStateException("Cached requests must occur on FX threads!");
         }
 
-        value = newValue;
-        dirty = false;
+        if (newValue != null) {
+            value = newValue;
+            dirty = false;
+        }
     }
 
     /**
@@ -77,7 +79,7 @@ public class CachedResponse<T> {
      */
     public T get(Supplier<T> supplier) {
         if (dirty) {
-            updateValue(value);
+            updateValue(supplier.get());
         }
 
         return value;

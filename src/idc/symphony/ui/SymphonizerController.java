@@ -21,25 +21,75 @@ import java.util.logging.Logger;
 
 /**
  * Top-Level UI Behaviour Controller
+ * Acts as a facade for all lower level controllers, such that lower level controllers don't need to know that
+ * UI even exists.
  */
 public class SymphonizerController {
-    private File appConfFile = new File("idcsymphonizer.properties");
-    private SymphonizerProperties appConfig;
-    private Logger userLog = Logger.getLogger("Symphony");
+    /**
+     * Project logger
+     * TODO: Configure environment variables to cause project logger to log into file
+     */
+    private Logger logger = Logger.getLogger("idc.symphony");
 
+    /**
+     * Persistent configuration file
+     */
+    private File appConfFile = new File("idcsymphonizer.properties");
+
+    /**
+     * Persistent properties
+     */
+    private SymphonizerProperties appConfig;
+
+    /**
+     * Separate log for more user-friendly messages, hiding technical error messages from user
+     */
+    private Logger userLog = Logger.getLogger("idc.symphony@user");
+
+    /**
+     * Window controlled elements are placed in. Injected.
+     */
     SymphonizerWindow application;
 
+    /**
+     * Play Visualization button
+     */
     @FXML Button btnVisualize;
+
+    /**
+     * Save generated MIDI file button
+     */
     @FXML Button btnSaveMIDI;
+
+    /**
+     * Render and save visualization MP4
+     */
     @FXML Button btnSaveMP4;
+
+    /**
+     *  Choose DB File location
+     */
     @FXML Button btnDBFile;
+
+    /**
+     * Choose existing MIDI file location
+     */
     @FXML Button btnMIDIFile;
+
+    /**
+     * Use existing MIDI for generation?
+     */
     @FXML CheckBox useExistingMIDI;
+
+    /**
+     *
+     */
     @FXML ListView<Label> listUserLog;
     @FXML TextField txtDBPath;
     @FXML TextField txtMIDIPath;
     @FXML TitledPane logPane;
 
+    private BooleanProperty externalMIDIInvalid = new SimpleBooleanProperty();
     private BooleanProperty isVisualizing =
             new SimpleBooleanProperty(this, "Visualization in Progress",false);
     private ObjectProperty<File> midiFile =
@@ -85,7 +135,6 @@ public class SymphonizerController {
         isVisualizing = new SimpleBooleanProperty(false);
 
         // externalMIDI state is invalid if user chose to use existing MIDI but has no valid file.
-        BooleanProperty externalMIDIInvalid = new SimpleBooleanProperty();
         externalMIDIInvalid.bind(
                 Bindings.createBooleanBinding(() ->
                     useExistingMIDI.isSelected() && txtMIDIPath.getText().isEmpty(),
@@ -194,7 +243,9 @@ public class SymphonizerController {
         if (file != null) {
             appConfig.setMIDIOutputPath(file.getPath());
             conductingController.patternCache().getAsync(
-                    (callback) -> conductingController.getFullMIDIAsync(dbFile.get(), callback),
+                    (useExistingMIDI.isSelected() && externalMIDIInvalid.get())
+                            ? (callback) -> conductingController.getInfoMIDIAsync(dbFile.get(), midiFile.get(), callback)
+                            : (callback) -> conductingController.getFullMIDIAsync(dbFile.get(), callback),
                     (pattern) -> this.saveMIDIPattern(file, pattern)
             );
         }

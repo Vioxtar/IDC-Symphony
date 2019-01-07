@@ -27,17 +27,17 @@ import java.util.*;
  * roles for each faculty in every sequence according to event database.
  */
 public class DBConductor {
-    // DB Fields
-    private ConductorState state;
-
+    /**
+     * Map of conducting commands with different execution commands
+     */
     private Map<Recurrence, SortedSet<Prioritized<Command>>> commandMap;
+    private ConductorState state;
 
     public DBConductor() {
         commandMap = new HashMap<>();
     }
 
     /**
-     *
      * @param recurrence Recurrence scope of command execution
      */
     private void executeCommands(Recurrence recurrence) {
@@ -148,6 +148,9 @@ public class DBConductor {
         return state.composition.getFinalComposition(state.tempo);
     }
 
+    /**
+     * @return Map of faculties used by conductor to generate music in last use of conduct()
+     */
     public Map<Integer, FacultyData> getFacultyMap() {
         if (state != null) {
             return state.getFacultyMap();
@@ -169,7 +172,7 @@ public class DBConductor {
     }
 
     /**
-     * Imports faculties from database
+     * Imports faculties from database and filters away faculties not supported by band implementation
      * Done via proxy function instead of directly using static class, for maintainability purposes.
      */
     private Map<Integer, FacultyData> generateFacultyData(Connection connection, Band band) throws SQLException {

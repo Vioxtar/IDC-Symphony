@@ -1,7 +1,5 @@
 package idc.symphony.data;
 
-import java.util.HashMap;
-
 public class EventType {
     public final int id;
     public final String name;

@@ -9,6 +9,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  Creates Faculty data structure, such that each faculty has a parent faculty, apart form a single root level faculty.
+ *  Tree structure to be used for visualization.
+ */
 public class FacultyDataFactory {
     /**
      * Hierarchical select - union automatically calculates by order of dependency,

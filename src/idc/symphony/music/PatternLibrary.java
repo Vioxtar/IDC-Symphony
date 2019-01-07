@@ -12,13 +12,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Library of patterns loaded from jfugue/MIDI files
+ *
+ * TODO: Add ability to load chord progressions
+ */
 public class PatternLibrary {
     // A map of usable patterns, whose keys are pattern names and values are pattern instances
     private Map<String, Pattern> patterns;
 
 
     public PatternLibrary() {
-        patterns = new HashMap<String, Pattern>();
+        patterns = new HashMap<>();
     }
 
     /**

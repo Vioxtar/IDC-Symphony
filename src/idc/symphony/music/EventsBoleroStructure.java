@@ -8,6 +8,8 @@ import java.util.*;
 
 /**
  * Generates Bolero structure according to statistical data of events
+ *
+ * TODO: Extend Bolero Structure functionality to include section lengths on its own, as well as chord progression
  */
 public class EventsBoleroStructure {
     public static final int[] EMPTY_SEQUENCES = new int[0];
