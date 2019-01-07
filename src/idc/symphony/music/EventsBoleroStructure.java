@@ -6,6 +6,9 @@ import idc.symphony.data.YearCollection;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Generates Bolero structure according to statistical data of events
+ */
 public class EventsBoleroStructure {
     public static final int[] EMPTY_SEQUENCES = new int[0];
     private Map<Integer, int[]> eventsPerYearSequence = new HashMap<>();

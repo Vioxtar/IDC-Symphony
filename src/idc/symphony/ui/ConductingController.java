@@ -7,11 +7,13 @@ import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
 import idc.symphony.music.conducting.rules.*;
+import idc.symphony.ui.property.CachedResponse;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
+import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
 import org.sqlite.SQLiteConfig;
 
@@ -34,95 +36,177 @@ public class ConductingController {
         SQL_CONF.setReadOnly(true);
     }
 
-    private DBConductor createsNewMIDI = new DBConductor();
+    /**
+     * Generates song from database.
+     * (Main conducting algorithm - core of program)
+     */
+    private DBConductor createsNewMIDI = new DBConductor()
     {
-        createsNewMIDI.addCommand(0, Recurrence.Sequence, new DuetMelody());
-        createsNewMIDI.addCommand(1, Recurrence.Sequence, new DefaultMelody());
-        createsNewMIDI.addCommand(2, Recurrence.Sequence, new DefaultRhythm());
-        createsNewMIDI.addCommand(3, Recurrence.Sequence, new DefaultCarpet());
-        createsNewMIDI.addCommand(4, Recurrence.Sequence, new DefaultCarpet());
-        createsNewMIDI.addCommand(5, Recurrence.Sequence, new DefaultCarpet());
-        createsNewMIDI.addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
-        createsNewMIDI.addCommand(0, Recurrence.EmptyYear, new EmptyRhythm());
-        createsNewMIDI.addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
-        createsNewMIDI.addCommand(0, Recurrence.Event, new LyricEvents());
-    }
+        {
+            addCommand(0, Recurrence.Sequence, new DuetMelody());
+            addCommand(1, Recurrence.Sequence, new DefaultMelody());
+            addCommand(2, Recurrence.Sequence, new DefaultRhythm());
+            addCommand(3, Recurrence.Sequence, new DefaultCarpet());
+            addCommand(4, Recurrence.Sequence, new DefaultCarpet());
+            addCommand(5, Recurrence.Sequence, new DefaultCarpet());
+            addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
+            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm());
+            addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
+            addCommand(0, Recurrence.Event, new LyricEvents());
+        }
+    };
 
-    private DBConductor preparesForExistingMIDI = new DBConductor();
+    /**
+     * Only creates Metadata messages for visualizer processing
+     */
+    private DBConductor preparesForExistingMIDI = new DBConductor()
     {
-        preparesForExistingMIDI.addCommand(0, Recurrence.Sequence, new DuetMelody(false));
-        preparesForExistingMIDI.addCommand(1, Recurrence.Sequence, new DefaultMelody(false));
-        preparesForExistingMIDI.addCommand(2, Recurrence.Sequence, new DefaultRhythm(false));
-        preparesForExistingMIDI.addCommand(3, Recurrence.Sequence, new DefaultCarpet(false));
-        preparesForExistingMIDI.addCommand(4, Recurrence.Sequence, new DefaultCarpet(false));
-        preparesForExistingMIDI.addCommand(5, Recurrence.Sequence, new DefaultCarpet(false));
-        preparesForExistingMIDI.addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
-        preparesForExistingMIDI.addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(false));
-        preparesForExistingMIDI.addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
-        preparesForExistingMIDI.addCommand(0, Recurrence.Event, new LyricEvents());
-    }
+        {
+            addCommand(0, Recurrence.Sequence, new DuetMelody(false));
+            addCommand(1, Recurrence.Sequence, new DefaultMelody(false));
+            addCommand(2, Recurrence.Sequence, new DefaultRhythm(false));
+            addCommand(3, Recurrence.Sequence, new DefaultCarpet(false));
+            addCommand(4, Recurrence.Sequence, new DefaultCarpet(false));
+            addCommand(5, Recurrence.Sequence, new DefaultCarpet(false));
+            addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
+            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(false));
+            addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
+            addCommand(0, Recurrence.Event, new LyricEvents());
+        }
+    };
 
     private BooleanProperty conductingProperty =
             new SimpleBooleanProperty(this, "MIDI conversion in progress", false);
 
+    private CachedResponse<Pattern> conductedPattern = new CachedResponse<>();
+
+    /**
+     * Property for returning
+     * @return
+     */
     public BooleanProperty conductingProperty() {
         return conductingProperty;
     }
 
+    /**
+     * Cached pattern result for tasks
+     * Some use-cases may result in unnecessary regeneration of the exact same pattern.
+     *
+     * This cache may be used to prevent such unnecessary processes.
+     *
+     * @return
+     */
+    public CachedResponse<Pattern> patternCache() {
+        return conductedPattern;
+    }
+
+    /**
+     * Generates a task that creates a musical MIDI pattern
+     * Musificies database, can be sent directly into visualization.
+     *
+     * @param file     Database file to generate pattern from
+     * @param callback Called when finished with resulting pattern
+     */
     public void getFullMIDIAsync(File file, Consumer<Pattern> callback) {
-        Task<Pattern> task = new Task<Pattern>() {
-            @Override
-            protected Pattern call() throws Exception {
-                try {
-                    return createsNewMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
-                } catch (Exception ex) {
-                    Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
-                    throw ex;
-                } finally {
-                    Platform.runLater(() -> conductingProperty.set(false));
+        if (!conductingProperty.get()) {
+            Task<Pattern> task = new Task<Pattern>() {
+                @Override
+                protected Pattern call() throws Exception {
+                    try {
+                        return createsNewMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
+                    } catch (Exception ex) {
+                        Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
+                        throw ex;
+                    } finally {
+                        Platform.runLater(() -> conductingProperty.set(false));
+                    }
                 }
-            }
-        };
+            };
 
-        setTaskCallback(task, callback);
+            conductingProperty.set(true);
+            launchTask(task, callback);
+        }
 
-        conductingProperty.set(true);
-        Thread conducting = new Thread(task);
-        conducting.setDaemon(true);
-        conducting.start();
     }
 
+    /**
+     * Generates a task that creates an info MIDI pattern that does not contain musical data.
+     * Purely for visualization, can be attached to pattern extracted from existing MIDI.
+     *
+     * @param file     Database file to generate pattern from
+     * @param callback Called when finished with resulting pattern
+     */
     public void getInfoMIDIAsync(File file, Consumer<Pattern> callback) {
-        Task<Pattern> task = new Task<Pattern>() {
-            @Override
-            protected Pattern call() throws Exception {
+        if (!conductingProperty.get()) {
+            Task<Pattern> task = new Task<Pattern>() {
+                @Override
+                protected Pattern call() throws Exception {
+                    try {
+                        return preparesForExistingMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
+                    } catch (Exception ex) {
+                        Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
+                        throw ex;
+                    } finally {
+                        Platform.runLater(() -> conductingProperty.set(false));
+                    }
+                }
+            };
+
+
+            conductingProperty.set(true);
+            launchTask(task, callback);
+        }
+    }
+
+    /**
+     * Saves given pattern into a MIDI file.
+     * Callback is called when done to determine success or failure.
+     *
+     * @param file     Target MIDI File
+     * @param pattern  Source pattern
+     * @param callback Called when finished
+     */
+    public void saveMIDI(File file, Pattern pattern, Consumer<Boolean> callback) {
+        Task<Boolean> task = new Task<Boolean>() {
+            @Override public Boolean call() throws Exception {
                 try {
-                    return preparesForExistingMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
+                    MidiFileManager.savePatternToMidi(pattern, file);
+                    return true;
                 } catch (Exception ex) {
                     Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
                     throw ex;
-                } finally {
-                    Platform.runLater(() -> conductingProperty.set(false));
                 }
             }
         };
 
-        setTaskCallback(task, callback);
-
-        conductingProperty.set(true);
-        Thread conducting = new Thread(task);
-        conducting.setDaemon(true);
-        conducting.start();
+        launchTask(task, callback);
     }
 
+    /**
+     * JDBC Local SQLite URI translator
+     * @param file Local SQLite file
+     * @return JDBC URI
+     */
     private String fileToSQLURI(File file) {
         return String.format("jdbc:sqlite:%s", file.getPath());
     }
 
-    private void setTaskCallback(Task<Pattern> task, Consumer<Pattern> callback) {
+    /**
+     * Generic task launcher
+     * Creates a daemon background thread to execute given task.
+     *
+     * @param task     Task to launch
+     * @param callback Task return value receiving callback
+     * @param <T>      Task return type
+     */
+    private <T> void launchTask(Task<T> task, Consumer<T> callback) {
         task.setOnSucceeded((state) -> callback.accept(task.getValue()));
         task.setOnFailed((state) -> callback.accept(null));
         task.setOnCancelled((state) -> callback.accept(null));
+
+        Thread thread = new Thread();
+        thread.setDaemon(true);
+        thread.start();
     }
 
 
@@ -136,17 +220,21 @@ public class ConductingController {
             throw new IllegalStateException("Logger already attached!");
         }
 
-        createsNewMIDI.addCommand(Integer.MAX_VALUE, Recurrence.Year, new YearLogger(logger));
-        createsNewMIDI.addCommand(Integer.MAX_VALUE, Recurrence.Sequence, new SequenceLogger(logger));
-        createsNewMIDI.addCommand(Integer.MAX_VALUE, Recurrence.EmptyYear, new SequenceLogger(logger));
-        createsNewMIDI.addCommand(Integer.MAX_VALUE, Recurrence.Event, new EventLogger(logger));
-
-        preparesForExistingMIDI.addCommand(Integer.MAX_VALUE, Recurrence.Year, new YearLogger(logger));
-        preparesForExistingMIDI.addCommand(Integer.MAX_VALUE, Recurrence.Sequence, new SequenceLogger(logger));
-        preparesForExistingMIDI.addCommand(Integer.MAX_VALUE, Recurrence.EmptyYear, new SequenceLogger(logger));
-        preparesForExistingMIDI.addCommand(Integer.MAX_VALUE, Recurrence.Event, new EventLogger(logger));
-
+        addLoggingCommands(createsNewMIDI, logger);
+        addLoggingCommands(preparesForExistingMIDI, logger);
         attachedLogger = logger;
+    }
+
+    /**
+     * Adds progress info logging commands into conductor strategies
+     * @param conductor Conductor strategy
+     * @param logger    Logger the logging commands will use for logging
+     */
+    private void addLoggingCommands(DBConductor conductor, Logger logger) {
+        conductor.addCommand(Integer.MAX_VALUE, Recurrence.Year, new YearLogger(logger));
+        conductor.addCommand(Integer.MAX_VALUE, Recurrence.Sequence, new SequenceLogger(logger));
+        conductor.addCommand(Integer.MAX_VALUE, Recurrence.EmptyYear, new SequenceLogger(logger));
+        conductor.addCommand(Integer.MAX_VALUE, Recurrence.Event, new EventLogger(logger));
     }
 
     private Logger attachedLogger = null;

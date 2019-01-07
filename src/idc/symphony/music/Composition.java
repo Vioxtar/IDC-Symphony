@@ -11,14 +11,10 @@ import java.util.List;
 
 /**
  * Composition data structure
+ *
+ * Synchronizes pattern sections according to expected started times.
  */
 public class Composition {
-    public static final int[] MELODIC_TRACKS = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15
-    };
-
-    public static final int RHYTHMIC_TRACK = 9;
-
     private List<List<Pattern>> tracks;
     private int[] trackLengths;
     private float[] sectionStartTimes;
@@ -59,6 +55,9 @@ public class Composition {
         }
     }
 
+    /**
+     * Translate section lengths to start times for each section - for start-time based time synchronization
+     */
     private void initStartTimes() {
         sectionStartTimes = new float[trackLengths.length];
         sectionStartTimes[0] = 0;
@@ -72,6 +71,10 @@ public class Composition {
         }
     }
 
+    /**
+     * Puts given pattern in given track at given section.
+     * Overrides pattern if exists.
+     */
     public void put(int track, int section, Pattern pattern) {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
@@ -83,6 +86,10 @@ public class Composition {
         tracks.get(track).set(section, pattern);
     }
 
+    /**
+     * Prepends given pattern to pattern in given track at given section.
+     * Creates new pattern if one does not exist
+     */
     public void prepend(int track, int section, Pattern pattern) {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
@@ -101,6 +108,10 @@ public class Composition {
         }
     }
 
+    /**
+     * Append given pattern to pattern in given track at given section.
+     * Creates new pattern if one does not exist
+     */
     public void append(int track, int section, Pattern pattern) {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
@@ -119,6 +130,9 @@ public class Composition {
         }
     }
 
+    /**
+     * @return Pattern in given track at given section
+     */
     public Pattern getPattern(int track, int section) {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
@@ -130,6 +144,14 @@ public class Composition {
         return tracks.get(track).get(section);
     }
 
+    /**
+     * Creates final composition out of current section state
+     * Each section undergoes a sync transformation that makes sure the section pattern starts
+     * at the expected time.
+     *
+     * @param tempo Final pattern tempo
+     * @return  Generated pattern.
+     */
     public Pattern getFinalComposition(int tempo) {
         Pattern finalPattern = new Pattern();
 

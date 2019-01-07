@@ -1,17 +1,18 @@
 package idc.symphony.ui;
 
 import idc.symphony.ui.logging.LogHandler;
+import idc.symphony.ui.property.CachedResponse;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import org.jfugue.midi.MidiFileManager;
+import org.jfugue.pattern.Pattern;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,8 +52,13 @@ public class SymphonizerController {
     private static final FileChooser.ExtensionFilter MIDI_FILTER =
             new FileChooser.ExtensionFilter("MIDI File", "*.midi");
 
+    // Lower level controllers - unaware of existence of UI
     private ConductingController conductingController = new ConductingController();
 
+    /**
+     * Loads persistent state from file.
+     * To be called from injector in order to ensure controller can change window state.
+     */
     void loadState() {
         dbFile.set(new File(appConfig.getDBPath()));
         midiFile.set(new File(appConfig.getMIDIPath()));
@@ -65,6 +71,9 @@ public class SymphonizerController {
         application.show();
     }
 
+    /**
+     * Controller initialization - UI control bindings, dependency injection.
+     */
     @FXML
     void initialize() {
         userLog.addHandler(new LogHandler(listUserLog, 1000));
@@ -106,13 +115,23 @@ public class SymphonizerController {
         txtMIDIPath.textProperty().bind(
                 Bindings.createStringBinding(() -> getFilePath(midiFile), midiFile));
 
+        conductingController.patternCache().addInvalidator(
+                useExistingMIDI.selectedProperty(), dbFile, midiFile
+        );
+
     }
 
+    /**
+     * Invalidation handler - invalidates file value changes if file does not exist or is unreadable.
+     *
+     * @param file      File to validate
+     * @param extension Extension file is expected to have
+     */
     private void validateFile(ObjectProperty<File> file, String extension) {
         File val = file.get();
         if (val != null) {
             if (!val.exists() || !val.canRead()) {
-                userLog.warning(String.format("Couldn't find %s: %s", file.getName(), val.getPath()));
+                userLog.warning(String.format("Couldn't find or read %s: %s", file.getName(), val.getPath()));
                 file.setValue(null);
             } else if (!val.getName().endsWith(extension)) {
                 userLog.warning(String.format("Invalid format for %s: %s (expected %s)",
@@ -121,13 +140,22 @@ public class SymphonizerController {
         }
     }
 
+    /**
+     * For binding, binds the path of a file to string properties.
+     *
+     * @param file Observable file value
+     * @return     File path
+     */
     private String getFilePath(ObservableValue<File> file) {
         File value = file.getValue();
         return (value != null) ? value.getPath() : "";
     }
 
+    /**
+     * Choose event database file
+     */
     @FXML
-    void chooseSQLiteFile() {
+    void chooseDBFile() {
         FileChooser chooser = initChooser(DB_FILTER, new File(appConfig.getDBPath()));
         chooser.getExtensionFilters().clear();
         chooser.getExtensionFilters().add(DB_FILTER);
@@ -141,6 +169,9 @@ public class SymphonizerController {
         }
     }
 
+    /**
+     * Choose External MIDI to use instead of generated musics
+     */
     @FXML
     void chooseMIDIFile() {
         FileChooser chooser = initChooser(MIDI_FILTER, new File(appConfig.getMIDIPath()));
@@ -152,31 +183,53 @@ public class SymphonizerController {
         }
     }
 
+    /**
+     * Saves generated pattern to MIDI file
+     * May generate pattern if required (uses cache)
+     */
     @FXML void saveMIDI() {
         FileChooser chooser = initChooser(MIDI_FILTER, new File(appConfig.getMIDIOutputPath()));
         File file = chooser.showSaveDialog(btnSaveMIDI.getScene().getWindow());
 
         if (file != null) {
             appConfig.setMIDIOutputPath(file.getPath());
-            conductingController.getFullMIDIAsync(dbFile.get(),
-                    (pattern) -> {
-                        if (pattern == null) {
-                            userLog.severe("Failed to generate MIDI from DB.");
-                            return;
-                        }
-
-                        try {
-                            MidiFileManager.savePatternToMidi(pattern, file);
-                            userLog.info(String.format("Exported generated MIDI to %s", file.getPath()));
-                        } catch (IOException ex) {
-                            userLog.severe(String.format("Failed to save generated MIDI to %s", file.getPath()));
-                            Logger.getGlobal().log(Level.SEVERE, ex.getMessage(), ex);
-                        }
-                    });
+            conductingController.patternCache().getAsync(
+                    (callback) -> conductingController.getFullMIDIAsync(dbFile.get(), callback),
+                    (pattern) -> this.saveMIDIPattern(file, pattern)
+            );
         }
-
     }
 
+    /**
+     * Saves given pattern to MIDI file
+     * @param targetFile Target file
+     * @param pattern Source pattern
+     */
+    private void saveMIDIPattern(File targetFile, Pattern pattern) {
+        if (pattern == null) {
+            userLog.severe("Failed to generate MIDI from DB.");
+            return;
+        }
+
+        conductingController.saveMIDI(
+                targetFile,
+                pattern,
+                (Success) -> {
+                    if (Success != null) {
+                        userLog.info(String.format("Exported generated MIDI to %s", targetFile.getPath()));
+                    } else {
+                        userLog.severe(String.format("Failed to save generated MIDI to %s", targetFile.getPath()));
+                    }
+                });
+    }
+
+    /**
+     * Creates a file choosing dialogue
+     *
+     * @param filter      Limiting extension filter
+     * @param defaultPath Default path to start dialogue window in
+     * @return file chooser dialogue window instance
+     */
     private FileChooser initChooser(FileChooser.ExtensionFilter filter, File defaultPath) {
         FileChooser chooser = new FileChooser();
 
@@ -198,6 +251,9 @@ public class SymphonizerController {
         return chooser;
     }
 
+    /**
+     * Saves persistent state on application closed
+     */
     void shutdown() {
         appConfig.save();
     }

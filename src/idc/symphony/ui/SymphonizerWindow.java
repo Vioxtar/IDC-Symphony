@@ -33,6 +33,7 @@ public class SymphonizerWindow extends Application {
         primaryStage.getIcons().add(new Image(getClass().getResource("resources/icon.png").toExternalForm()));
         primaryStage.setTitle("IDC Symphonizer");
         primaryStage.setScene(new Scene(root));
+        primaryStage.getScene().getStylesheets().add(getClass().getResource("resources/style.css").toExternalForm());
         primaryStage.setMinWidth(540);
         primaryStage.setMinHeight(370);
         primaryStage.initStyle(StageStyle.UNIFIED);
