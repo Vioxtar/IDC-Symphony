@@ -4,9 +4,7 @@ import idc.symphony.data.YearData;
 import idc.symphony.data.YearCollection;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class EventsBoleroStructure {
     public static final int[] EMPTY_SEQUENCES = new int[0];
@@ -33,7 +31,7 @@ public class EventsBoleroStructure {
     }
 
     /**
-     * Create Bolero Structure with year sequence repetitions
+     * Create Bolero YearStructure with year sequence repetitions
      * based on how interesting that year was compared to the average year.
      * @param stats
      * @throws SQLException
@@ -55,7 +53,6 @@ public class EventsBoleroStructure {
 
             int numOfSeqs = 1 + (int)(yearRelativeDensity(yearData, stats) / 3);
             int[] sequenceEvents = new int[numOfSeqs];
-
 
             int eventsPerSeq = yearData.events() / numOfSeqs;
             int remainder = yearData.events() % numOfSeqs;

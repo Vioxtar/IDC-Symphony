@@ -2,18 +2,20 @@ package idc.symphony.ui;
 
 import java.awt.*;
 import java.io.*;
-import java.util.Properties;
+import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 /**
  * Properties file to keep last valid application state for convenience;
  * Limit repeated tasks.
  */
-public class SymphonizerProperties {
+public class SymphonizerProperties extends Properties {
     private static String INPUT_CLASS = "INPUT";
     private static String DB_FILE = INPUT_CLASS + "." + "SQL_DB_FILE";
-    private static String MIDI_FILE = INPUT_CLASS + "." + "SQL_DB_FILE";
+    private static String MIDI_FILE = INPUT_CLASS + "." + "MIDI_FILE";
     private static String USE_EXTERNAL_MIDI = INPUT_CLASS + "." + "USE_EXTERNAL_MIDI";
 
     private static String OUTPUT_CLASS = "OUTPUT";
@@ -31,7 +33,7 @@ public class SymphonizerProperties {
 
     static {
         // INPUT
-        DEFAULT.setProperty(DB_FILE, "data\\IDCEvents.db");
+        DEFAULT.setProperty(DB_FILE, "data\\IDC Events.db");
         DEFAULT.setProperty(MIDI_FILE, "data\\external.midi");
         DEFAULT.setProperty(USE_EXTERNAL_MIDI, "0");
 
@@ -58,8 +60,6 @@ public class SymphonizerProperties {
         DEFAULT.setProperty(WIN_WIDTH, String.valueOf(defaultWinHeight));
         DEFAULT.setProperty(MAXIMIZED, String.valueOf(false));
     }
-
-    private Properties properties;
     private Logger logger;
     private File file;
 
@@ -76,8 +76,8 @@ public class SymphonizerProperties {
     }
 
     public SymphonizerProperties(File file, Logger logger) {
-        this.properties = new Properties();
-        this.properties.putAll(DEFAULT);
+        super();
+        this.putAll(DEFAULT);
         this.logger = logger;
         this.file = file;
 
@@ -86,7 +86,7 @@ public class SymphonizerProperties {
             try {
                 if (file.exists()) {
                     input = new FileInputStream(file);
-                    properties.load(input);
+                    load(input);
                 }
             } catch (IOException ex) {
                 if (logger != null) {
@@ -103,7 +103,6 @@ public class SymphonizerProperties {
         }
 
     }
-
     private void safeClose(Closeable closeable) {
         if (closeable != null) {
             try {
@@ -124,7 +123,7 @@ public class SymphonizerProperties {
 
     private int getInt(String key) {
         try {
-            return Integer.valueOf(properties.getProperty(key));
+            return Integer.valueOf(getProperty(key));
         } catch (NumberFormatException ex) {
             logInvalidType(key, Integer.class);
             return Integer.valueOf(DEFAULT.getProperty(key));
@@ -132,12 +131,12 @@ public class SymphonizerProperties {
     }
 
     private void setInt(String key, int value) {
-        properties.setProperty(key, String.valueOf(value));
+        setProperty(key, String.valueOf(value));
     }
 
     private boolean getBoolean(String key) {
         try {
-            return Boolean.valueOf(properties.getProperty(key));
+            return Boolean.valueOf(getProperty(key));
         } catch (NumberFormatException ex) {
             logInvalidType(key, Boolean.class);
             return Boolean.valueOf(DEFAULT.getProperty(key));
@@ -145,11 +144,11 @@ public class SymphonizerProperties {
     }
 
     private void setBoolean(String key, boolean value) {
-        properties.setProperty(key, String.valueOf(value));
+        setProperty(key, String.valueOf(value));
     }
 
     public int getWindowWidth() {
-        return getInt(properties.getProperty(WIN_WIDTH));
+        return getInt(WIN_WIDTH);
     }
 
     public void setWindowWidth(int width) {
@@ -157,7 +156,7 @@ public class SymphonizerProperties {
     }
 
     public int getWindowHeight() {
-        return getInt(properties.getProperty(WIN_HEIGHT));
+        return getInt(WIN_HEIGHT);
     }
 
     public void setWindowHeight(int height) {
@@ -165,7 +164,7 @@ public class SymphonizerProperties {
     }
 
     public int getWindowLeft() {
-        return getInt(properties.getProperty(WIN_POS_LEFT));
+        return getInt(WIN_POS_LEFT);
     }
 
     public void setWindowLeft(int left) {
@@ -173,7 +172,7 @@ public class SymphonizerProperties {
     }
 
     public int getWindowTop() {
-        return getInt(properties.getProperty(WIN_POS_TOP));
+        return getInt(WIN_POS_TOP);
     }
 
     public void setWindowTop(int top) {
@@ -181,23 +180,23 @@ public class SymphonizerProperties {
     }
     
     public String getDBPath() {
-        return properties.getProperty(DB_FILE);
+        return getProperty(DB_FILE);
     }
     
     public void setDBPath(String path) {
-        properties.setProperty(DB_FILE, path);
+        setProperty(DB_FILE, path);
     }
 
     public String getMIDIPath() {
-        return properties.getProperty(MIDI_FILE);
+        return getProperty(MIDI_FILE);
     }
 
     public void setMIDIPath(String path) {
-        properties.setProperty(MIDI_FILE, path);
+        setProperty(MIDI_FILE, path);
     }
 
     public boolean getUseExternalMIDI() {
-        return getBoolean(properties.getProperty(USE_EXTERNAL_MIDI));
+        return getBoolean(USE_EXTERNAL_MIDI);
     }
 
     public void setUseExternalMIDI(boolean selected) {
@@ -205,17 +204,41 @@ public class SymphonizerProperties {
     }
 
     public boolean getMaximized() {
-        return getBoolean(properties.getProperty(MAXIMIZED));
+        return getBoolean(MAXIMIZED);
+    }
+
+    public String getMIDIOutputPath() {
+        return getProperty(MIDI_OUTPUT);
+    }
+
+    public void setMIDIOutputPath(String path) {
+        setProperty(MIDI_OUTPUT, path);
     }
 
     public void setMaximized(boolean maximized) {
         setBoolean(USE_EXTERNAL_MIDI, maximized);
     }
 
+    /**
+     * Overrides underlying implementation of keys - sorts keys, makes generated properties file
+     * much more readable.
+     */
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public synchronized Enumeration<Object> keys() {
+        Enumeration<Object> keys = super.keys();
+        List<Object> sortedKeys = new ArrayList<>(size());
+        while(keys.hasMoreElements()) {
+            sortedKeys.add(keys.nextElement());
+        }
+        sortedKeys.sort(Comparator.comparing(Object::toString));
+        return Collections.enumeration(sortedKeys);
+    }
+
     public void save() {
         if (file != null) {
             try (FileOutputStream output = new FileOutputStream(file)) {
-                properties.store(output, "IDC Symphonizer client preferences");
+                this.store(output, "IDC Symphonizer client preferences");
             } catch (IOException ex) {
                 if (logger != null) {
                     logger.warning("Could not save Symphonizer application state");

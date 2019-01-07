@@ -16,6 +16,8 @@ public class LyricFacultyRoles implements Command {
 
     @Override
     public boolean execute(ConductorState state, Recurrence recurrence) {
+        boolean yearTagged = false;
+
         for (int facultyID : state.getFacultyMap().keySet()) {
             BandMember member = state.getBand().bandMembers().get(facultyID);
             BandRole role = state.sequenceContext().facultyRole(facultyID);
@@ -24,9 +26,11 @@ public class LyricFacultyRoles implements Command {
                 Pattern prepended = new Pattern();
                 Pattern appended = new Pattern();
 
-                if (lastYear != state.getCurrentYear() && state.getCurrentYear() >= state.getStructure().getMinYear()) {
+                if (lastYear != state.getCurrentYear() && state.getCurrentYear() >= state.getStructure().getMinYear() &&
+                        !yearTagged) {
                     lastYear = state.getCurrentYear();
                     prepended.add(String.format("'(YEAR:%d)", state.getCurrentYear()));
+                    yearTagged = true;
                 }
 
                 if (!joinedFaculties.contains(facultyID)) {

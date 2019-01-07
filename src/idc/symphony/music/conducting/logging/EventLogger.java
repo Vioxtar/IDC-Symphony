@@ -22,10 +22,10 @@ public class EventLogger implements Command {
     public boolean execute(ConductorState state, Recurrence recurrence) {
         updateCounters(state);
 
-        logger.fine(String.format("\t\tFaculty: %s", state.getCurrentEvent().faculty.name));
-        logger.fine(String.format("\t\tType: %s", state.getCurrentEvent().type.name));
-        logger.fine(String.format("\t\tTitle: %s", state.getCurrentEvent().description));
-        logger.info(String.format("\tEvent #%d (#%d total) parsed", yearCounter, totalCounter));
+        logger.info(String.format("Event #%d (#%d total) parsed:", yearCounter, totalCounter));
+        logger.fine(String.format("Faculty: %s", state.getCurrentEvent().faculty.name));
+        logger.fine(String.format("Type: %s", state.getCurrentEvent().type.name));
+        logger.fine(String.format("Title: %s", state.getCurrentEvent().description));
 
         checkInvalidState(state);
 
@@ -53,7 +53,6 @@ public class EventLogger implements Command {
             yearCounter = 0;
             currentYear = state.getCurrentYear();
         }
-
         yearCounter++;
         totalCounter++;
     }

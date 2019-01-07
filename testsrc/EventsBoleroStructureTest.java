@@ -30,7 +30,7 @@ class EventsBoleroStructureTest {
 
     private static void printStructure() {
         StringBuilder buddy = new StringBuilder();
-        buddy.append("Bolero Structure:\n");
+        buddy.append("Bolero YearStructure:\n");
 
         int totalSeqs = 0;
         int emptyYears = 0;

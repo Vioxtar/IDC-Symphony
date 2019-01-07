@@ -17,10 +17,10 @@ public class YearLogger implements Command {
 
     @Override
     public boolean execute(ConductorState state, Recurrence recurrence) {
-        logger.info(String.format("\tEvents parsed: %d", state.yearContext().getEventCount()));
-        logger.info(String.format("\tEvents per sequence: %s",
-                Arrays.toString(state.getStructure().eventsPerSequence(state.getCurrentYear()))));
         logger.info(String.format("Year %d parsed", state.getCurrentYear()));
+        logger.fine(String.format("Events parsed: %d", state.yearContext().getEventCount()));
+        logger.fine(String.format("Events per sequence: %s",
+                Arrays.toString(state.getStructure().eventsPerSequence(state.getCurrentYear()))));
 
         return true;
     }

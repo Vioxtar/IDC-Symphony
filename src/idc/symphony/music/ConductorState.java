@@ -7,6 +7,7 @@ import idc.symphony.data.FacultyData;
 import idc.symphony.music.band.BandRole;
 import org.jfugue.theory.Key;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -32,6 +33,7 @@ public class ConductorState {
      * Underlying Conductor
      */
     DBConductor conductor;
+    Connection connection;
 
     /**
      * Band facade for per-faculty music generation strategies
@@ -46,7 +48,7 @@ public class ConductorState {
 
 
     /**
-     * Iterative Composition Structure for DBConductor
+     * Iterative Composition YearStructure for DBConductor
      */
     EventsBoleroStructure structure;
 
@@ -67,6 +69,7 @@ public class ConductorState {
     /**
      *  Sequence being processed
      */
+    boolean emptyStreak = false;
     int currentSequence = 0;
     int currentYear = 0;
 
@@ -95,14 +98,19 @@ public class ConductorState {
         ArrayList<Integer> trackLengths =
                 new ArrayList<>(structure.getMaxYear() - structure.getMinYear());
 
+        boolean emptyStreak = false;
+
         for (int year = structure.getMinYear() - 1; year <= structure.getMaxYear(); year++) {
             int[] eventsPerSeq = structure.eventsPerSequence(year);
 
             if (eventsPerSeq.length > 0) {
+                emptyStreak = false;
                 for (int i = 0; i < eventsPerSeq.length; i++) {
                     trackLengths.add(wholesPerSequence);
+
                 }
-            } else {
+            } else if (!emptyStreak) {
+                emptyStreak = true;
                 if (wholesPerEmptyYear > 0) {
                     trackLengths.add(wholesPerEmptyYear);
                 }
@@ -167,7 +175,7 @@ public class ConductorState {
     }
 
     public ResultSet queryDB(String query) throws SQLException {
-        return conductor.connection().prepareStatement(query).executeQuery();
+        return connection.prepareStatement(query).executeQuery();
     }
 
     /**

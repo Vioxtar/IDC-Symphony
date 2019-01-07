@@ -17,8 +17,8 @@ public class IDCSymphony {
     }
 
     private static void conductAndPlay(File file) throws SQLException {
-        DBConductor conductor = new DBConductor(prepareConnection(file));
-        conductor.conduct();
+        DBConductor conductor = new DBConductor();
+        conductor.conduct(prepareConnection(file));
     }
 
     private static Connection prepareConnection(File file) throws SQLException {

@@ -17,17 +17,17 @@ public class SequenceLogger implements Command {
 
     @Override
     public boolean execute(ConductorState state, Recurrence recurrence) {
+        logger.info(String.format("Sequence #%d parsed.", state.getCurrentSequence()));
+
         for (FacultyData faculty : state.getFacultyMap().values()) {
             BandRole facultyRole = state.sequenceContext().facultyRole(faculty.ID);
             if (facultyRole != null) {
-                logger.info(String.format(
-                        "\tFaculty %s received role %s",
+                logger.fine(String.format(
+                        "Faculty %s received role %s",
                         faculty.name,
                         facultyRole.name()));
             }
         }
-
-        logger.info(String.format("Sequence #%d parsed.", state.getCurrentSequence()));
         return true;
     }
 }

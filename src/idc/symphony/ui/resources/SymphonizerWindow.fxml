@@ -8,73 +8,63 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<SplitPane dividerPositions="0.82" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-           minHeight="370.0" minWidth="540.0" orientation="VERTICAL" prefHeight="600.0" prefWidth="540.0"
-           xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="idc.symphony.ui.SymphonizerController">
+<SplitPane dividerPositions="0.82" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="370.0" minWidth="540.0" orientation="VERTICAL" prefHeight="600.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="idc.symphony.ui.SymphonizerController">
     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" prefHeight="500.0">
-        <GridPane hgap="5.0" maxHeight="100.0" minHeight="100.0" minWidth="520.0" prefHeight="100.0"
-                  prefWidth="520.0" vgap="5.0">
+        <GridPane hgap="5.0" maxHeight="100.0" minHeight="100.0" minWidth="520.0" prefHeight="100.0" prefWidth="520.0" vgap="5.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
-            <Label text="SQLite Database:"/>
-            <TextField fx:id="txtDBPath" editable="false" minWidth="195.0" GridPane.columnIndex="1"
-                       GridPane.columnSpan="2"/>
-            <TextField fx:id="txtMIDIPath" editable="false" minWidth="195.0" GridPane.columnIndex="1"
-                       GridPane.columnSpan="2" GridPane.rowIndex="1"/>
-            <Label text="External MIDI" GridPane.rowIndex="1"/>
-            <CheckBox fx:id="useExistingMIDI" mnemonicParsing="false" text="Use External MIDI"
-                      GridPane.columnSpan="2" GridPane.rowIndex="2"/>
-            <Button fx:id="btnSaveMIDI" minWidth="85.0" mnemonicParsing="false" text="Export MIDI"
-                    GridPane.columnIndex="4" GridPane.halignment="RIGHT">
+            <Label text="SQLite Database:" />
+            <TextField fx:id="txtDBPath" editable="false" focusTraversable="false" minWidth="195.0" mouseTransparent="true" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+            <TextField fx:id="txtMIDIPath" editable="false" focusTraversable="false" minWidth="195.0" mouseTransparent="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <Label text="External MIDI" GridPane.rowIndex="1" />
+            <CheckBox fx:id="useExistingMIDI" mnemonicParsing="false" text="Use External MIDI for Visualization" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+            <Button fx:id="btnSaveMIDI" minWidth="120.0" mnemonicParsing="false" onAction="#saveMIDI" text="Export MIDI" GridPane.columnIndex="4" GridPane.halignment="RIGHT">
                 <GridPane.margin>
-                    <Insets/>
+                    <Insets />
                 </GridPane.margin>
             </Button>
-            <Button fx:id="btnSaveMP4" minWidth="85.0" mnemonicParsing="false" text="Export MP4"
-                    GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Button fx:id="btnSaveMP4" minWidth="120.0" mnemonicParsing="false" text="Save Visualization" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                 <GridPane.margin>
-                    <Insets/>
+                    <Insets />
                 </GridPane.margin>
             </Button>
-            <Button fx:id="btnVisualize" minWidth="85.0" mnemonicParsing="false" text="Preview"
-                    GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+            <Button fx:id="btnVisualize" minWidth="120.0" mnemonicParsing="false" text="Play Visualization" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                 <GridPane.margin>
-                    <Insets/>
+                    <Insets />
                 </GridPane.margin>
             </Button>
-            <Button fx:id="btnDBFile" mnemonicParsing="false" onAction="#chooseSQLiteFile" text="..."
-                    GridPane.columnIndex="3"/>
-            <Button fx:id="btnMIDIFile" mnemonicParsing="false" onAction="#chooseMIDIFile" text="..."
-                    GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+            <Button fx:id="btnDBFile" mnemonicParsing="false" onAction="#chooseSQLiteFile" text="..." GridPane.columnIndex="3" />
+            <Button fx:id="btnMIDIFile" mnemonicParsing="false" onAction="#chooseMIDIFile" text="..." GridPane.columnIndex="3" GridPane.rowIndex="1" />
         </GridPane>
         <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308"
                     maxWidth="1.7976931348623157E308" minHeight="72.0" minWidth="128.0" prefHeight="1080.0"
                     prefWidth="1920.0" text="Visualization"/>
     </VBox>
-    <TitledPane fx:id="logPane" animated="false" collapsible="false" maxHeight="800.0" minHeight="0.0"
-                prefHeight="100.0" text="Log" SplitPane.resizableWithParent="false">
-        <ListView fx:id="listView"/>
+    <TitledPane fx:id="logPane" animated="false" collapsible="false" maxHeight="800.0" minHeight="0.0" prefHeight="100.0" text="Log" SplitPane.resizableWithParent="false">
+        <ListView fx:id="listUserLog" />
     </TitledPane>
 </SplitPane>

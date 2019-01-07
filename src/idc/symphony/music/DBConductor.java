@@ -28,16 +28,12 @@ import java.util.*;
  */
 public class DBConductor {
     // DB Fields
-    private Connection     dbConnection;
     private ConductorState state;
 
     private Map<Recurrence, SortedSet<Prioritized<Command>>> commandMap;
 
-    public DBConductor(Connection dbConnection) {
-        this.dbConnection = dbConnection;
-
+    public DBConductor() {
         commandMap = new HashMap<>();
-
     }
 
     /**
@@ -51,37 +47,32 @@ public class DBConductor {
         }
     }
 
-    Connection connection() {
-        return dbConnection;
-    }
-
     /**
      * @param priority   Priority relative to other commands (lower means first)
      * @param recurrence When to call command (on each event...)
      */
-    public Prioritized<Command> addCommand(int priority, Recurrence recurrence, Command command) {
+    public void addCommand(int priority, Recurrence recurrence, Command command) {
         if (!commandMap.containsKey(recurrence)) {
             commandMap.put(recurrence, new TreeSet<>());
         }
 
         Prioritized<Command> prioritized = command.prioritize(priority);
         commandMap.get(recurrence).add(prioritized);
-
-        return prioritized;
     }
 
     /**
      * Creates a new conductor state
      */
-    private void resetState() throws SQLException {
+    private void resetState(Connection connection) throws SQLException {
         Band band = new Band();
 
         state = new ConductorState(
                 this,
                 band,
-                prepareBoleroStructure(band),
-                generateEventTypes(),
-                generateFacultyData(band));
+                prepareBoleroStructure(connection, band),
+                generateEventTypes(connection),
+                generateFacultyData(connection, band));
+        state.connection = connection;
     }
 
     /**
@@ -115,19 +106,18 @@ public class DBConductor {
      * for each sequence.
      * @param sequenceEventCounts Number of events in each sequence
      * @param EventSet            Event iterator from DB
-     * @throws SQLException
      */
     private void processSequences(int[] sequenceEventCounts, ResultSet EventSet) throws SQLException {
-        for (int yearSequence = 0;
-             yearSequence < sequenceEventCounts.length;
-             yearSequence++) {
-            processEvents(sequenceEventCounts[yearSequence], EventSet);
+        for (int sequenceEventCount : sequenceEventCounts) {
+            processEvents(sequenceEventCount, EventSet);
             executeCommands(Recurrence.Sequence);
             state.sequenceContext().reset();
             state.currentSequence++;
+            state.emptyStreak = false;
         }
 
-        if (sequenceEventCounts.length == 0 && state.getWholesPerEmpty() > 0) {
+        if (sequenceEventCounts.length == 0 && !state.emptyStreak && state.getWholesPerEmpty() > 0) {
+            state.emptyStreak = true;
             executeCommands(Recurrence.EmptyYear);
             state.sequenceContext().reset();
             state.currentSequence++;
@@ -138,10 +128,10 @@ public class DBConductor {
      * Transforms the events database into a Bolero-Structured composition according to the
      * compositional commands given to the conductor.
      */
-    public Pattern conduct() throws SQLException {
-        resetState();
+    public Pattern conduct(Connection connection) throws SQLException {
+        resetState(connection);
 
-        PreparedStatement eventStatement = dbConnection.prepareStatement(EventsQueries.SELECT_EVENTS);
+        PreparedStatement eventStatement = state.connection.prepareStatement(EventsQueries.SELECT_EVENTS);
         ResultSet EventSet = eventStatement.executeQuery();
 
         int yearMin = state.structure.getMinYear() - 1;
@@ -167,11 +157,11 @@ public class DBConductor {
     }
 
     /**
-     * Calculates Bolero Structure (sequence amount, events per sequence, divided by years)
+     * Calculates Bolero YearStructure (sequence amount, events per sequence, divided by years)
      */
-    private EventsBoleroStructure prepareBoleroStructure(Band band) throws SQLException {
+    private EventsBoleroStructure prepareBoleroStructure(Connection connection, Band band) throws SQLException {
         try {
-            YearCollection stats = YearDataFactory.fromDB(dbConnection, band.bandMembers().keySet());
+            YearCollection stats = YearDataFactory.fromDB(connection, band.bandMembers().keySet());
             return new EventsBoleroStructure(stats);
         } catch (SQLException exception) {
             throw new SQLException("While creating EventsBoleroStructure", exception);
@@ -182,10 +172,10 @@ public class DBConductor {
      * Imports faculties from database
      * Done via proxy function instead of directly using static class, for maintainability purposes.
      */
-    private Map<Integer, FacultyData> generateFacultyData(Band band) throws SQLException {
+    private Map<Integer, FacultyData> generateFacultyData(Connection connection, Band band) throws SQLException {
         Map<Integer, FacultyData> facultyStatData;
         try {
-            facultyStatData = FacultyDataFactory.fromDB(dbConnection);
+            facultyStatData = FacultyDataFactory.fromDB(connection);
         } catch(SQLException exception) {
             throw new SQLException("While generating Faculty data from DB", exception);
         }
@@ -207,9 +197,9 @@ public class DBConductor {
      * Imports event types from database
      * Done via proxy function instead of directly using static class, for maintainability purposes.
      */
-    private Map<Integer, EventType> generateEventTypes() throws SQLException {
+    private Map<Integer, EventType> generateEventTypes(Connection connection) throws SQLException {
         try {
-            return EventTypesFactory.fromDB(dbConnection);
+            return EventTypesFactory.fromDB(connection);
         } catch (SQLException exception) {
             throw new SQLException("While generating Event Type data from DB", exception);
         }

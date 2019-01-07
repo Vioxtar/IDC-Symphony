@@ -31,27 +31,13 @@ public class IDCSymphony extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("IDC Symphony");
 
-
-
-
-
-
-
-
-
-        //TODO Help
-
         SQLiteConfig sqlConf = new SQLiteConfig();
         sqlConf.setReadOnly(true);
 
         Logger logger = Logger.getAnonymousLogger();
 
-        DBConductor conductor = null;
-        try {
-            conductor = new DBConductor( sqlConf.createConnection("jdbc:sqlite:data/IDC Events.db"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DBConductor conductor = new DBConductor();
+
         conductor.addCommand(1000, Recurrence.Year, new YearLogger(logger));
 
         conductor.addCommand(0, Recurrence.Sequence, new DuetMelody());
@@ -72,7 +58,7 @@ public class IDCSymphony extends Application {
 
         Pattern song = null;
         try {
-            song = conductor.conduct();
+            song = conductor.conduct( sqlConf.createConnection("jdbc:sqlite:data/IDC Events.db"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

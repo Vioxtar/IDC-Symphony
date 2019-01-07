@@ -9,8 +9,10 @@ import idc.symphony.music.conducting.logging.YearLogger;
 import idc.symphony.music.conducting.rules.*;
 import idc.symphony.music.transformers.visualization.VisualEventsBuilder;
 import idc.symphony.music.transformers.visualization.factory.VisualEventManager;
+import idc.symphony.visual.scheduling.NotePlayed;
 import idc.symphony.visual.scheduling.VisualEvent;
 import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sqlite.SQLiteConfig;
@@ -37,11 +39,11 @@ class DBConductorTest {
     @Test
     void testConducting() throws SQLException {
         System.setProperty("java.util.logging.SimpleFormatter.format",
-                "%5$s%6$s%n");
+                "%5$s%6$s");
         Logger logger = Logger.getAnonymousLogger();
 
         long before = System.currentTimeMillis();
-        DBConductor conductor = new DBConductor(dbConnection);
+        DBConductor conductor = new DBConductor();
         System.out.println(String.format("Connection time: %f", (System.currentTimeMillis() - before) / 1000.0));
         before = System.currentTimeMillis();
         conductor.addCommand(1000, Recurrence.Year, new YearLogger(logger));
@@ -63,7 +65,7 @@ class DBConductorTest {
         conductor.addCommand(1000, Recurrence.Event, new EventLogger(logger));
         System.out.println(String.format("Conductor config time: %f", (System.currentTimeMillis() - before) / 1000.0));
         before = System.currentTimeMillis();
-        Pattern song = conductor.conduct();
+        Pattern song = conductor.conduct(dbConnection);
         System.out.println(String.format("Conducting time: %f", (System.currentTimeMillis() - before) / 1000.0));
 
         before = System.currentTimeMillis();
@@ -76,5 +78,17 @@ class DBConductorTest {
         Deque<VisualEvent> scheduledEvents = (Deque<VisualEvent>)eventsBuilder.build(song);
         System.out.println(String.format("Events build time: %f", (System.currentTimeMillis() - before) / 1000.0));
         System.out.println(scheduledEvents.size());
+
+
+        for (VisualEvent event : scheduledEvents) {
+            if (event instanceof NotePlayed) {
+                NotePlayed played = (NotePlayed) event;
+
+                System.out.println(String.format("@%f for %f, %s",
+                        played.time, played.duration, played.faculty.name));
+            }
+        }
+
+
     }
 }

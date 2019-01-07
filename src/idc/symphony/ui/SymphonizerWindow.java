@@ -6,12 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Application entry point - binding to FXML and therefore controller;
  */
 public class SymphonizerWindow extends Application {
     public Stage windowStage;
+    public SymphonizerController controller;
 
 
     public static void main(String[] args) {
@@ -25,12 +27,15 @@ public class SymphonizerWindow extends Application {
         Parent root = loader.load();
 
         // Inject application into controller
-        SymphonizerController controller = loader.getController();
+        controller = loader.getController();
         controller.application = this;
 
         primaryStage.getIcons().add(new Image(getClass().getResource("resources/icon.png").toExternalForm()));
         primaryStage.setTitle("IDC Symphonizer");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setMinWidth(540);
+        primaryStage.setMinHeight(370);
+        primaryStage.initStyle(StageStyle.UNIFIED);
 
         controller.loadState();
     }
@@ -51,5 +56,10 @@ public class SymphonizerWindow extends Application {
 
     public void show() {
         windowStage.show();
+    }
+
+    @Override
+    public void stop() {
+        controller.shutdown();
     }
 }
