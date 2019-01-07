@@ -1,9 +1,9 @@
 package idc.symphony.music.conducting.logging;
 
 import idc.symphony.data.EventData;
-import idc.symphony.music.ConductorState;
-import idc.symphony.music.conducting.Command;
-import idc.symphony.music.conducting.Recurrence;
+import idc.symphony.music.conducting.ConductorState;
+import idc.symphony.music.conducting.commands.Command;
+import idc.symphony.music.conducting.commands.Recurrence;
 
 import java.util.logging.Logger;
 

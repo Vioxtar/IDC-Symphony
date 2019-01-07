@@ -1,20 +1,19 @@
-package idc.symphony.music.transformers.visualization.factory;
+package idc.symphony.music.transformers.visualization;
 
 import idc.symphony.data.FacultyData;
 import idc.symphony.music.band.BandRole;
 import idc.symphony.visual.scheduling.*;
-import org.jfugue.theory.Note;
 
 import java.util.*;
 
-public class VisualEventManager {
+public class VisualEventFactory {
     List<LyricEventConverter> converters;
 
     /**
      *
      * @param converters
      */
-    public VisualEventManager(List<LyricEventConverter> converters) {
+    public VisualEventFactory(List<LyricEventConverter> converters) {
         if (converters == null || converters.size() == 0) {
             throw new IllegalArgumentException("Provided converter list must be non-empty");
         }

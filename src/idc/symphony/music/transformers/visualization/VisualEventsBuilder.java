@@ -1,8 +1,6 @@
 package idc.symphony.music.transformers.visualization;
 
 import idc.symphony.data.FacultyData;
-import idc.symphony.music.band.Faculty;
-import idc.symphony.music.transformers.visualization.factory.VisualEventManager;
 import idc.symphony.visual.scheduling.FacultyJoined;
 import idc.symphony.visual.scheduling.NotePlayed;
 import idc.symphony.visual.scheduling.VisualEvent;
@@ -15,13 +13,13 @@ import org.jfugue.theory.Note;
 import java.util.*;
 
 public class VisualEventsBuilder extends ParserListenerAdapter {
-    private VisualEventManager eventManager;
+    private VisualEventFactory eventManager;
     private LayerTrackTimeManager timeManager;
     private Map<Byte, FacultyData> trackToFacultyMap;
     private List<VisualEvent> events;
     private int tempo;
 
-    public VisualEventsBuilder(VisualEventManager eventManager) {
+    public VisualEventsBuilder(VisualEventFactory eventManager) {
         this.eventManager = eventManager;
     }
 

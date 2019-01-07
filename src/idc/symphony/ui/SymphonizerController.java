@@ -1,7 +1,7 @@
 package idc.symphony.ui;
 
+import idc.symphony.music.conducting.ConductorController;
 import idc.symphony.ui.logging.LogHandler;
-import idc.symphony.ui.property.CachedResponse;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,11 +11,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -103,7 +101,7 @@ public class SymphonizerController {
             new FileChooser.ExtensionFilter("MIDI File", "*.midi");
 
     // Lower level controllers - unaware of existence of UI
-    private ConductingController conductingController = new ConductingController();
+    private ConductorController conductorController = new ConductorController();
 
     /**
      * Loads persistent state from file.
@@ -128,7 +126,7 @@ public class SymphonizerController {
     void initialize() {
         userLog.addHandler(new LogHandler(listUserLog, 1000));
         userLog.setLevel(Level.FINER);
-        conductingController.attachLogger(userLog);
+        conductorController.attachLogger(userLog);
 
         appConfig = new SymphonizerProperties(appConfFile, userLog);
 
@@ -142,18 +140,18 @@ public class SymphonizerController {
                 txtMIDIPath.textProperty()));
 
         // Button setup
-        btnDBFile.disableProperty().bind(isVisualizing.or(conductingController.conductingProperty()));
+        btnDBFile.disableProperty().bind(isVisualizing.or(conductorController.conductingProperty()));
         btnSaveMIDI.disableProperty().bind(isVisualizing.or(txtDBPath.textProperty().isEmpty()));
         btnSaveMP4.disableProperty().bind(
                 isVisualizing
                         .or(txtDBPath.textProperty().isEmpty())
                         .or(externalMIDIInvalid)
-                        .or(conductingController.conductingProperty()));
+                        .or(conductorController.conductingProperty()));
 
         btnVisualize.disableProperty().bind(
                 txtDBPath.textProperty().isEmpty()
                         .or(externalMIDIInvalid)
-                        .or(conductingController.conductingProperty()));
+                        .or(conductorController.conductingProperty()));
 
         // Text Field Setup
         dbFile.addListener((ignore) -> validateFile(dbFile, ".db"));
@@ -164,7 +162,7 @@ public class SymphonizerController {
         txtMIDIPath.textProperty().bind(
                 Bindings.createStringBinding(() -> getFilePath(midiFile), midiFile));
 
-        conductingController.patternCache().addInvalidator(
+        conductorController.patternCache().addInvalidator(
                 useExistingMIDI.selectedProperty(), dbFile, midiFile
         );
 
@@ -242,10 +240,10 @@ public class SymphonizerController {
 
         if (file != null) {
             appConfig.setMIDIOutputPath(file.getPath());
-            conductingController.patternCache().getAsync(
+            conductorController.patternCache().getAsync(
                     (useExistingMIDI.isSelected() && externalMIDIInvalid.get())
-                            ? (callback) -> conductingController.getInfoMIDIAsync(dbFile.get(), midiFile.get(), callback)
-                            : (callback) -> conductingController.getFullMIDIAsync(dbFile.get(), callback),
+                            ? (callback) -> conductorController.getInfoMIDIAsync(dbFile.get(), midiFile.get(), callback)
+                            : (callback) -> conductorController.getFullMIDIAsync(dbFile.get(), callback),
                     (pattern) -> this.saveMIDIPattern(file, pattern)
             );
         }
@@ -262,7 +260,7 @@ public class SymphonizerController {
             return;
         }
 
-        conductingController.saveMIDI(
+        conductorController.saveMIDI(
                 targetFile,
                 pattern,
                 (Success) -> {

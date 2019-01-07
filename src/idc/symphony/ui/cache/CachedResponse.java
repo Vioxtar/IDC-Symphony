@@ -1,4 +1,4 @@
-package idc.symphony.ui.property;
+package idc.symphony.ui.cache;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;

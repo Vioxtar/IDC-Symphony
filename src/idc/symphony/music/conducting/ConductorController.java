@@ -1,16 +1,14 @@
-package idc.symphony.ui;
+package idc.symphony.music.conducting;
 
-import idc.symphony.music.DBConductor;
-import idc.symphony.music.conducting.Command;
-import idc.symphony.music.conducting.Recurrence;
+import idc.symphony.music.conducting.DBConductor;
+import idc.symphony.music.conducting.commands.Recurrence;
 import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
-import idc.symphony.music.conducting.rules.*;
-import idc.symphony.ui.property.CachedResponse;
+import idc.symphony.music.conducting.commands.*;
+import idc.symphony.ui.cache.CachedResponse;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import org.jfugue.midi.MidiFileManager;
@@ -18,12 +16,7 @@ import org.jfugue.pattern.Pattern;
 import org.sqlite.SQLiteConfig;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.FutureTask;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +24,7 @@ import java.util.logging.Logger;
  * Controller in charge of the conducting process
  *
  */
-public class ConductingController {
+public class ConductorController {
     private static Logger logger = Logger.getLogger("idc.symphony");
     private static SQLiteConfig SQL_CONF = new SQLiteConfig();
     static {

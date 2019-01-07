@@ -1,9 +1,8 @@
-package idc.symphony.music.conducting.rules;
+package idc.symphony.music.conducting.commands;
 
 import idc.symphony.data.FacultyData;
-import idc.symphony.music.ConductorState;
+import idc.symphony.music.conducting.ConductorState;
 import idc.symphony.music.band.BandRole;
-import idc.symphony.music.conducting.Recurrence;
 
 import java.util.Comparator;
 import java.util.List;

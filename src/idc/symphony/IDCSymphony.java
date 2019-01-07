@@ -1,6 +1,6 @@
 package idc.symphony;
 
-import idc.symphony.music.DBConductor;
+import idc.symphony.music.conducting.DBConductor;
 import org.jfugue.player.Player;
 import org.sqlite.SQLiteConfig;
 

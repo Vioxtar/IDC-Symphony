@@ -1,4 +1,4 @@
-package idc.symphony.music;
+package idc.symphony.music.conducting;
 
 import idc.symphony.data.EventData;
 import idc.symphony.data.EventType;

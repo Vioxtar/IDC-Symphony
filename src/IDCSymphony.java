@@ -1,14 +1,11 @@
-import idc.symphony.data.FacultyData;
-import idc.symphony.music.DBConductor;
-import idc.symphony.music.conducting.Recurrence;
+import idc.symphony.music.conducting.DBConductor;
+import idc.symphony.music.conducting.commands.Recurrence;
 import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
-import idc.symphony.music.conducting.rules.*;
+import idc.symphony.music.conducting.commands.*;
 import idc.symphony.music.transformers.visualization.VisualEventsBuilder;
-import idc.symphony.music.transformers.visualization.factory.VisualEventManager;
-import idc.symphony.visual.scheduling.FacultyJoined;
-import idc.symphony.visual.scheduling.VisualEvent;
+import idc.symphony.music.transformers.visualization.VisualEventFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import idc.symphony.visual.Visualizer;
@@ -17,8 +14,6 @@ import org.jfugue.player.Player;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.logging.Logger;
 
 public class IDCSymphony extends Application {
@@ -63,7 +58,7 @@ public class IDCSymphony extends Application {
             e.printStackTrace();
         }
 
-        VisualEventManager eventManager = new VisualEventManager(VisualEventManager.defaultConverters(conductor.getFacultyMap()));
+        VisualEventFactory eventManager = new VisualEventFactory(VisualEventFactory.defaultConverters(conductor.getFacultyMap()));
         VisualEventsBuilder eventsBuilder = new VisualEventsBuilder(eventManager);
 
 

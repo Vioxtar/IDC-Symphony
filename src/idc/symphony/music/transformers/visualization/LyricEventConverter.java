@@ -1,4 +1,4 @@
-package idc.symphony.music.transformers.visualization.factory;
+package idc.symphony.music.transformers.visualization;
 
 import idc.symphony.visual.scheduling.VisualEvent;
 

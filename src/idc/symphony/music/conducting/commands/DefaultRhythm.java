@@ -1,9 +1,8 @@
-package idc.symphony.music.conducting.rules;
+package idc.symphony.music.conducting.commands;
 
-import idc.symphony.music.ConductorState;
+import idc.symphony.music.conducting.ConductorState;
 import idc.symphony.music.band.Band;
 import idc.symphony.music.band.BandRole;
-import idc.symphony.music.conducting.Recurrence;
 
 public class DefaultRhythm extends AbstractRoleSetter {
     public DefaultRhythm() {

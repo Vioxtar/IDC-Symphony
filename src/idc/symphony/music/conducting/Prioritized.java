@@ -1,7 +1,9 @@
 package idc.symphony.music.conducting;
 
-import java.util.Objects;
-
+/**
+ * Prioritization adapter for sorting commands in an adjustable order
+ * @param <T> Value type to be prioritized
+ */
 public class Prioritized<T> implements Comparable<Prioritized<T>> {
     public T value;
     public int priority;
@@ -15,14 +17,4 @@ public class Prioritized<T> implements Comparable<Prioritized<T>> {
     public int compareTo(Prioritized<T> o) {
         return priority - o.priority;
     }
-
-    /*@Override
-    public boolean equals(Object o) {
-        if (o instanceof Prioritized) {
-            Prioritized p = (Prioritized)o;
-            return Objects.equals(value, p.value);
-        }
-
-        return false;
-    }*/
 }

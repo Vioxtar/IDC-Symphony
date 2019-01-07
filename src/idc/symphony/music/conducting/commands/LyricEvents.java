@@ -1,12 +1,13 @@
-package idc.symphony.music.conducting.rules;
+package idc.symphony.music.conducting.commands;
 
 import idc.symphony.data.EventData;
-import idc.symphony.music.ConductorState;
+import idc.symphony.music.conducting.ConductorState;
 import idc.symphony.music.band.BandMember;
-import idc.symphony.music.conducting.Command;
-import idc.symphony.music.conducting.Recurrence;
 import org.jfugue.pattern.Pattern;
 
+/**
+ * For visualization infographics - generates timed metadata message containing event data
+ */
 public class LyricEvents implements Command {
 
     @Override

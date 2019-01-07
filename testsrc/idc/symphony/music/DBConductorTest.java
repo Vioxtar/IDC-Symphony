@@ -1,28 +1,23 @@
 package idc.symphony.music;
 
-import idc.symphony.data.FacultyData;
-import idc.symphony.music.conducting.Command;
-import idc.symphony.music.conducting.Recurrence;
+import idc.symphony.music.conducting.DBConductor;
+import idc.symphony.music.conducting.commands.Recurrence;
 import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
-import idc.symphony.music.conducting.rules.*;
+import idc.symphony.music.conducting.commands.*;
 import idc.symphony.music.transformers.visualization.VisualEventsBuilder;
-import idc.symphony.music.transformers.visualization.factory.VisualEventManager;
+import idc.symphony.music.transformers.visualization.VisualEventFactory;
 import idc.symphony.visual.scheduling.NotePlayed;
 import idc.symphony.visual.scheduling.VisualEvent;
 import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Deque;
-import java.util.Map;
-import java.util.Queue;
 import java.util.logging.Logger;
 
 class DBConductorTest {
@@ -69,8 +64,8 @@ class DBConductorTest {
         System.out.println(String.format("Conducting time: %f", (System.currentTimeMillis() - before) / 1000.0));
 
         before = System.currentTimeMillis();
-        VisualEventManager eventManager = new VisualEventManager(
-            VisualEventManager.defaultConverters(conductor.getFacultyMap()));
+        VisualEventFactory eventManager = new VisualEventFactory(
+            VisualEventFactory.defaultConverters(conductor.getFacultyMap()));
         VisualEventsBuilder eventsBuilder = new VisualEventsBuilder(eventManager);
         System.out.println(String.format("Events init time: %f", (System.currentTimeMillis() - before) / 1000.0));
 

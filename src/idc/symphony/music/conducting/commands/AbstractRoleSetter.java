@@ -1,9 +1,8 @@
-package idc.symphony.music.conducting.rules;
+package idc.symphony.music.conducting.commands;
 
-import idc.symphony.music.ConductorState;
+import idc.symphony.music.conducting.ConductorState;
 import idc.symphony.music.band.BandMember;
 import idc.symphony.music.band.BandRole;
-import idc.symphony.music.conducting.Command;
 
 public abstract class AbstractRoleSetter implements Command {
     protected boolean createPatterns = true;

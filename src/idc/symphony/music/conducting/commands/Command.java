@@ -1,8 +1,11 @@
-package idc.symphony.music.conducting;
+package idc.symphony.music.conducting.commands;
 
-import idc.symphony.music.ConductorState;
+import idc.symphony.music.conducting.ConductorState;
+import idc.symphony.music.conducting.Prioritized;
 
-
+/**
+ * Conducting command used to change conductor state as well as affect composition
+ */
 public interface Command {
 
     /**

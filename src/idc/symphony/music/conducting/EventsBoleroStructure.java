@@ -1,4 +1,4 @@
-package idc.symphony.music;
+package idc.symphony.music.conducting;
 
 import idc.symphony.data.YearData;
 import idc.symphony.data.YearCollection;

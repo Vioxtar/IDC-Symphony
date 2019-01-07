@@ -1,4 +1,4 @@
-package idc.symphony.music;
+package idc.symphony.music.conducting;
 
 import idc.symphony.data.EventData;
 import idc.symphony.data.EventType;
@@ -9,9 +9,8 @@ import idc.symphony.music.band.Band;
 import idc.symphony.data.FacultyData;
 import idc.symphony.data.YearCollection;
 import idc.symphony.db.YearDataFactory;
-import idc.symphony.music.conducting.Command;
-import idc.symphony.music.conducting.Prioritized;
-import idc.symphony.music.conducting.Recurrence;
+import idc.symphony.music.conducting.commands.Command;
+import idc.symphony.music.conducting.commands.Recurrence;
 import org.jfugue.pattern.Pattern;
 
 import java.sql.Connection;

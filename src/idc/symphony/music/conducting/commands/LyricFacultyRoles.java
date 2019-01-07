@@ -1,15 +1,16 @@
-package idc.symphony.music.conducting.rules;
+package idc.symphony.music.conducting.commands;
 
-import idc.symphony.music.ConductorState;
+import idc.symphony.music.conducting.ConductorState;
 import idc.symphony.music.band.BandMember;
 import idc.symphony.music.band.BandRole;
-import idc.symphony.music.conducting.Command;
-import idc.symphony.music.conducting.Recurrence;
 import org.jfugue.pattern.Pattern;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * For visualization infographics - generates
+ */
 public class LyricFacultyRoles implements Command {
     Set<Integer> joinedFaculties = new HashSet<>();
     int lastYear = -1;
