@@ -25,7 +25,7 @@ public class Entrepreneurship extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 20, 0.5f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 1, 12, 0.5f, 0.2f, 0.2f);
         p.setInstrument(instrument);
         return p;
 

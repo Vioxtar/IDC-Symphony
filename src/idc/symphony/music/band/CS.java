@@ -11,7 +11,7 @@ public class CS extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 69;
+        long seed = 691337;
         this.gen.setSeed(seed);
     }
 
@@ -25,7 +25,7 @@ public class CS extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 20, 0.5f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 1, 25, 0.5f, 0.2f, 0.2f);
         p.setInstrument(instrument);
         return p;
 

@@ -267,7 +267,7 @@ public class Visualizer extends Pane {
         double simTime = (double)(now - simStartTime) / 10e8;
 
         // Peek at our next event and determine if we should simulate it
-        double simReadRate = 1; // TODO: DEBUG
+        double simReadRate = 20; // TODO: DEBUG
         VisualEvent nextEvent = schedEvents.peek();
         while (nextEvent != null && nextEvent.time() / simReadRate <= (simTime)) {
             schedEvents.poll();
@@ -334,7 +334,7 @@ public class Visualizer extends Pane {
         camCenterY = (maxY + minY) / 2;
 
         // Camera zoom is linearly correlated with the biggest span of the scene
-        double dist = Math.max((maxX - minX), (maxY - minY));
+        double dist = Math.min((maxX - minX), (maxY - minY));
         camZoom = 1 / dist;
     }
 
