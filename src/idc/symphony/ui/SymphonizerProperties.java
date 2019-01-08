@@ -34,11 +34,11 @@ public class SymphonizerProperties extends Properties {
     static {
         // INPUT
         DEFAULT.setProperty(DB_FILE, "data\\IDC Events.db");
-        DEFAULT.setProperty(MIDI_FILE, "data\\external.midi");
+        DEFAULT.setProperty(MIDI_FILE, "");
         DEFAULT.setProperty(USE_EXTERNAL_MIDI, "0");
 
         // OUTPUT
-        DEFAULT.setProperty(MIDI_OUTPUT, "");
+        DEFAULT.setProperty(MIDI_OUTPUT, "output.midi");
         DEFAULT.setProperty(MP4_OUTPUT, "output.mp4");
 
         // DISPLAY
@@ -52,12 +52,12 @@ public class SymphonizerProperties extends Properties {
         int defaultWinWidth = Math.max(540, screenSize.width / 2);
         int defaultWinHeight = Math.max(370, (int)(screenSize.height * 0.8) - 80);
         int defaultPosX = (screenSize.width - defaultWinWidth) / 2;
-        int defaultPosY = (screenSize.height - defaultWinHeight) / 2;
+        int defaultPosY = (screenSize.height - defaultWinHeight) / 3;
 
         DEFAULT.setProperty(WIN_POS_LEFT, String.valueOf(defaultPosX));
         DEFAULT.setProperty(WIN_POS_TOP, String.valueOf(defaultPosY));
-        DEFAULT.setProperty(WIN_HEIGHT, String.valueOf(defaultWinWidth));
-        DEFAULT.setProperty(WIN_WIDTH, String.valueOf(defaultWinHeight));
+        DEFAULT.setProperty(WIN_HEIGHT, String.valueOf(defaultWinHeight));
+        DEFAULT.setProperty(WIN_WIDTH, String.valueOf(defaultWinWidth));
         DEFAULT.setProperty(MAXIMIZED, String.valueOf(false));
     }
     private Logger logger;

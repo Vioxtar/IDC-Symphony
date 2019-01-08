@@ -17,6 +17,9 @@ public class SymphonizerWindow extends Application {
 
 
     public static void main(String[] args) {
+        // Force sw pipeline
+        System.setProperty("prism.order", "sw");
+
         launch(args);
     }
 

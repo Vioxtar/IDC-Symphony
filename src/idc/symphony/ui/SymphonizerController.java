@@ -119,8 +119,14 @@ public class SymphonizerController {
      * To be called from injector in order to ensure controller can change window state.
      */
     void loadState() {
-        dbFile.set(new File(appConfig.getDBPath()));
-        midiFile.set(new File(appConfig.getMIDIPath()));
+        File db = new File(appConfig.getDBPath());
+        File midi = new File(appConfig.getMIDIPath());
+        if (db.exists()) {
+            dbFile.set(db);
+        }
+        if (midi.exists()) {
+            midiFile.set(midi);
+        }
 
         useExistingMIDI.setSelected(appConfig.getUseExternalMIDI());
         useExistingMIDI.selectedProperty().addListener((selected) ->
