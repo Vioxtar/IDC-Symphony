@@ -18,7 +18,7 @@ public class SequenceLogger implements Command {
     @Override
     public boolean execute(ConductorState state, Recurrence recurrence) {
         logger.info(String.format("Sequence #%d parsed.", state.getCurrentSequence()));
-  
+
         for (FacultyData faculty : state.getFacultyMap().values()) {
             BandRole facultyRole = state.sequenceContext().facultyRole(faculty.ID);
             if (facultyRole != null) {
