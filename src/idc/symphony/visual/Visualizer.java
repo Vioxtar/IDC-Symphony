@@ -4,7 +4,6 @@ import idc.symphony.data.FacultyData;
 import idc.symphony.visual.scheduling.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.BlendMode;
@@ -18,31 +17,50 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Math.random;
 
 public class Visualizer extends Application {
 
+    // Window constants
     final int CAN_WDTH = 720;
     final int CAN_HGHT = 680;
     final Color BG_COLR = Color.BLACK;
 
-    final double yJump = 700;
+    // Spacing constants
+    final double INFO_X_SPACE = 500;
+    final double INFO_Y_OFFSET = 200;
+    final double LAYER_HEIGHT = 800;
 
-
-    ArrayList<Trail> trails;
+    // The scheduled visual events to be displayed, sorted in chronological order
     Queue<VisualEvent> schedEvents;
-    HashMap<Integer, Integer> facIDtoTrails;
 
-    Scene trailsScene;
+    // All our trails
+    ArrayList<Trail> trails;
+
+    // All our infographs, as well as a distribution to right and left infographs
+    ArrayList<Infograph> infographs;
+    ArrayList<Infograph> rightInfographs;
+    ArrayList<Infograph> leftInfographs;
+
+    // Maps a faculty ID number to our own 'visID' number, set to be the same for
+    // a trail and its corresponding infograph
+    HashMap<Integer, Integer> facIDtoVisID;
+
+    // The visualizer's scene, camera parameters
+    Scene visScene;
     Pane camera;
     double camCenterX, camCenterY, camZoom;
+
+    // The simulation start time in nanoseconds
     long simStartTime;
+
+    // The simulation/draw tickrates in milliseconds
+    final int DRAW_TICK = 16;
+    final int SIM_TICK = 5;
 
     public Visualizer(Queue<VisualEvent> schedEvents) {
         // Initialize schedueled events queue as soon as we're up
@@ -55,13 +73,20 @@ public class Visualizer extends Application {
 
         // Initialization
         this.camera = new Pane();
-        this.trailsScene = new Scene(this.camera, CAN_WDTH, CAN_HGHT, BG_COLR);
+        this.visScene = new Scene(this.camera, CAN_WDTH, CAN_HGHT, BG_COLR);
+
         this.trails = new ArrayList<>();
+
+        this.infographs = new ArrayList<>();
+        this.rightInfographs = new ArrayList<>();
+        this.leftInfographs = new ArrayList<>();
+
         this.simStartTime = System.nanoTime();
-        this.facIDtoTrails = new HashMap<>();
+        this.facIDtoVisID = new HashMap<>();
+
 
         // Take control of the primary stage
-        primaryStage.setScene(trailsScene);
+        primaryStage.setScene(visScene);
         primaryStage.show();
 
         // Start the main loop timer
@@ -72,10 +97,12 @@ public class Visualizer extends Application {
                 stageTick(now); // For drawing calls
             }
         }.start();
+
+        infographs.add(new Infograph());
     }
 
     long simBefore = -1;
-    final long simTickInterval = TimeUnit.NANOSECONDS.convert(5, TimeUnit.MILLISECONDS);
+    final long simTickInterval = TimeUnit.NANOSECONDS.convert(SIM_TICK, TimeUnit.MILLISECONDS);
     public void simulationTick(long now) {
         if (simBefore == -1) {
             simBefore = now;
@@ -87,7 +114,7 @@ public class Visualizer extends Application {
     }
 
     long stageBefore = -1;
-    final long stageTickInterval = TimeUnit.NANOSECONDS.convert(16, TimeUnit.MILLISECONDS);;
+    final long stageTickInterval = TimeUnit.NANOSECONDS.convert(DRAW_TICK, TimeUnit.MILLISECONDS);;
     public void stageTick(long now) {
         if (stageBefore == -1) {
             stageBefore = now;
@@ -109,8 +136,8 @@ public class Visualizer extends Application {
 
             // TODO: Set a higher immediate radius, draw an additive spreading blur to the background with the trail color
             FacultyData fD = ((NotePlayed) event).faculty;
-            if (facIDtoTrails.containsKey(fD.ID)) {
-                int trailID = facIDtoTrails.get(fD.ID);
+            if (facIDtoVisID.containsKey(fD.ID)) {
+                int trailID = facIDtoVisID.get(fD.ID);
                 Trail trail = trails.get(trailID);
                 trail.setImmRadius(100);
                 trail.setChangeRadiusSpeed(1 / ((NotePlayed) event).duration);
@@ -127,28 +154,34 @@ public class Visualizer extends Application {
             // TODO: Change the saturation of every trail color, shift target positions
 
         } else if (event instanceof FacultyJoined) {
-//            System.out.println("Faculty Joined");
 
             FacultyData fD = ((FacultyJoined) event).faculty;
 
+            // The visID of a trail will always be the visID of its corresponding infograph
+            int visID = trails.size();
+            facIDtoVisID.put(fD.ID, visID);
+
+            // Color TODO: Make this hard coded or something, give fancier colors
+            Color tempCol = Color.rgb(ranRange(0, 255), ranRange(0, 255), ranRange(0, 255));
+
             Trail trail = new Trail();
-            {
+
                 // Radius
                 trail.setTargetRadius(20);
                 trail.setImmRadius(0);
                 trail.setChangeRadiusSpeed(5);
 
-                // Color TODO: Make this hard coded or something, give fancier colors
-                Color tempCol = Color.rgb(ranRange(0, 255), ranRange(0, 255), ranRange(0, 255));
+                // Color
                 trail.setHeadColor(tempCol); trail.setTrailColor(tempCol); trail.setLineColor(tempCol);
 
-                // Obtain our parent and emerge from it
+                // Obtain our parent and emerge from it (make sure it's valid first)
                 Trail parent = null;
-                if (fD.parent != null && facIDtoTrails.containsKey(fD.parent.ID)) {
+                if (fD.parent != null && facIDtoVisID.containsKey(fD.parent.ID)) {
                     // Make sure that we have a parent
-                    parent = trails.get(facIDtoTrails.get(fD.parent.ID));
+                    parent = trails.get(facIDtoVisID.get(fD.parent.ID));
                 }
                 if (parent != null && parent != trail) {
+
                     // Originate from our parent's head
                     trail.setOriginX(parent.head.x);
                     trail.setOriginY(parent.head.y);
@@ -158,11 +191,9 @@ public class Visualizer extends Application {
                     // Have the trail follow its parent
                     trail.setFollowTarget(parent);
 
-                    // Aim slightly above the parent
-                    trail.setTargetY(parent.getTargetY() - yJump);
+                    // Aim above the parent
+                    trail.setTargetY(parent.getTargetY() - LAYER_HEIGHT);
 
-                    // Reorganize the parent's children to add room for the new child
-                    organizeChildXTargets(parent, parent.getTargetY());
 
                 } else {
 
@@ -172,14 +203,48 @@ public class Visualizer extends Application {
                     trail.setHeadX(0); trail.setHeadY(0);
                     trail.setTailX(0); trail.setTailY(0);
 
-                    trail.setTargetY(-yJump);
+                    // Give the starting height
+                    trail.setTargetY(-LAYER_HEIGHT);
                 }
-            }
-            // Register the new trail
-            int size = trails.size();
-            trails.add(size, trail);
-            facIDtoTrails.put(fD.ID, size);
 
+            trails.add(visID, trail);
+
+            // Add an introductory infograph
+            Infograph infG = new Infograph();
+                // Title
+                infG.setTitleText(fD.name);
+                infG.setTitleSize(100);
+                // Color
+                infG.setTitleColor(tempCol);
+                infG.setLineColor(tempCol);
+                // Starting position
+                infG.setX(trail.head.x); infG.setY(trail.head.y);
+                // Line width
+                infG.setLineWidth(5);
+                // Aim at our trail's head
+                infG.setAimTarget(trail.head);
+
+                // Pop in and out effects
+                infG.popIn(0.01);
+                infG.popOut(0.01);
+            infographs.add(visID, infG);
+
+            // Set unified IDs of the trail and its infograph
+            trail.setID(visID);
+            infG.setID(visID);
+
+            // If we have a parent, organize its child trail X targets to add room for the new child
+            if (parent != null) {
+                // This will also shift the children's infographs
+                organizeChildTrails(parent, parent.getTargetY());
+            } else {
+                // If we don't have a parent, shift our infograph ourselves
+                shiftTrailsInfograph(trail);
+            }
+
+            // Re-organize all infographs
+            organizeInfographs(rightInfographs);
+            organizeInfographs(leftInfographs);
 
         } else if (event instanceof YearChanged) {
 //            System.out.println("Year Changed");
@@ -208,10 +273,16 @@ public class Visualizer extends Application {
             trail.update();
         });
 
-        // Obtain mins/maxs of all trails for framing purposes
+        // Update all infographs
+        infographs.parallelStream().forEach((infG) -> {
+            infG.update();
+        });
+
+        // Obtain mins/maxs of all elements for framing purposes
         double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE;
         double minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
 
+        // Min/maxs of trails
         for (Trail trail : trails) {
             double[] mins = trail.getMins();
             double mnX = mins[0], mnY = mins[1];
@@ -231,6 +302,25 @@ public class Visualizer extends Application {
             }
         }
 
+        // Min/maxs of infographics
+        for (Infograph infG : infographs) {
+            double[] mins = infG.getMins();
+            double mnX = mins[0], mnY = mins[1];
+            if (mnX < minX) {
+                minX = mnX;
+            }
+            if (mnY < minY) {
+                minY = mnY;
+            }
+            double[] maxs = infG.getMaxs();
+            double mxX = maxs[0], mxY = maxs[1];
+            if (mxX > maxX) {
+                maxX = mxX;
+            }
+            if (mxY > maxY) {
+                maxY = mxY;
+            }
+        }
 
         // Camera center is always the average of our mins/maxs
         camCenterX = (maxX + minX) / 2;
@@ -246,22 +336,26 @@ public class Visualizer extends Application {
         Pane camera = new Pane();
 
         // Have every trail draw into the new camera
-        int i = trails.size() - 1;
-        while (i >= 0) {
-            Trail trail = trails.get(i--);
+        // Draw the trails in reverse for correct draw order
+        for (int i = trails.size() - 1; i >=0; i--) {
+            Trail trail = trails.get(i);
             trail.draw(camera);
+        }
+
+        // Draw the infographics
+        for (Infograph infG : infographs) {
+            infG.draw(camera);
         }
 
         // Set up the camera framing
 
-        double sceneW = trailsScene.getWidth();
-        double sceneH = trailsScene.getHeight();
-
+        double sceneW = visScene.getWidth();
+        double sceneH = visScene.getHeight();
 
         // We consider our window size (scene range) when determining the final zoom
         double minSceneRange = Math.min(sceneW, sceneH);
 
-        double scaleBuffer = 0.8;
+        double scaleBuffer = 0.875;
         double scale = camZoom * minSceneRange * scaleBuffer;
         scale = Math.min(scale, 1); // We can only zoom out from 1
         camera.setScaleX(scale); camera.setScaleY(scale);
@@ -276,10 +370,10 @@ public class Visualizer extends Application {
         // TODO: Interpolate the camera movement... mainly good for fresh trail spawns
 
         // Finalize
-        trailsScene.setRoot(camera);
+        visScene.setRoot(camera);
     }
 
-    public void organizeChildXTargets(Trail parent, double y) {
+    public void organizeChildTrails(Trail parent, double y) {
         ArrayList<Trail> children = parent.getFollowers();
         if (children == null) { return; }
         int size = children.size();
@@ -291,12 +385,78 @@ public class Visualizer extends Application {
             child.setTargetX(targetX);
             frac++;
 
-            organizeChildXTargets(child, child.getTargetY());
+            // Every child should organize his own children as well
+            organizeChildTrails(child, child.getTargetY());
+
+            // Shift infographs to account for the change
+            shiftTrailsInfograph(child);
+        }
+    }
+
+    public void shiftTrailsInfograph(Trail trail) {
+        // Shift each child's respective infographs
+        Infograph infG = infographs.get(trail.getID());
+        if (trail.getTargetX() >= 0) {
+            addInfographToRight(infG);
+        } else {
+            addInfographToLeft(infG);
+        }
+    }
+
+    public void organizeInfographs(ArrayList<Infograph> side) {
+
+        // Find out the bottomMost and upMost y values
+        double bottomMost = Double.MIN_VALUE; double upMost = Double.MAX_VALUE;
+        double rightMost = Double.MIN_VALUE; double leftMost = Double.MAX_VALUE;
+        for (Trail trail : trails) {
+            double targetY = trail.getTargetY();
+            if (targetY < upMost) {
+                upMost = targetY;
+            }
+            if (targetY > bottomMost) {
+                bottomMost = targetY;
+            }
+            double targetX = trail.getTargetX();
+            if (targetX < leftMost) {
+                leftMost = targetX;
+            }
+            if (targetX > rightMost) {
+                rightMost = targetX;
+            }
+        }
+
+        int size = side.size();
+        double space = (bottomMost - upMost) / (double) size;
+        int it = 0;
+        for (Infograph infG : side) {
+            it++;
+            infG.setBodyTargetY(bottomMost - it * space + INFO_Y_OFFSET);
+            if (side == rightInfographs) {
+                infG.setBodyTargetX(rightMost + INFO_X_SPACE);
+            } else {
+                infG.setBodyTargetX((leftMost - INFO_X_SPACE));
+            }
+
+        }
+    }
+
+    public void addInfographToRight(Infograph infG) {
+        leftInfographs.remove(infG);
+        int curr = rightInfographs.indexOf(infG);
+        if (curr == -1) {
+            rightInfographs.add(infG);
+        }
+    }
+    public void addInfographToLeft(Infograph infG) {
+        rightInfographs.remove(infG);
+        int curr = leftInfographs.indexOf(infG);
+        if (curr == -1) {
+            leftInfographs.add(infG);
         }
     }
 
     public double spreadByY(double y) {
-        return 250000 * (yJump / Math.pow(y, 2));
+        return 300000 * (LAYER_HEIGHT / Math.pow(y, 2));
     }
 
     public void testDraw(Pane root) {
@@ -311,7 +471,7 @@ public class Visualizer extends Application {
             circles.getChildren().add(circle);
             circle.relocate(ranRange(0, CAN_WDTH), ranRange(0, CAN_HGHT));
         }
-        Rectangle colors = new Rectangle(trailsScene.getWidth(), trailsScene.getHeight(),
+        Rectangle colors = new Rectangle(visScene.getWidth(), visScene.getHeight(),
                 new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE, new Stop[]{
                         new Stop(0, Color.web("#f8bd55")),
                         new Stop(Math.random(), Color.web("#c0fe56")),
@@ -321,8 +481,8 @@ public class Visualizer extends Application {
                         new Stop(Math.random(), Color.web("#ed5fc2")),
                         new Stop(Math.random(), Color.web("#ef504c")),
                         new Stop(1, Color.web("#f2660f")),}));
-        colors.widthProperty().bind(trailsScene.widthProperty());
-        colors.heightProperty().bind(trailsScene.heightProperty());
+        colors.widthProperty().bind(visScene.widthProperty());
+        colors.heightProperty().bind(visScene.heightProperty());
         Group blendModeGroup =
                 new Group(new Group(circles, colors));
         colors.setBlendMode(BlendMode.OVERLAY);
