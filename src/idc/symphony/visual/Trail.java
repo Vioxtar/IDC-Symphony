@@ -281,10 +281,10 @@ public class Trail {
         if (rDiff > 0.05) {
             Circle orb = new Circle();
             orb.relocate(head.x, head.y);
-            orb.setRadius(rDiff * 2);
+            orb.setRadius(rDiff * 2.25);
             orb.setFill(headColor);
 
-            double blur = rDiff * rDiff * 1000;
+            double blur = rDiff * rDiff * 1500;
             orb.setEffect(new BoxBlur(blur, blur, 5));
             orb.setBlendMode(BlendMode.ADD);
             g.getChildren().add(orb);
