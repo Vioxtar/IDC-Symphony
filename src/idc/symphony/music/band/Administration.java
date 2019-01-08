@@ -12,7 +12,7 @@ public class Administration extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 12;
+        long seed = 123;
         this.gen.setSeed(seed);
     }
 

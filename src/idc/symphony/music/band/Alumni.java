@@ -11,7 +11,7 @@ public class Alumni extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 420;
+        long seed = 222;
         this.gen.setSeed(seed);
     }
 

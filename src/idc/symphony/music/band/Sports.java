@@ -1,5 +1,6 @@
 package idc.symphony.music.band;
 
+import idc.symphony.music.transformers.AmplitudeTransformer;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 
@@ -11,7 +12,7 @@ public class Sports extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 1;
+        long seed = 2;
         this.gen.setSeed(seed);
     }
 
@@ -25,8 +26,9 @@ public class Sports extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 8, 0.5f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 8, 0.5f, 0.2f, 0.2f);
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
         return p;
 
     }
@@ -36,7 +38,7 @@ public class Sports extends Faculty {
 
         Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
         p.setInstrument(instrument);
-        p.addToEachNoteToken("a45");
+        p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
         return p;
 
     }
@@ -46,6 +48,7 @@ public class Sports extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET3, p);
         return p;
 
     }
@@ -55,6 +58,8 @@ public class Sports extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET2, p);
+
         return p;
 
     }
@@ -64,6 +69,8 @@ public class Sports extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET1, p);
+
         return p;
 
     }

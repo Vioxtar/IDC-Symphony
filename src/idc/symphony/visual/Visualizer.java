@@ -146,7 +146,7 @@ public class Visualizer extends Pane {
             if (facIDtoVisID.containsKey(fD.ID)) {
                 int trailID = facIDtoVisID.get(fD.ID);
                 Trail trail = trails.get(trailID);
-                trail.setImmRadius(100);
+                trail.setImmRadius(200 * ((NotePlayed) event).amp);
                 trail.setChangeRadiusSpeed(1 / ((NotePlayed) event).duration);
             }
 

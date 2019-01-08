@@ -1,5 +1,6 @@
 package idc.symphony.music.band;
 
+import idc.symphony.music.transformers.AmplitudeTransformer;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 
@@ -27,6 +28,8 @@ public class SocialCommit extends Faculty {
 
         Pattern p = genMusic(key, wholes, 1, 20, 0.5f, 0.2f, 0.2f);
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
+
         return p;
 
     }
@@ -36,7 +39,8 @@ public class SocialCommit extends Faculty {
 
         Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
         p.setInstrument(instrument);
-        p.addToEachNoteToken("a45");
+        p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
+
         return p;
 
     }
@@ -46,6 +50,8 @@ public class SocialCommit extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET3, p);
+
         return p;
 
     }
@@ -55,6 +61,8 @@ public class SocialCommit extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET2, p);
+
         return p;
 
     }
@@ -64,6 +72,8 @@ public class SocialCommit extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
+        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET1, p);
+
         return p;
 
     }

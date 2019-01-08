@@ -22,6 +22,14 @@ public class Faculty implements BandMember {
         return Faculty.patterns;
     }
 
+
+    final float AMP_MELODY = 1f;
+    final float AMP_SECMELODY = 0.8f;
+    final float AMP_CARPET3 = 0.7f;
+    final float AMP_CARPET2 = 0.7f;
+    final float AMP_CARPET1 = 0.7f;
+
+
     /*************************************************************************************************
      * Overrides - to be re-implemented by each child
      *************************************************************************************************/

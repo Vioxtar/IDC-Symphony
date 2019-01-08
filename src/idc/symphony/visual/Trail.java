@@ -1,7 +1,10 @@
 package idc.symphony.visual;
 
 import javafx.scene.Group;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Effect;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -196,6 +199,8 @@ public class Trail {
         circ.relocate(head.x, head.y); circ.setRadius(head.r); circ.setFill(headColor);
         circles.getChildren().add(circ);
 
+
+
         // Nothing to work with if we don't have a trail
         if (trail.isEmpty()) { return; }
 
@@ -240,8 +245,23 @@ public class Trail {
         line.setStrokeWidth(last.r);
         lines.getChildren().add(line);
 
+
         g.getChildren().add(circles);
         g.getChildren().add(lines);
+
+        // Draw a fucking cool as shit glowing circle if we're big :DDD
+        double rDiff = head.r - targetR;
+        if (rDiff > 0.05) {
+            Circle orb = new Circle();
+            orb.relocate(head.x, head.y);
+            orb.setRadius(rDiff);
+            orb.setFill(headColor);
+
+            double blur = rDiff * rDiff * 50;
+            orb.setEffect(new BoxBlur(blur, blur, 5));
+            orb.setBlendMode(BlendMode.ADD);
+            g.getChildren().add(orb);
+        }
 
     }
 }
