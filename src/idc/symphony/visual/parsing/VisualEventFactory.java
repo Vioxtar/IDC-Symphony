@@ -1,4 +1,4 @@
-package idc.symphony.music.transformers.visualization;
+package idc.symphony.visual.parsing;
 
 import idc.symphony.data.FacultyData;
 import idc.symphony.music.band.BandRole;
@@ -6,6 +6,9 @@ import idc.symphony.visual.scheduling.*;
 
 import java.util.*;
 
+/**
+ * Factory for different visual event types, each implementing how to parse and instantiate themselves via lyrics.
+ */
 public class VisualEventFactory {
     List<LyricEventConverter> converters;
 

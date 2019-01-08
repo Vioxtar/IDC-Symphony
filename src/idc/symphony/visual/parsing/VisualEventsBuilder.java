@@ -1,4 +1,4 @@
-package idc.symphony.music.transformers.visualization;
+package idc.symphony.visual.parsing;
 
 import idc.symphony.data.FacultyData;
 import idc.symphony.visual.scheduling.FacultyJoined;
@@ -12,6 +12,10 @@ import org.jfugue.theory.Note;
 
 import java.util.*;
 
+/**
+ * Parses a given pattern, looking for lyric events that represent visual events.
+ * Returns a sorted queue of visual events, intended for the visualizer.
+ */
 public class VisualEventsBuilder extends ParserListenerAdapter {
     private VisualEventFactory eventManager;
     private LayerTrackTimeManager timeManager;

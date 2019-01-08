@@ -24,9 +24,9 @@ public class Faculty implements BandMember {
 
 
     final float AMP_MELODY = 1f;
-    final float AMP_SECMELODY = 0.8f;
-    final float AMP_CARPET3 = 0.7f;
-    final float AMP_CARPET2 = 0.7f;
+    final float AMP_SECMELODY = 0.85f;
+    final float AMP_CARPET3 = 0.35f;
+    final float AMP_CARPET2 = 0.52f;
     final float AMP_CARPET1 = 0.7f;
 
 

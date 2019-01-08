@@ -3,6 +3,10 @@ package idc.symphony.music.transformers;
 import org.jfugue.parser.ParserListenerAdapter;
 import org.jfugue.pattern.Pattern;
 
+/**
+ * Extracts BPM (Tempo) out of given pattern.
+ * Assumes pattern only has one tempo. If pattern's tempo changes during song, will return last tempo.
+ */
 public class BPMExtractor extends ParserListenerAdapter {
     private int bpm = -1;
 

@@ -4,6 +4,10 @@ import org.jfugue.parser.ParserListener;
 import org.jfugue.parser.ParserListenerAdapter;
 import org.jfugue.theory.Note;
 
+/**
+ * For debug purposes, computes duration of each track, and durations of whole song.
+ * TODO: Fix bug where layer isn't accounted for, corrupting drum track's duration
+ */
 public class ComputeSongDuration extends ParserListenerAdapter implements ParserListener {
     private double[] durations = new double[16];
     private double[] trackBeatTime = new double[16];

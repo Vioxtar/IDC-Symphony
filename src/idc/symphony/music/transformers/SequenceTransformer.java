@@ -7,16 +7,14 @@ import org.jfugue.theory.Note;
 
 /**
  * Wraps a given musical pattern by:
- * - Changing the amplitude of each note
  * - Adding a time seek at the beginning of the pattern
  * - Adding a layer declaration at the beginning of the pattern
  * - Changing the instrument at the beginning of the pattern
  *
- * Intended for patterns that don't state the latter three; explicitly or via staccato string.
+ * Intended for patterns that don't state these three; explicitly or via staccato string.
  */
 public class SequenceTransformer extends ChainingParserListenerAdapter {
     double time;
-    float   amplitude;
     byte     instrument;
     byte    voice;
 
@@ -24,7 +22,6 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
 
     public SequenceTransformer() {
         this.time = 0;
-        this.amplitude = 1;
         this.voice = 0;
         this.instrument = (byte)-1;
 
@@ -33,10 +30,6 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
 
     public void setTime(double time) {
         this.time = time;
-    }
-
-    public void setAmp(float amp) {
-        this.amplitude = amp;
     }
 
     public void setInstrument(byte instrument) {
@@ -91,16 +84,5 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
             fireTrackBeatTimeRequested(time);
             layerTimeChanged[layer] = true;
         }
-    }
-
-    @Override
-    public void onNoteParsed(Note note) {
-        if (amplitude != 1 && amplitude != -1) {
-            float newVel = amplitude * note.getOnVelocity();
-            newVel = Math.min(127f, Math.max(0f, newVel));
-            note.setOnVelocity((byte)newVel);
-        }
-
-        super.onNoteParsed(note);
     }
 }

@@ -4,13 +4,11 @@ import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
 import idc.symphony.music.conducting.commands.*;
-import idc.symphony.music.transformers.visualization.VisualEventsBuilder;
-import idc.symphony.music.transformers.visualization.VisualEventFactory;
+import idc.symphony.visual.parsing.VisualEventsBuilder;
+import idc.symphony.visual.parsing.VisualEventFactory;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import idc.symphony.visual.Visualizer;
 import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.SQLException;

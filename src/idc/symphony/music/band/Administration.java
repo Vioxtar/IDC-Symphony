@@ -1,5 +1,6 @@
 package idc.symphony.music.band;
 
+import idc.symphony.music.transformers.LayerMasterer;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.rhythm.Rhythm;
 import org.jfugue.theory.Key;
@@ -25,9 +26,14 @@ public class Administration extends Faculty {
     public Pattern playMainMelody(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("O.O.O.O.");
-        rhythm.setLength(wholes);
-        return rhythm.getPattern();
+        rhythm.addLayer("O.O.O.O.O.O.O.O.");
+        rhythm.addLayer("o.o.o...o.o.o.oo");
+        rhythm.addLayer("..S...S...S..S..");
+        rhythm.addLayer("...........s..s.");
+        rhythm.addLayer("`.^.`.^.^.^.`.^^");
+        rhythm.addLayer(".``...`.```...`.");
+        rhythm.setLength(wholes / 2);
+        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 1.1f, 0.8f, 0.8f, 0.4f, 0.4f);
 
     }
 
@@ -35,9 +41,12 @@ public class Administration extends Faculty {
     public Pattern playSecondary(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("o.o.^.^.");
+        rhythm.addLayer("O.O.O.O.");
+        rhythm.addLayer("o.o.o...");
+        rhythm.addLayer("`.^.`.^.");
+        rhythm.addLayer(".``...`.");
         rhythm.setLength(wholes);
-        return rhythm.getPattern();
+        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 1.1f, 0.6f, 0.6f);
 
     }
 
@@ -45,9 +54,12 @@ public class Administration extends Faculty {
     public Pattern playCarpet3(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
-        rhythm.addLayer("^^^^^^^^");
+        rhythm.addLayer("O.O.O.oo");
+        rhythm.addLayer("..o.....");
+        rhythm.addLayer(".`...``.");
         rhythm.setLength(wholes);
-        return rhythm.getPattern();
+
+        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 1.1f, 0.6f);
 
     }
 
@@ -58,7 +70,7 @@ public class Administration extends Faculty {
         rhythm.addLayer("O.O.O.O.");
         rhythm.addLayer("......oo");
         rhythm.setLength(wholes);
-        return rhythm.getPattern();
+        return LayerMasterer.master(rhythm.getPattern(),1.1f, 1.1f);
 
     }
 
@@ -66,10 +78,11 @@ public class Administration extends Faculty {
     public Pattern playCarpet1(int wholes, Key key) {
 
         Rhythm rhythm = new Rhythm();
+        rhythm.addLayer("O...O...");
         rhythm.addLayer("^.^.^.^.");
         rhythm.addLayer("...`...`");
         rhythm.setLength(wholes);
-        return rhythm.getPattern();
+        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 0.6f, 0.6f);
 
     }
 }

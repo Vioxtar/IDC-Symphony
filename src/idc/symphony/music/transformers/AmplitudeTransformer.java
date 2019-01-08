@@ -6,6 +6,10 @@ import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Note;
 import org.staccato.StaccatoParserListener;
 
+/**
+ * Multiplies all note amplitudes by a given fraction,
+ * effectively controlling pattern volume
+ */
 public class AmplitudeTransformer extends ChainingParserListenerAdapter {
     private static AmplitudeTransformer instance = new AmplitudeTransformer();
 

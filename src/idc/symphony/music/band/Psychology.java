@@ -19,7 +19,7 @@ public class Psychology extends Faculty {
 
     @Override
     public int getTargetTrack() {
-        return 9;
+        return 13;
     }
 
 
