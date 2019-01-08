@@ -360,7 +360,7 @@ public class Visualizer extends Pane {
         double minSceneRange = Math.min(roomW, roomH);
 
         // How much do we zoom out?
-        double scaleBuffer = 0.85;
+        double scaleBuffer = 0.7;
         double scale = camZoom * minSceneRange * scaleBuffer;
         scale = Math.min(scale, 1); // We can only zoom out from 1
         this.setScaleX(scale); this.setScaleY(scale);
