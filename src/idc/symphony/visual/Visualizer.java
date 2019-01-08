@@ -52,9 +52,7 @@ public class Visualizer extends Pane {
     // a trail and its corresponding infograph
     HashMap<Integer, Integer> facIDtoVisID;
 
-    // The visualizer's scene, camera parameters
-    Scene visScene;
-    Pane camera;
+    // Framing parameters
     double camCenterX, camCenterY, camZoom;
 
     // The simulation start time in nanoseconds
@@ -65,8 +63,6 @@ public class Visualizer extends Pane {
     final int SIM_TICK = 5;
 
     public Visualizer() {
-        this.camera = this;
-        this.visScene = new Scene(camera, CAN_WDTH, CAN_HGHT, BG_COLR);
     }
 
     /**
@@ -75,16 +71,16 @@ public class Visualizer extends Pane {
      */
     public void start(Queue<VisualEvent> schedEvents) {
 
+        this.simStartTime = System.nanoTime();
+
         // Initialize schedueled events queue as soon as we're up
         // for loading prior to simulation
         this.schedEvents = schedEvents;
-        this.trails = new ArrayList<>();
 
+        this.trails = new ArrayList<>();
         this.infographs = new ArrayList<>();
         this.rightInfographs = new ArrayList<>();
         this.leftInfographs = new ArrayList<>();
-
-        this.simStartTime = System.nanoTime();
         this.facIDtoVisID = new HashMap<>();
 
         // Start the main loop timer
@@ -95,8 +91,6 @@ public class Visualizer extends Pane {
                 stageTick(now); // For drawing calls
             }
         }.start();
-
-        infographs.add(new Infograph());
     }
 
     /**
@@ -171,67 +165,67 @@ public class Visualizer extends Pane {
 
             Trail trail = new Trail();
 
-                // Radius
-                trail.setTargetRadius(20);
-                trail.setImmRadius(0);
-                trail.setChangeRadiusSpeed(5);
+            // Radius
+            trail.setTargetRadius(20);
+            trail.setImmRadius(0);
+            trail.setChangeRadiusSpeed(5);
 
-                // Color
-                trail.setHeadColor(tempCol); trail.setTrailColor(tempCol); trail.setLineColor(tempCol);
+            // Color
+            trail.setHeadColor(tempCol); trail.setTrailColor(tempCol); trail.setLineColor(tempCol);
 
-                // Obtain our parent and emerge from it (make sure it's valid first)
-                Trail parent = null;
-                if (fD.parent != null && facIDtoVisID.containsKey(fD.parent.ID)) {
-                    // Make sure that we have a parent
-                    parent = trails.get(facIDtoVisID.get(fD.parent.ID));
-                }
-                if (parent != null && parent != trail) {
+            // Obtain our parent and emerge from it (make sure it's valid first)
+            Trail parent = null;
+            if (fD.parent != null && facIDtoVisID.containsKey(fD.parent.ID)) {
+                // Make sure that we have a parent
+                parent = trails.get(facIDtoVisID.get(fD.parent.ID));
+            }
+            if (parent != null && parent != trail) {
 
-                    // Originate from our parent's head
-                    trail.setOriginX(parent.head.x);
-                    trail.setOriginY(parent.head.y);
-                    trail.setHeadX(parent.head.x); trail.setHeadY(parent.head.y);
-                    trail.setTailX(parent.head.x); trail.setTailY(parent.head.y);
+                // Originate from our parent's head
+                trail.setOriginX(parent.head.x);
+                trail.setOriginY(parent.head.y);
+                trail.setHeadX(parent.head.x); trail.setHeadY(parent.head.y);
+                trail.setTailX(parent.head.x); trail.setTailY(parent.head.y);
 
-                    // Have the trail follow its parent
-                    trail.setFollowTarget(parent);
+                // Have the trail follow its parent
+                trail.setFollowTarget(parent);
 
-                    // Aim above the parent
-                    trail.setTargetY(parent.getTargetY() - LAYER_HEIGHT);
+                // Aim above the parent
+                trail.setTargetY(parent.getTargetY() - LAYER_HEIGHT);
 
 
-                } else {
+            } else {
 
-                    // Set starting position
-                    trail.setOriginX(0);
-                    trail.setOriginY(0);
-                    trail.setHeadX(0); trail.setHeadY(0);
-                    trail.setTailX(0); trail.setTailY(0);
+                // Set starting position
+                trail.setOriginX(0);
+                trail.setOriginY(0);
+                trail.setHeadX(0); trail.setHeadY(0);
+                trail.setTailX(0); trail.setTailY(0);
 
-                    // Give the starting height
-                    trail.setTargetY(-LAYER_HEIGHT);
-                }
+                // Give the starting height
+                trail.setTargetY(-LAYER_HEIGHT);
+            }
 
             trails.add(visID, trail);
 
             // Add an introductory infograph
             Infograph infG = new Infograph();
-                // Title
-                infG.setTitleText(fD.name);
-                infG.setTitleSize(100);
-                // Color
-                infG.setTitleColor(tempCol);
-                infG.setLineColor(tempCol);
-                // Starting position
-                infG.setX(trail.head.x); infG.setY(trail.head.y);
-                // Line width
-                infG.setLineWidth(5);
-                // Aim at our trail's head
-                infG.setAimTarget(trail.head);
+            // Title
+            infG.setTitleText(fD.name);
+            infG.setTitleSize(100);
+            // Color
+            infG.setTitleColor(tempCol);
+            infG.setLineColor(tempCol);
+            // Starting position
+            infG.setX(trail.head.x); infG.setY(trail.head.y);
+            // Line width
+            infG.setLineWidth(5);
+            // Aim at our trail's head
+            infG.setAimTarget(trail.head);
 
-                // Pop in and out effects
-                infG.popIn(0.01);
-                infG.popOut(0.01);
+            // Pop in and out effects
+            infG.popIn(0.01);
+            infG.popOut(0.01);
             infographs.add(visID, infG);
 
             // Set unified IDs of the trail and its infograph
@@ -337,45 +331,40 @@ public class Visualizer extends Pane {
     }
 
     public void visualize() {
-        // Clear the previous camera
-        Pane camera = new Pane();
+        // Clear the previous frame
+        this.getChildren().clear();
 
-        // Have every trail draw into the new camera
+        // Have every trail draw into the new frame
         // Draw the trails in reverse for correct draw order
         for (int i = trails.size() - 1; i >=0; i--) {
             Trail trail = trails.get(i);
-            trail.draw(camera);
+            trail.draw(this);
         }
 
         // Draw the infographics
         for (Infograph infG : infographs) {
-            infG.draw(camera);
+            infG.draw(this);
         }
+        
+        // We consider room (range) when framing ourselves
+        double roomW = this.getWidth();
+        double roomH = this.getHeight();
+        double minSceneRange = Math.min(roomW, roomH);
 
-        // Set up the camera framing
-
-        double sceneW = visScene.getWidth();
-        double sceneH = visScene.getHeight();
-
-        // We consider our window size (scene range) when determining the final zoom
-        double minSceneRange = Math.min(sceneW, sceneH);
-
-        double scaleBuffer = 0.875;
+        // How much do we zoom out?
+        double scaleBuffer = 0.85;
         double scale = camZoom * minSceneRange * scaleBuffer;
         scale = Math.min(scale, 1); // We can only zoom out from 1
-        camera.setScaleX(scale); camera.setScaleY(scale);
+        this.setScaleX(scale); this.setScaleY(scale);
 
-        // Place the camera in the scene (negated because camera positioning is reversed)
+        // Finalize our placement
         double camX = camCenterX;
         double camY = camCenterY;
-        camera.setLayoutX(scale * -(camX - sceneW / 2));
-        camera.setLayoutY(scale * -(camY - sceneH / 2));
+        this.setTranslateX(scale * -(camX - roomW / 2));
+        this.setTranslateY(scale * -(camY - roomH / 2));
 
+        // TODO: Interpolate the camera movement... mainly good for fresh trail spawns?
 
-        // TODO: Interpolate the camera movement... mainly good for fresh trail spawns
-
-        // Finalize
-        visScene.setRoot(camera);
     }
 
     public void organizeChildTrails(Trail parent, double y) {
@@ -462,38 +451,6 @@ public class Visualizer extends Pane {
 
     public double spreadByY(double y) {
         return 300000 * (LAYER_HEIGHT / Math.pow(y, 2));
-    }
-
-    public void testDraw(Pane root) {
-
-
-        Group circles = new Group();
-        for (int i = 0; i < 30; i++) {
-            Circle circle = new Circle(150, Color.web("white", 0.05));
-            circle.setStrokeType(StrokeType.OUTSIDE);
-            circle.setStroke(Color.web("white", 0.16));
-            circle.setStrokeWidth(4);
-            circles.getChildren().add(circle);
-            circle.relocate(ranRange(0, CAN_WDTH), ranRange(0, CAN_HGHT));
-        }
-        Rectangle colors = new Rectangle(visScene.getWidth(), visScene.getHeight(),
-                new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE, new Stop[]{
-                        new Stop(0, Color.web("#f8bd55")),
-                        new Stop(Math.random(), Color.web("#c0fe56")),
-                        new Stop(Math.random(), Color.web("#5dfbc1")),
-                        new Stop(Math.random(), Color.web("#64c2f8")),
-                        new Stop(Math.random(), Color.web("#be4af7")),
-                        new Stop(Math.random(), Color.web("#ed5fc2")),
-                        new Stop(Math.random(), Color.web("#ef504c")),
-                        new Stop(1, Color.web("#f2660f")),}));
-        colors.widthProperty().bind(visScene.widthProperty());
-        colors.heightProperty().bind(visScene.heightProperty());
-        Group blendModeGroup =
-                new Group(new Group(circles, colors));
-        colors.setBlendMode(BlendMode.OVERLAY);
-        root.getChildren().add(blendModeGroup);
-        circles.setEffect(new BoxBlur(ranRange(0, 100), ranRange(0, 100), ranRange(1, 1)));
-
     }
 
     public static int ranRange(int a, int b){

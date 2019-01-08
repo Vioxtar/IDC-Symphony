@@ -147,7 +147,7 @@ public class Infograph {
         body.aimToY(bodyTargetY, 0.005);
     }
 
-    public void draw(Pane camera) {
+    public void draw(Pane g) {
 
         // Title
         Text titleTxt = new Text(titleText);
@@ -165,7 +165,7 @@ public class Infograph {
         titleTxt.setX(leftX); titleTxt.setY(body.y - titleSize * 1.25 * popInFrac);
         titleTxt.setTextOrigin(VPos.TOP); titleTxt.setTextAlignment(TextAlignment.LEFT);
         titleTxt.setFill(titleColor);
-        camera.getChildren().add(titleTxt);
+        g.getChildren().add(titleTxt);
 
 
         // Body line
@@ -173,7 +173,7 @@ public class Infograph {
         bodyLine.setStroke(lineColor); bodyLine.setStrokeWidth(lineWidth);
         bodyLine.setStartX(leftX); bodyLine.setStartY(body.y);
         bodyLine.setEndX(rightX); bodyLine.setEndY(body.y);
-        camera.getChildren().add(bodyLine);
+        g.getChildren().add(bodyLine);
 
 
 
@@ -188,7 +188,7 @@ public class Infograph {
             double aimX = aimPoint.x * (1 - popOutExp) + body.x * popOutExp;
             double aimY = aimPoint.y * (1 - popOutExp) + body.y * popOutExp;
             aimLine.setEndX(aimX); aimLine.setEndY(aimY);
-            camera.getChildren().add(aimLine);
+            g.getChildren().add(aimLine);
         }
     }
 
