@@ -276,11 +276,7 @@ public class SymphonizerController {
      */
     @FXML
     void chooseDBFile() {
-        FileChooser chooser = initChooser(DB_FILTER, new File(appConfig.getDBPath()));
-        chooser.getExtensionFilters().clear();
-        chooser.getExtensionFilters().add(DB_FILTER);
-        chooser.setSelectedExtensionFilter(DB_FILTER);
-        chooser.setInitialDirectory(new File(appConfig.getDBPath()));
+        FileChooser chooser = initChooser(MIDI_FILTER, new File(appConfig.getMIDIPath()));
         File file = chooser.showOpenDialog(btnDBFile.getScene().getWindow());
 
         if (file != null) {
@@ -367,8 +363,8 @@ public class SymphonizerController {
                 pattern,
                 (events) -> {
                     if (events != null) {
-                        visualizer.start(events);
                         visualizerController.playPattern(pattern);
+                        visualizer.start(events);
                         isVisualizing.set(true);
                     } else {
                         userLog.severe(String.format("Failed to generate visualization data from MIDI"));
@@ -427,6 +423,7 @@ public class SymphonizerController {
      * Saves persistent state on application closed
      */
     void shutdown() {
+        visualizerController.stopPlaying();
         appConfig.save();
     }
 }

@@ -32,13 +32,12 @@ import java.util.logging.LogRecord;
  * Instead, Logging Handler uses JavaFX TimeLine in order to poll for LogRecords at a fixed rate.
  */
 public class LogHandler extends Handler{
-    private static final Map<Level, String> COLORS = new HashMap<>();
-    private static final String DEFAULT_COLOR = "#000000";
+    private static final Map<Level, Paint> COLORS = new HashMap<>();
     static {
-        COLORS.put(Level.WARNING, "#AA9911");
-        COLORS.put(Level.SEVERE, "#AA2222");
-        COLORS.put(Level.FINE, "#666");
-        COLORS.put(Level.FINER, "#999");
+        COLORS.put(Level.WARNING, Paint.valueOf("#AA9911"));
+        COLORS.put(Level.SEVERE, Paint.valueOf("#AA2222"));
+        COLORS.put(Level.FINE, Paint.valueOf("#666"));
+        COLORS.put(Level.FINER, Paint.valueOf("#999"));
     }
 
     // Cyclic buffer
@@ -84,7 +83,12 @@ public class LogHandler extends Handler{
     private void publishRecord(LogRecord record){
         if (logListView != null) {
             Label recordLabel = getNextLabel();
-            recordLabel.setTextFill(Paint.valueOf(COLORS.getOrDefault(record.getLevel(), DEFAULT_COLOR)));
+
+            Paint color;
+            if ((color = COLORS.get(record.getLevel())) != null) {
+                recordLabel.setTextFill(COLORS.get(record.getLevel()));
+            }
+
             recordLabel.setText(getFormatter().format(record));
             recordLabel.maxWidthProperty().bind(cellWidth);
             recordLabel.setWrapText(true);

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -24,7 +25,7 @@ public class SymphonizerWindow extends Application {
     public void start(Stage primaryStage) throws Exception {
         windowStage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/SymphonizerWindow.fxml"));
-        Parent root = loader.load();
+        Region root = loader.load();
 
         // Inject application into controller
         controller = loader.getController();
@@ -34,9 +35,8 @@ public class SymphonizerWindow extends Application {
         primaryStage.setTitle("IDC Symphonizer");
         primaryStage.setScene(new Scene(root));
         primaryStage.getScene().getStylesheets().add(getClass().getResource("resources/style.css").toExternalForm());
-        primaryStage.setMinWidth(540);
+        primaryStage.setMinWidth(560);
         primaryStage.setMinHeight(370);
-        primaryStage.initStyle(StageStyle.UNIFIED);
 
         controller.loadState();
     }

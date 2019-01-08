@@ -35,7 +35,7 @@ public class DuetMelody extends AbstractRoleSetter {
 
                 if (maxPair.size() == 2) {
                     setRole(state, maxPair.get(0).ID, BandRole.Melody);
-                    setRole(state, maxPair.get(1).ID, BandRole.Melody);
+                    setRole(state, maxPair.get(1).ID, BandRole.Secondary);
                 }
             }
         }
