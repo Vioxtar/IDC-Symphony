@@ -63,8 +63,9 @@ public class Visualizer extends Pane {
     final int DRAW_TICK = 16;
     final int SIM_TICK = 5;
 
-    public Visualizer() {
-    }
+
+    public Visualizer() {}
+
 
     /**
      * Starts the visualization
@@ -108,6 +109,9 @@ public class Visualizer extends Pane {
         stageBefore = -1;
     }
 
+    /**
+     * Calls simulation updates at fixed timings.
+     */
     long simBefore = -1;
     final long simTickInterval = TimeUnit.NANOSECONDS.convert(SIM_TICK, TimeUnit.MILLISECONDS);
     public void simulationTick(long now) {
@@ -120,6 +124,9 @@ public class Visualizer extends Pane {
         }
     }
 
+    /**
+     * Calls draw updates at fixed timings.
+     */
     long stageBefore = -1;
     final long stageTickInterval = TimeUnit.NANOSECONDS.convert(DRAW_TICK, TimeUnit.MILLISECONDS);;
     public void stageTick(long now) {
@@ -169,7 +176,7 @@ public class Visualizer extends Pane {
             facIDtoVisID.put(fD.ID, visID);
 
             // Color TODO: Make this hard coded or something, give fancier colors
-            Color tempCol = Color.rgb(ranRange(0, 255), ranRange(0, 255), ranRange(0, 255));
+            Color facColor = getPrefferedColor(fD.ID);
 
             Trail trail = new Trail();
 
@@ -179,7 +186,7 @@ public class Visualizer extends Pane {
             trail.setChangeRadiusSpeed(5);
 
             // Color
-            trail.setHeadColor(tempCol); trail.setTrailColor(tempCol); trail.setLineColor(tempCol);
+            trail.setHeadColor(facColor); trail.setTrailColor(facColor); trail.setLineColor(facColor);
 
             // Obtain our parent and emerge from it (make sure it's valid first)
             Trail parent = null;
@@ -222,8 +229,8 @@ public class Visualizer extends Pane {
             infG.setTitleText(fD.name);
             infG.setTitleSize(100);
             // Color
-            infG.setTitleColor(tempCol);
-            infG.setLineColor(tempCol);
+            infG.setTitleColor(facColor);
+            infG.setLineColor(facColor);
             // Starting position
             infG.setX(trail.head.x); infG.setY(trail.head.y);
             // Line width
@@ -261,6 +268,10 @@ public class Visualizer extends Pane {
         }
     }
 
+    /**
+     * Performs a single simulation tick.
+     * @param now
+     */
     public void simulate(long now) {
 
         // Update the simulation time
@@ -338,6 +349,9 @@ public class Visualizer extends Pane {
         camZoom = 1 / dist;
     }
 
+    /**
+     * Draws a single frame.
+     */
     public void visualize() {
         // Clear the previous frame
         this.getChildren().clear();
@@ -375,6 +389,12 @@ public class Visualizer extends Pane {
 
     }
 
+    /**
+     * Re-organizes the X targets of a set of child trails of a given parent, while considering
+     * a given Y value for a logarithmic tree structure.
+     * @param parent
+     * @param y
+     */
     public void organizeChildTrails(Trail parent, double y) {
         ArrayList<Trail> children = parent.getFollowers();
         if (children == null) { return; }
@@ -395,6 +415,10 @@ public class Visualizer extends Pane {
         }
     }
 
+    /**
+     * Shifts a trail's infograph to the right or left depending on its X position.
+     * @param trail
+     */
     public void shiftTrailsInfograph(Trail trail) {
         // Shift each child's respective infographs
         Infograph infG = infographs.get(trail.getID());
@@ -405,6 +429,10 @@ public class Visualizer extends Pane {
         }
     }
 
+    /**
+     * Re-organizes the Y targets of all infographs within a given side column.
+     * @param side
+     */
     public void organizeInfographs(ArrayList<Infograph> side) {
 
         // Find out the bottomMost and upMost y values
@@ -442,6 +470,10 @@ public class Visualizer extends Pane {
         }
     }
 
+    /**
+     * Places a given infograph in the right column.
+     * @param infG
+     */
     public void addInfographToRight(Infograph infG) {
         leftInfographs.remove(infG);
         int curr = rightInfographs.indexOf(infG);
@@ -449,6 +481,11 @@ public class Visualizer extends Pane {
             rightInfographs.add(infG);
         }
     }
+
+    /**
+     * Places a given infograph in the left column.
+     * @param infG
+     */
     public void addInfographToLeft(Infograph infG) {
         rightInfographs.remove(infG);
         int curr = leftInfographs.indexOf(infG);
@@ -457,10 +494,50 @@ public class Visualizer extends Pane {
         }
     }
 
+    /**
+     * Calculates the tree's X spread value given a Y value for a logarithmic tree structure.
+     * @param y
+     * @return
+     */
     public double spreadByY(double y) {
         return 300000 * (LAYER_HEIGHT / Math.pow(y, 2));
     }
 
+    HashMap<Integer, Color> prefFacColor;
+    public Color getPrefferedColor(Integer facID) {
+        if (prefFacColor == null) {
+            prefFacColor = new HashMap<>();
+            prefFacColor.put(1,  Color.web("e93939"));
+            prefFacColor.put(2,  Color.web("f3f39e"));
+            prefFacColor.put(3,  Color.web("eaa939"));
+            prefFacColor.put(4,  Color.web("388be8"));
+            prefFacColor.put(5,  Color.web("9c39e8"));
+            prefFacColor.put(6,  Color.web("82f1d3"));
+            prefFacColor.put(7,  Color.web("e238e4"));
+            prefFacColor.put(8,  Color.web("ffffff"));
+            prefFacColor.put(9,  Color.web("39ea7c"));
+            prefFacColor.put(10, Color.web("b31f5e"));
+            prefFacColor.put(11, Color.web("a5f22a"));
+            prefFacColor.put(12, Color.web("b7dde2"));
+            prefFacColor.put(13, Color.web("b7dde2"));
+            prefFacColor.put(14, Color.web("eaeaea"));
+            prefFacColor.put(15, Color.web("4838e6"));
+            prefFacColor.put(16, Color.web("4de738"));
+        }
+        if (prefFacColor.containsKey(facID)) {
+            return prefFacColor.get(facID);
+        } else {
+            return Color.web("ffffff");
+        }
+    }
+
+
+    /**
+     * A helper that provides a random number within a specified range.
+     * @param a
+     * @param b
+     * @return
+     */
     public static int ranRange(int a, int b){
         if (a == b) {
             return a;
@@ -473,6 +550,12 @@ public class Visualizer extends Pane {
         return ran;
     }
 
+    /**
+     * A helper that provides a random number within a specified range.
+     * @param a
+     * @param b
+     * @return
+     */
     public static double ranRange(double a, double b){
         if (a == b) {
             return a;

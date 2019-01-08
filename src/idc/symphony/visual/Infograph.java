@@ -104,6 +104,10 @@ public class Infograph {
         aimPoint.y = y;
     }
 
+    /**
+     * Returns the maxs coordinates of this infograph, determined by the text size, aim and body points.
+     * @return
+     */
     public double[] getMaxs() {
         // We also need to account for the text sizes...
         Text titleTxt = new Text(titleText);
@@ -117,6 +121,10 @@ public class Infograph {
         };
     }
 
+    /**
+     * Returns the mins coordinates of this infograph, determined by the text size, aim and body points.
+     * @return
+     */
     public double[] getMins() {
         // We also need to account for the text sizes...
         Text titleTxt = new Text(titleText);
@@ -130,6 +138,9 @@ public class Infograph {
         };
     }
 
+    /**
+     * A single simulation tick.
+     */
     public void update() {
 
         // Pop in/out
@@ -147,6 +158,10 @@ public class Infograph {
         body.aimToY(bodyTargetY, 0.005);
     }
 
+    /**
+     * Draws the infograph into a given pane.
+     * @param g
+     */
     public void draw(Pane g) {
 
         // Title
@@ -174,8 +189,6 @@ public class Infograph {
         bodyLine.setStartX(leftX); bodyLine.setStartY(body.y);
         bodyLine.setEndX(rightX); bodyLine.setEndY(body.y);
         g.getChildren().add(bodyLine);
-
-
 
 
         // Body to aim point line

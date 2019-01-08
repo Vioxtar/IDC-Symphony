@@ -15,6 +15,7 @@ import java.util.*;
 
 public class Trail {
 
+    // Every trail is composed of a head, a trail, and a tail.
     TPoint head; TPoint tail;
     LinkedList<TPoint> trail;
 
@@ -24,13 +25,22 @@ public class Trail {
         this.tail = new TPoint();
     }
 
+    /**
+     * The ID of the trail.
+     */
     int id;
     public void setID(int id) { this.id = id; }
     public int getID() { return id; }
 
+    /**
+     * The maximum trail length.
+     */
     int maxTrailLength = 200;
     public void setMaxTrailLength(int length) { maxTrailLength = length; }
 
+    /**
+     * The trail extension interval.
+     */
     double trailInterval = 10; double lastExtend;
     public void setTrailInterval(int interval) { trailInterval = interval; }
 
@@ -76,6 +86,9 @@ public class Trail {
         changeRSpeed = chngeSpd;
     }
 
+    /**
+     * Follows another trail.
+     */
     Trail followTarget;
     ArrayList<Trail> followers;
     public void setFollowTarget(Trail newTarget) {
@@ -98,10 +111,18 @@ public class Trail {
     public Trail getFollowTarget(Trail followTarget) { return followTarget; }
     public ArrayList<Trail> getFollowers() { return followers; }
 
+    /**
+     * Returns the maxs of this trail - defined by the maxs of the head and tail points.
+     * @return
+     */
     public double[] getMaxs() {
         return new double[] {Math.max(head.x, tail.x), Math.max(head.y, tail.y)};
     }
 
+    /**
+     * Returns the mins of this trail - defined by the mins of the head and tail points.
+     * @return
+     */
     public double[] getMins() {
         return new double[] {Math.min(head.x, tail.x), Math.min(head.y, tail.y)};
     }
@@ -123,6 +144,9 @@ public class Trail {
         }
     }
 
+    /**
+     * A single simulation tick.
+     */
     public void update() {
 
         double mul = 0.005;
@@ -190,6 +214,10 @@ public class Trail {
         }
     }
 
+    /**
+     * Draw the trail into a given pane.
+     * @param g
+     */
     public void draw(Pane g) {
 
         Group circles = new Group();
@@ -245,7 +273,6 @@ public class Trail {
         line.setStrokeWidth(last.r);
         lines.getChildren().add(line);
 
-
         g.getChildren().add(circles);
         g.getChildren().add(lines);
 
@@ -254,10 +281,10 @@ public class Trail {
         if (rDiff > 0.05) {
             Circle orb = new Circle();
             orb.relocate(head.x, head.y);
-            orb.setRadius(rDiff);
+            orb.setRadius(rDiff * 2);
             orb.setFill(headColor);
 
-            double blur = rDiff * rDiff * 50;
+            double blur = rDiff * rDiff * 1000;
             orb.setEffect(new BoxBlur(blur, blur, 5));
             orb.setBlendMode(BlendMode.ADD);
             g.getChildren().add(orb);
