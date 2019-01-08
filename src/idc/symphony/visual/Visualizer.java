@@ -267,7 +267,7 @@ public class Visualizer extends Pane {
         double simTime = (double)(now - simStartTime) / 10e8;
 
         // Peek at our next event and determine if we should simulate it
-        double simReadRate = 20; // TODO: DEBUG
+        double simReadRate = 1; // TODO: DEBUG
         VisualEvent nextEvent = schedEvents.peek();
         while (nextEvent != null && nextEvent.time() / simReadRate <= (simTime)) {
             schedEvents.poll();
