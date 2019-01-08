@@ -55,7 +55,8 @@ public class Visualizer extends Pane {
     // Framing parameters
     double camCenterX, camCenterY, camZoom;
 
-    // The simulation start time in nanoseconds
+    // Visualization timing
+    AnimationTimer mainTimer;
     long simStartTime;
 
     // The simulation/draw tickrates in milliseconds
@@ -84,20 +85,27 @@ public class Visualizer extends Pane {
         this.facIDtoVisID = new HashMap<>();
 
         // Start the main loop timer
-        new AnimationTimer() {
+        this.mainTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 simulationTick(now); // For simulation update calls
                 stageTick(now); // For drawing calls
             }
-        }.start();
+        };
+        this.mainTimer.start();
     }
 
     /**
      * Stops the visualization, returns empty to black screen
      */
     public void stop() {
+        // Stop the main timer and clear ourselves
+        this.mainTimer.stop();
+        this.getChildren().clear();
 
+        // Reset our time placement
+        simBefore = -1;
+        stageBefore = -1;
     }
 
     long simBefore = -1;
@@ -345,7 +353,7 @@ public class Visualizer extends Pane {
         for (Infograph infG : infographs) {
             infG.draw(this);
         }
-        
+
         // We consider room (range) when framing ourselves
         double roomW = this.getWidth();
         double roomH = this.getHeight();
