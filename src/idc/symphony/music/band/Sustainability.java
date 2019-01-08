@@ -12,7 +12,7 @@ public class Sustainability extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 2019;
+        long seed = 4111958;
         this.gen.setSeed(seed);
     }
 
