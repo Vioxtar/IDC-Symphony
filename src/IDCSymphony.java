@@ -67,12 +67,12 @@ public class IDCSymphony extends Application {
 
 
         // Start the visualizer
-        Visualizer vis = new Visualizer(eventsBuilder.build(song));
+        /*Visualizer vis = new Visualizer(eventsBuilder.build(song));
 
         Player player = new Player();
         player.delayPlay(0, song);
 
-        vis.start(primaryStage);
+        vis.start(primaryStage);*/
 
 
     }

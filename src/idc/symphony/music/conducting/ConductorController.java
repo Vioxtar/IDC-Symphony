@@ -1,5 +1,6 @@
 package idc.symphony.music.conducting;
 
+import idc.symphony.db.DBController;
 import idc.symphony.music.conducting.DBConductor;
 import idc.symphony.music.conducting.commands.Recurrence;
 import idc.symphony.music.conducting.logging.EventLogger;
@@ -24,12 +25,8 @@ import java.util.logging.Logger;
  * Controller in charge of the conducting process
  *
  */
-public class ConductorController {
+public class ConductorController extends DBController {
     private static Logger logger = Logger.getLogger("idc.symphony");
-    private static SQLiteConfig SQL_CONF = new SQLiteConfig();
-    static {
-        SQL_CONF.setReadOnly(true);
-    }
 
     /**
      * Generates song from database.
@@ -105,10 +102,14 @@ public class ConductorController {
     public void getFullMIDIAsync(File file, Consumer<Pattern> callback) {
         if (!conductingProperty.get()) {
             Task<Pattern> task = new Task<Pattern>() {
+                {
+                    updateTitle("getFullMIDIAsync");
+                }
+
                 @Override
                 protected Pattern call() throws Exception {
                     try {
-                        return createsNewMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(file)));
+                        return createsNewMIDI.conduct(getConnection(file));
                     } catch (Exception ex) {
                         logger.log(Level.SEVERE, ex.getMessage(), ex);
                         throw ex;
@@ -137,10 +138,14 @@ public class ConductorController {
             Task<Pattern> task = new Task<Pattern>() {
                 @Override
                 protected Pattern call() throws Exception {
+                    {
+                        updateTitle("getInfoMIDIAsync");
+                    }
+
                     try {
                         Pattern existingSong = MidiFileManager.loadPatternFromMidi(midiFile);
                         return existingSong.add(
-                                preparesForExistingMIDI.conduct(SQL_CONF.createConnection(fileToSQLURI(dbFile))));
+                                preparesForExistingMIDI.conduct(getConnection(dbFile)));
                     } catch (Exception ex) {
                         logger.log(Level.SEVERE, ex.getMessage(), ex);
                         throw ex;
@@ -178,33 +183,6 @@ public class ConductorController {
         };
 
         launchTask(task, callback);
-    }
-
-    /**
-     * JDBC Local SQLite URI translator
-     * @param file Local SQLite file
-     * @return JDBC URI
-     */
-    private String fileToSQLURI(File file) {
-        return String.format("jdbc:sqlite:%s", file.getPath());
-    }
-
-    /**
-     * Generic task launcher
-     * Creates a daemon background thread to execute given task.
-     *
-     * @param task     Task to launch
-     * @param callback Task return value receiving callback
-     * @param <T>      Task return type
-     */
-    private <T> void launchTask(Task<T> task, Consumer<T> callback) {
-        task.setOnSucceeded((state) -> callback.accept(task.getValue()));
-        task.setOnFailed((state) -> callback.accept(null));
-        task.setOnCancelled((state) -> callback.accept(null));
-
-        Thread thread = new Thread();
-        thread.setDaemon(true);
-        thread.start();
     }
 
 

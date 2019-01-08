@@ -38,8 +38,8 @@ public class SymphonizerProperties extends Properties {
         DEFAULT.setProperty(USE_EXTERNAL_MIDI, "0");
 
         // OUTPUT
-        DEFAULT.setProperty(MIDI_OUTPUT, "output.midi");
-        DEFAULT.setProperty(MP4_OUTPUT, "outout.mp4");
+        DEFAULT.setProperty(MIDI_OUTPUT, "");
+        DEFAULT.setProperty(MP4_OUTPUT, "output.mp4");
 
         // DISPLAY
         Dimension screenSize;
@@ -216,7 +216,7 @@ public class SymphonizerProperties extends Properties {
     }
 
     public void setMaximized(boolean maximized) {
-        setBoolean(USE_EXTERNAL_MIDI, maximized);
+        setBoolean(MAXIMIZED, maximized);
     }
 
     /**

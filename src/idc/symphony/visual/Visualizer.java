@@ -6,8 +6,10 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -23,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.random;
 
-public class Visualizer extends Application {
+public class Visualizer extends Pane {
 
     // Window constants
     final int CAN_WDTH = 720;
@@ -62,19 +64,20 @@ public class Visualizer extends Application {
     final int DRAW_TICK = 16;
     final int SIM_TICK = 5;
 
-    public Visualizer(Queue<VisualEvent> schedEvents) {
+    public Visualizer() {
+        this.camera = this;
+        this.visScene = new Scene(camera, CAN_WDTH, CAN_HGHT, BG_COLR);
+    }
+
+    /**
+     * Starts the visualization
+     * @param schedEvents
+     */
+    public void start(Queue<VisualEvent> schedEvents) {
+
         // Initialize schedueled events queue as soon as we're up
         // for loading prior to simulation
         this.schedEvents = schedEvents;
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-
-        // Initialization
-        this.camera = new Pane();
-        this.visScene = new Scene(this.camera, CAN_WDTH, CAN_HGHT, BG_COLR);
-
         this.trails = new ArrayList<>();
 
         this.infographs = new ArrayList<>();
@@ -83,11 +86,6 @@ public class Visualizer extends Application {
 
         this.simStartTime = System.nanoTime();
         this.facIDtoVisID = new HashMap<>();
-
-
-        // Take control of the primary stage
-        primaryStage.setScene(visScene);
-        primaryStage.show();
 
         // Start the main loop timer
         new AnimationTimer() {
@@ -99,6 +97,13 @@ public class Visualizer extends Application {
         }.start();
 
         infographs.add(new Infograph());
+    }
+
+    /**
+     * Stops the visualization, returns empty to black screen
+     */
+    public void stop() {
+
     }
 
     long simBefore = -1;

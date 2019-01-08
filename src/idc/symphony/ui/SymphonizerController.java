@@ -1,7 +1,10 @@
 package idc.symphony.ui;
 
 import idc.symphony.music.conducting.ConductorController;
+import idc.symphony.ui.cache.AsyncRequest;
 import idc.symphony.ui.logging.LogHandler;
+import idc.symphony.visual.Visualizer;
+import idc.symphony.visual.VisualizerController;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -52,16 +55,20 @@ public class SymphonizerController {
     /**
      * Play Visualization button
      */
-    @FXML Button btnVisualize;
+    Tooltip btnVisualizeTooltip;
+    @FXML Button btnPlayVisualize;
+    @FXML Button btnStopVisualize;
 
     /**
      * Save generated MIDI file button
      */
+    Tooltip btnSaveMIDITooltip;
     @FXML Button btnSaveMIDI;
 
     /**
      * Render and save visualization MP4
      */
+    Tooltip btnSaveMP4Tooltip;
     @FXML Button btnSaveMP4;
 
     /**
@@ -77,6 +84,7 @@ public class SymphonizerController {
     /**
      * Use existing MIDI for generation?
      */
+    Tooltip midiInvalidTooltip = new Tooltip("Cannot find existing MIDI");
     @FXML CheckBox useExistingMIDI;
 
     /**
@@ -86,6 +94,8 @@ public class SymphonizerController {
     @FXML TextField txtDBPath;
     @FXML TextField txtMIDIPath;
     @FXML TitledPane logPane;
+    @FXML TitledPane visualizerPane;
+    @FXML Visualizer visualizer;
 
     private BooleanProperty externalMIDIInvalid = new SimpleBooleanProperty();
     private BooleanProperty isVisualizing =
@@ -102,6 +112,7 @@ public class SymphonizerController {
 
     // Lower level controllers - unaware of existence of UI
     private ConductorController conductorController = new ConductorController();
+    private VisualizerController visualizerController = new VisualizerController();
 
     /**
      * Loads persistent state from file.
@@ -115,6 +126,37 @@ public class SymphonizerController {
         useExistingMIDI.selectedProperty().addListener((selected) ->
             appConfig.setUseExternalMIDI(useExistingMIDI.isSelected())
         );
+
+
+
+        // Get window state
+        application.resize(
+                appConfig.getWindowWidth(),
+                appConfig.getWindowHeight()
+        );
+
+        application.reposition(
+                appConfig.getWindowLeft(),
+                appConfig.getWindowTop()
+        );
+
+        application.maximized(
+                appConfig.getMaximized()
+        );
+
+        // Link window state to config for persistence
+        application.windowStage.widthProperty().addListener(
+                (ignore) -> appConfig.setWindowWidth((int)application.windowStage.getWidth()));
+        application.windowStage.heightProperty().addListener(
+                (ignore) -> appConfig.setWindowHeight((int)application.windowStage.getHeight()));
+
+        application.windowStage.xProperty().addListener(
+                (ignore) -> appConfig.setWindowLeft((int)application.windowStage.getX()));
+        application.windowStage.yProperty().addListener(
+                (ignore) -> appConfig.setWindowTop((int)application.windowStage.getY()));
+
+        application.windowStage.maximizedProperty().addListener((
+                (ignore)->  appConfig.setMaximized(application.windowStage.isMaximized())));
 
         application.show();
     }
@@ -139,19 +181,44 @@ public class SymphonizerController {
                 useExistingMIDI.selectedProperty(),
                 txtMIDIPath.textProperty()));
 
+        // Provide information about why buttons are disabled when MIDI is invalid
+        externalMIDIInvalid.addListener(
+                (ignore) -> {
+                    if (externalMIDIInvalid.get()) {
+                        txtMIDIPath.setStyle("-fx-effect: dropshadow( three-pass-box, red , 3.0, 0.0,0.0,0.0)");
+                    } else {
+                        txtMIDIPath.setStyle("-fx-effect: none");
+                    }
+                });
+
         // Button setup
+        useExistingMIDI.disableProperty().bind(isVisualizing.or(conductorController.conductingProperty()));
         btnDBFile.disableProperty().bind(isVisualizing.or(conductorController.conductingProperty()));
-        btnSaveMIDI.disableProperty().bind(isVisualizing.or(txtDBPath.textProperty().isEmpty()));
-        btnSaveMP4.disableProperty().bind(
+        btnMIDIFile.disableProperty().bind(isVisualizing.or(conductorController.conductingProperty()));
+
+        btnSaveMIDI.disableProperty().bind(
                 isVisualizing
                         .or(txtDBPath.textProperty().isEmpty())
                         .or(externalMIDIInvalid)
                         .or(conductorController.conductingProperty()));
 
-        btnVisualize.disableProperty().bind(
+        // TODO: Implement saving to MP4
+        btnSaveMP4.setDisable(true);
+        /*btnSaveMP4.disableProperty().bind(
+                isVisualizing
+                        .or(txtDBPath.textProperty().isEmpty())
+                        .or(externalMIDIInvalid)
+                        .or(conductorController.conductingProperty()));*/
+
+        btnPlayVisualize.disableProperty().bind(
                 txtDBPath.textProperty().isEmpty()
+                        .or(txtDBPath.textProperty().isEmpty())
                         .or(externalMIDIInvalid)
                         .or(conductorController.conductingProperty()));
+        btnPlayVisualize.mouseTransparentProperty().bind(isVisualizing);
+        btnPlayVisualize.visibleProperty().bind(isVisualizing.not());
+        btnStopVisualize.visibleProperty().bind(isVisualizing);
+        btnStopVisualize.mouseTransparentProperty().bind(isVisualizing.not());
 
         // Text Field Setup
         dbFile.addListener((ignore) -> validateFile(dbFile, ".db"));
@@ -176,7 +243,7 @@ public class SymphonizerController {
      */
     private void validateFile(ObjectProperty<File> file, String extension) {
         File val = file.get();
-        if (val != null) {
+        if (val != null && !val.getPath().isEmpty()) {
             if (!val.exists() || !val.canRead()) {
                 userLog.warning(String.format("Couldn't find or read %s: %s", file.getName(), val.getPath()));
                 file.setValue(null);
@@ -241,9 +308,7 @@ public class SymphonizerController {
         if (file != null) {
             appConfig.setMIDIOutputPath(file.getPath());
             conductorController.patternCache().getAsync(
-                    (useExistingMIDI.isSelected() && externalMIDIInvalid.get())
-                            ? (callback) -> conductorController.getInfoMIDIAsync(dbFile.get(), midiFile.get(), callback)
-                            : (callback) -> conductorController.getFullMIDIAsync(dbFile.get(), callback),
+                    getPatternRequest(),
                     (pattern) -> this.saveMIDIPattern(file, pattern)
             );
         }
@@ -263,14 +328,66 @@ public class SymphonizerController {
         conductorController.saveMIDI(
                 targetFile,
                 pattern,
-                (Success) -> {
-                    if (Success != null) {
+                (success) -> {
+                    if (success != null) {
                         userLog.info(String.format("Exported generated MIDI to %s", targetFile.getPath()));
                     } else {
                         userLog.severe(String.format("Failed to save generated MIDI to %s", targetFile.getPath()));
                     }
                 });
     }
+
+    @FXML void playVisualization() {
+        if (!txtDBPath.getText().isEmpty()) {
+            conductorController.patternCache().getAsync(
+                    getPatternRequest(),
+                    this::convertAndPlay
+            );
+        }
+    }
+
+    /**
+     * Converts a song into visual events, and plays events in visualizer.
+     * @param pattern Song pattern generated from MIDI and DB
+     */
+    private void convertAndPlay(Pattern pattern) {
+        if (pattern == null) {
+            userLog.severe("Failed to generate MIDI from DB.");
+            return;
+        }
+
+        visualizerController.buildAsync(
+                dbFile.get(),
+                pattern,
+                (events) -> {
+                    if (events != null) {
+                        visualizer.start(events);
+                        visualizerController.playPattern(pattern);
+                        isVisualizing.set(true);
+                    } else {
+                        userLog.severe(String.format("Failed to generate visualization data from MIDI"));
+                    }
+                }
+        );
+    }
+
+    @FXML void stopVisualization() {
+        visualizer.stop();
+        visualizerController.stopPlaying();
+        isVisualizing.set(false);
+    }
+
+    /**
+     * Chooses the appropriate pattern generator request according to user choice
+     * @return Asynchronous request for pattern generation
+     */
+    private AsyncRequest<Pattern> getPatternRequest() {
+        return (useExistingMIDI.isSelected() && externalMIDIInvalid.get())
+                ? (callback) -> conductorController.getInfoMIDIAsync(dbFile.get(), midiFile.get(), callback)
+                : (callback) -> conductorController.getFullMIDIAsync(dbFile.get(), callback);
+    }
+
+
 
     /**
      * Creates a file choosing dialogue
