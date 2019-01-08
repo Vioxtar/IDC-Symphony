@@ -11,7 +11,7 @@ public class Alumni extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 4443;
+        long seed = 1213141;
         this.gen.setSeed(seed);
     }
 
@@ -23,7 +23,7 @@ public class Alumni extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 2, 4, 0.3f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 2, 4, 0.3f, 0.4f, 0.2f);
         p.setInstrument(instrument);
         return p;
 

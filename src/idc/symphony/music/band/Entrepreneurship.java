@@ -12,7 +12,7 @@ public class Entrepreneurship extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 42;
+        long seed = 23461321;
         this.gen.setSeed(seed);
     }
 
@@ -26,7 +26,7 @@ public class Entrepreneurship extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 12, 0.5f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 12, 0.1f, 0.3f, 0.2f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
 

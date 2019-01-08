@@ -26,7 +26,7 @@ public class Sustainability extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 25, 0.1f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 25, 0.3f, 0.2f, 0.2f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
 
