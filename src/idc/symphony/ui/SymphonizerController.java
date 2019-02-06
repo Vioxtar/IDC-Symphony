@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 public class SymphonizerController {
     /**
      * Project logger
-     * TODO: Configure environment variables to cause project logger to log into file
      */
     private Logger logger = Logger.getLogger("idc.symphony");
 
@@ -46,6 +45,9 @@ public class SymphonizerController {
      * Separate log for more user-friendly messages, hiding technical error messages from user
      */
     private Logger userLog = Logger.getLogger("idc.symphony@user");
+    {
+        userLog.setParent(logger);
+    }
 
     /**
      * Window controlled elements are placed in. Injected.
@@ -414,6 +416,9 @@ public class SymphonizerController {
                 chooser.setInitialDirectory(defaultPath.getParentFile());
                 chooser.setInitialFileName(defaultPath.getName());
             }
+        } else {
+            // Use running directory if preferred file not found
+            chooser.setInitialDirectory(new File("."));
         }
 
         return chooser;

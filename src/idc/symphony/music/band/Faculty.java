@@ -15,7 +15,7 @@ public class Faculty implements BandMember {
      */
 
     public static final PatternLibrary patterns = new PatternLibrary() {{
-       this.loadPatternsFromFile(new File("usableplaceholderpatterns"));
+       this.loadPatternsFromFile(new File("patterns"));
     }};
 
     public PatternLibrary getLibrary() {

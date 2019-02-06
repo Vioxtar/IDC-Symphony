@@ -13,6 +13,7 @@ import org.jfugue.player.Player;
 import org.jfugue.player.SequencerManager;
 
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
 import java.io.File;
 import java.sql.Connection;
 import java.util.Map;
@@ -26,7 +27,8 @@ import java.util.logging.Logger;
  */
 public class VisualizerController extends DBController {
     private static Logger logger = Logger.getLogger("idc.symphony");
-    private Player patternPlayer;
+    private Player patternPlayer = new Player();
+    private Thread playingThread;
 
     /**
      * Builds a stream of visual events from a given pattern using database information
@@ -67,8 +69,11 @@ public class VisualizerController extends DBController {
     public void playPattern(Pattern pattern) {
         explicitlySetBPM(pattern);
         stopPlaying();
-        patternPlayer = new Player();
-        patternPlayer.delayPlay(0, pattern);
+        Sequence seq = patternPlayer.getSequence(pattern);
+        playingThread = new Thread(()-> patternPlayer.play(seq));
+        playingThread.setName("Pattern Player");
+        playingThread.setDaemon(true);
+        playingThread.start();
     }
 
     /**
@@ -92,7 +97,8 @@ public class VisualizerController extends DBController {
      * Stop playing song
      */
     public void stopPlaying() {
-        if (patternPlayer != null) {
+        if (playingThread != null) {
+            playingThread.interrupt();
             patternPlayer.getManagedPlayer().reset();
         }
     }
