@@ -144,6 +144,14 @@ public class Composition {
         return tracks.get(track).get(section);
     }
 
+    public int getNumTracks() {
+        return MidiDefaults.TRACKS;
+    }
+
+    public int getNumSections() {
+        return trackLengths.length;
+    }
+
     /**
      * Creates final composition out of current section state
      * Each section undergoes a sync transformation that makes sure the section pattern starts

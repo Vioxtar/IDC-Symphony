@@ -100,7 +100,7 @@ public class ConductorState {
 
         boolean emptyStreak = false;
 
-        for (int year = structure.getMinYear() - 1; year <= structure.getMaxYear(); year++) {
+        for (int year = structure.getMinYear() - 2; year <= structure.getMaxYear() + 1; year++) {
             int[] eventsPerSeq = structure.eventsPerSequence(year);
 
             if (eventsPerSeq.length > 0) {
@@ -110,7 +110,10 @@ public class ConductorState {
 
                 }
             } else if (!emptyStreak) {
-                emptyStreak = true;
+                if (year >= structure.getMinYear() && year <= structure.getMaxYear()) {
+                    emptyStreak = true;
+                }
+
                 if (wholesPerEmptyYear > 0) {
                     trackLengths.add(wholesPerEmptyYear);
                 }
