@@ -7,3 +7,9 @@ out/
 *.pdf
 idcsymphonizer.properties
 idcsymphonizer.properties
+.idea/artifacts/IDC_Symphony.xml
+.idea/artifacts/IDC_Symphony_jar.xml
+.idea/dictionaries/Grempington.xml
+.idea/inspectionProfiles/Project_Default.xml
+cloc.exe
+.idea/artifacts/IDC_Symphony.xml
