@@ -32,7 +32,7 @@ public class EmptyRhythm extends AbstractRoleSetter implements Command {
             if (context != null &&
                     state.getCurrentYear() >= state.getStructure().getMinYear() &&
                     state.getCurrentYear() <= state.getStructure().getMinYear()) {
-                if (context.intensity < 1.3) {
+                if (context.intensity < 1.2) {
                     setRole(state, Band.RHYTHM_FACULTY, BandRole.RhythmRelaxed);
                 }
                 else if (context.intensity < 1.8) {

@@ -1,0 +1,717 @@
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #0 parsed.
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1993 parsed
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#1 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Law
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Radzyner Law School - IDC Herzliya Takes Off
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#2 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Declaration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Declaration of the Inception of the Interdisciplinary Center Herzliya
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #3 (#3 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Prof. Reichman Office
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #4 (#4 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Marc Rich Library
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #5 (#5 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Ivcher Auditorium
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #6 (#6 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Alpern Auditorium
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #7 (#7 total) parsed:
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:23 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Radzyner Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #1 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1994 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 7
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [7]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#8 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Business
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Arison School of Business - Leadership in a Global World
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#9 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Computer Science
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Efi Arazi School of Computer Science - Technological Innovatio
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #2 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1995 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #3 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1996 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1997 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#10 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Law
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Accredited
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: IDC'S Bachelor of Law Program Accredited - Realizing the Vision
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #4 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1998 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #5 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 1999 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#11 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Alumni
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Alumni Association - A Place in our Hearts
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #6 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Alumni received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#12 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Social Commitment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: "Keren-Or" and "Israel@Heart" - Social Commitment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #3 (#13 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Sports
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Sports Teams - Premier League
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #7 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Social Commitment received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Sports received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2000 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [3, 2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#14 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Business
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Arison Lauder
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#15 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Zell Enentrepreneurship Program - Turning Ideas into Reality
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #3 (#16 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Entrepreneurship Club - Business and Social Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #8 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2001 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [4]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #9 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2002 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2003 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#17 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Master's Programs - Quality and Innovation
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #10 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2004 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [1]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #11 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2005 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [1]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#18 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Computer Science
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Ofer-Arazi
+Sammy Ofer
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#19 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Communication
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Sammy Ofer School of Communications - Pioneering the Digital Age
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #12 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Communication received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2006 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #13 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2007 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [1]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #14 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2008 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2009 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#20 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Psychology
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Baruch Ivcher School of Psychology - Giving Back to the Community
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#21 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Economy
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Tiomkin School of Economics - Shaping Economic Policy
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #15 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Economy received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Psychology received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2010 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [3]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #16 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2011 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 0
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: []
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#22 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Sustainability
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Radzyner-Sustainability
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#23 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Sustainability
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The School of Sustainability - Social and Business Responsibility
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #17 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Sustainability received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2012 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#24 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Faculty Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Adelson School of Entrepreneurship - Learning by Doing
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #18 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2013 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#25 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Hangar Classroom Building
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#26 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Celebration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The 20th Anniversary Celebration- Academia of the Future
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #19 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2014 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#27 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Psychology
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Ivcher-Tiomkin
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#28 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Law
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Zvi Meitar Institute for Legal Implication of Emerging Technologies - Formulating a new academic approach
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #20 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Psychology received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2015 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [4]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#29 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Acknowledged
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Continuing to Lead - First Place in the National Union of Israeli Students’ Satisfaction Survey
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#30 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Adelson School of Entrepreneurship - From Initiative to Reality
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #3 (#31 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: IDCBeyond - The Entrepreneurs that will Face the Challenges of the 21st Century
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #21 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2016 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [3]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#32 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Entrepreneurship
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Double-Major in Entrpreneurship - The First Program of its Kind in Israel
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #22 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2017 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [3]
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #1 (#33 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Dormitory Project is Underway - Your Home on Campus
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #2 (#34 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Law
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Accredited
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: Authorization to Grant PH.D.S - Israel’s First Private University
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #23 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #3 (#35 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Business
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: New Academic Programs - Entrepreneurship and Innovation in Healthcare in Cooperation with the Sheba Medical Center
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #4 (#36 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Business
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Program Establishment
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: B.A In Business Administration - A New Track
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #24 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Computer Science received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Rhythm
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #5 (#37 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Communication
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Acknowledged
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Shnanghai Ranking - The School of Communications Joins the Prestigious Index
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+INFO: Event #6 (#38 total) parsed:
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Faculty: Administration
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Type: Building Construction
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.EventLogger execute
+FINE: Title: The Launch of the Dorms - 24 Hours Campus
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+INFO: Sequence #25 parsed.
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Law received role Carpet2
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Business received role Carpet3
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Communication received role Melody
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Entrepreneurship received role Carpet1
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.SequenceLogger execute
+FINE: Faculty Administration received role Secondary
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+INFO: Year 2018 parsed
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events parsed: 6
+Jan 08, 2019 10:26:24 PM idc.symphony.music.conducting.logging.YearLogger execute
+FINE: Events per sequence: [2, 2, 2]
+Jan 08, 2019 10:26:24 PM idc.symphony.ui.SymphonizerController lambda$saveMIDIPattern$13
+INFO: Exported generated MIDI to E:\Projects\IDCSymphony\output.midi

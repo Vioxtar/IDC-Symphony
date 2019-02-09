@@ -1,11 +1,13 @@
 package idc.symphony.music;
 
+import idc.symphony.music.conducting.ConductorState;
 import idc.symphony.music.conducting.DBConductor;
 import idc.symphony.music.conducting.commands.Recurrence;
 import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
 import idc.symphony.music.conducting.commands.*;
+import idc.symphony.music.transformers.ComputeSongDuration;
 import idc.symphony.visual.parsing.VisualEventsBuilder;
 import idc.symphony.visual.parsing.VisualEventFactory;
 import idc.symphony.visual.scheduling.NotePlayed;
@@ -22,6 +24,26 @@ import java.util.logging.Logger;
 
 class DBConductorTest {
     static Connection dbConnection;
+    /**
+     * Generates song from database.
+     * (Main conducting algorithm - core of program)
+     */
+    private DBConductor createsNewMIDI = new DBConductor()
+    {
+        {
+            addCommand(0, Recurrence.Sequence, new DuetMelody());
+            addCommand(1, Recurrence.Sequence, new DefaultMelody());
+            addCommand(2, Recurrence.Sequence, new DefaultRhythm());
+            addCommand(3, Recurrence.Sequence, new DefaultCarpet());
+            addCommand(4, Recurrence.Sequence, new DefaultCarpet());
+            addCommand(5, Recurrence.Sequence, new DefaultCarpet());
+            addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
+            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm());
+            addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
+            addCommand(0, Recurrence.Event, new LyricEvents());
+            addCommand(0, Recurrence.End, new DebugSectionLengths());
+        }
+    };
 
     @BeforeAll
     static void connectDB() throws SQLException {
@@ -38,34 +60,21 @@ class DBConductorTest {
         Logger logger = Logger.getAnonymousLogger();
 
         long before = System.currentTimeMillis();
-        DBConductor conductor = new DBConductor();
         System.out.println(String.format("Connection time: %f", (System.currentTimeMillis() - before) / 1000.0));
         before = System.currentTimeMillis();
-        conductor.addCommand(1000, Recurrence.Year, new YearLogger(logger));
 
-        conductor.addCommand(0, Recurrence.Sequence, new DuetMelody());
-        conductor.addCommand(1, Recurrence.Sequence, new DefaultMelody());
-        conductor.addCommand(2, Recurrence.Sequence, new DefaultRhythm());
-        conductor.addCommand(3, Recurrence.Sequence, new DefaultCarpet());
-        conductor.addCommand(4, Recurrence.Sequence, new DefaultCarpet());
-        conductor.addCommand(5, Recurrence.Sequence, new DefaultCarpet());
-        conductor.addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
-        conductor.addCommand(1000, Recurrence.Sequence, new SequenceLogger(logger));
-
-        conductor.addCommand(0, Recurrence.EmptyYear, new EmptyRhythm());
-        conductor.addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
-        conductor.addCommand(1000, Recurrence.EmptyYear, new SequenceLogger(logger));
-
-        conductor.addCommand(0, Recurrence.Event, new LyricEvents());
-        conductor.addCommand(1000, Recurrence.Event, new EventLogger(logger));
         System.out.println(String.format("Conductor config time: %f", (System.currentTimeMillis() - before) / 1000.0));
         before = System.currentTimeMillis();
-        Pattern song = conductor.conduct(dbConnection);
+        Pattern song = createsNewMIDI.conduct(dbConnection);
         System.out.println(String.format("Conducting time: %f", (System.currentTimeMillis() - before) / 1000.0));
+    }
 
-        before = System.currentTimeMillis();
+    @Test
+    void testEvents() throws SQLException {
+        Pattern song = createsNewMIDI.conduct(dbConnection);
+        long before = System.currentTimeMillis();
         VisualEventFactory eventManager = new VisualEventFactory(
-            VisualEventFactory.defaultConverters(conductor.getFacultyMap()));
+                VisualEventFactory.defaultConverters(createsNewMIDI.getFacultyMap()));
         VisualEventsBuilder eventsBuilder = new VisualEventsBuilder(eventManager);
         System.out.println(String.format("Events init time: %f", (System.currentTimeMillis() - before) / 1000.0));
 
@@ -73,17 +82,22 @@ class DBConductorTest {
         Deque<VisualEvent> scheduledEvents = (Deque<VisualEvent>)eventsBuilder.build(song);
         System.out.println(String.format("Events build time: %f", (System.currentTimeMillis() - before) / 1000.0));
         System.out.println(scheduledEvents.size());
+    }
 
+    private static class DebugSectionLengths implements Command {
+        @Override
+        public boolean execute(ConductorState state, Recurrence recurrence) {
+            for (int section = 0; section < state.getComposition().getNumSections(); section++) {
+                for (int track = 0; track < state.getComposition().getNumTracks(); track++) {
+                    double duration = ComputeSongDuration.getDuration(state.getComposition().getPattern(track, section));
 
-        for (VisualEvent event : scheduledEvents) {
-            if (event instanceof NotePlayed) {
-                NotePlayed played = (NotePlayed) event;
-
-                System.out.println(String.format("@%f for %f, %s",
-                        played.time, played.duration, played.faculty.name));
+                    if (duration > 0) {
+                        System.out.println(String.format("Section: %d, Track: %d, Duration: %f", section, track, duration));
+                    }
+                }
             }
+
+            return false;
         }
-
-
     }
 }

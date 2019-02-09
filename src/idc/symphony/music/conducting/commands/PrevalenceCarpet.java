@@ -25,7 +25,7 @@ public class PrevalenceCarpet extends AbstractRoleSetter{
             if (!state.sequenceContext().roleExists(carpet)) {
                 state.getFacultyMap().values().stream()
                         .filter((faculty)-> !state.sequenceContext().facultyHasRole(faculty.ID))
-                        .max(Comparator.comparingInt(faculty -> faculty.events.size()))
+                        .max(Comparator.comparingDouble(faculty -> context.getFactoredPrevalence(faculty)))
                         .filter((faculty) -> faculty.events.size() > 0)
                         .ifPresent((faculty) -> {
                             setRole(state, faculty.ID, carpet);

@@ -39,14 +39,16 @@ public class ConductorController extends DBController {
             ContextExtension context = new ContextExtension();
 
             addCommand(-3, Recurrence.Sequence, new ContextInit(context));
-            addCommand(-2, Recurrence.Sequence, new PrevalenceCalculator(context, 0.9f));
+            addCommand(-2, Recurrence.Sequence, new PrevalenceCalculator(context, 0.6f));
+            addCommand(0, Recurrence.Sequence, new DuetMelody());
+            addCommand(1, Recurrence.Sequence, new DefaultMelody());
             addCommand(2, Recurrence.Sequence, new PrevalenceBass(context));
-            addCommand(0, Recurrence.Sequence, new PrevalenceDuet(context));
-            addCommand(1, Recurrence.Sequence, new PrevalenceMelody(context));
-            addCommand(2, Recurrence.Sequence, new IntensityRhythm(context));
-            addCommand(3, Recurrence.Sequence, new PrevalenceCarpet(context));
-            addCommand(4, Recurrence.Sequence, new PrevalenceCarpet(context));
-            addCommand(5, Recurrence.Sequence, new PrevalenceCarpet(context));
+            addCommand(3, Recurrence.Sequence, new PrevalenceDuet(context));
+            addCommand(4, Recurrence.Sequence, new PrevalenceMelody(context));
+            addCommand(5, Recurrence.Sequence, new IntensityRhythm(context));
+            addCommand(6, Recurrence.Sequence, new PrevalenceCarpet(context));
+            addCommand(7, Recurrence.Sequence, new PrevalenceCarpet(context));
+            addCommand(8, Recurrence.Sequence, new PrevalenceCarpet(context));
             addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
             addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(context));
             addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());

@@ -12,7 +12,7 @@ public class Law extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 347;
+        long seed = 155;
         this.gen.setSeed(seed);
     }
 
@@ -26,7 +26,7 @@ public class Law extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 8, 0.3f, 0.5f, 0.4f);
+        Pattern p = genMusic(key, wholes, 3, 15, 0.3f, 0.5f, 0.2f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
         return p;

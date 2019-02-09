@@ -15,7 +15,7 @@ public class ContextExtension {
         float result = facultyPrevalence.get(faculty);
 
         if (!facultyPlayed.get(faculty)) {
-            result *= 1.1f;
+            result *= 2f;
         }
 
         return result;
