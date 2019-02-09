@@ -173,7 +173,7 @@ public class Composition {
                     }
 
                     finalPattern.add(
-                            sequencePattern(trimPattern(sectionPattern, section.length), track, startTime).add("\n"));
+                            sequencePattern(trimPattern(sectionPattern, trimLength), track, startTime).add("\n"));
                 }
             }
 

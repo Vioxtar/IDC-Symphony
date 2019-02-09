@@ -33,7 +33,7 @@ public class PrevalenceDuet extends AbstractRoleSetter {
                 List<FacultyData> maxPair =
                         state.getFacultyMap().values().stream()
                                 .filter((faculty)-> !state.sequenceContext().facultyHasRole(faculty.ID)
-                                        && Math.abs(context.getFactoredPrevalence(faculty) - maxCount) < 0.1f)
+                                        && Math.abs(context.getFactoredPrevalence(faculty) - maxCount) < 0.125f)
                                 .limit(2).collect(Collectors.toList());
 
                 if (maxPair.size() == 2) {

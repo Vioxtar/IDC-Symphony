@@ -24,12 +24,12 @@ public class PrevalenceBass extends AbstractRoleSetter {
 
         if (context.facultyPlayed.get(CSFaculty) || context.facultyPrevalence.get(CSFaculty) > 0) {
             if (context.intensity < 1.2) {
-                setRole(state, CSFaculty.ID, BandRole.Carpet1);
+                setRole(state, CSFaculty.ID, BandRole.BassRelaxed);
             }
             else if (context.intensity < 1.8) {
-                setRole(state, CSFaculty.ID, BandRole.Carpet2);
+                setRole(state, CSFaculty.ID, BandRole.BassMedium);
             } else {
-                setRole(state, CSFaculty.ID, BandRole.Carpet3);
+                setRole(state, CSFaculty.ID, BandRole.BassIntense);
             }
         }
 

@@ -24,7 +24,7 @@ public class PrevalenceMelody extends AbstractRoleSetter {
             state.getFacultyMap().values().stream()
                     .filter((faculty)-> !state.sequenceContext().facultyHasRole(faculty.ID))
                     .max(Comparator.comparingDouble(faculty -> context.getFactoredPrevalence(faculty)))
-                    .filter((faculty) -> context.getFactoredPrevalence(faculty) > 0.3)
+                    .filter((faculty) -> context.getFactoredPrevalence(faculty) > 0)
                     .ifPresent((faculty) -> {
                         setRole(state, faculty.ID, BandRole.Melody);
                         context.facultyPlayed.put(faculty, true);

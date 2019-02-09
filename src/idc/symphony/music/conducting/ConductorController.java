@@ -39,7 +39,7 @@ public class ConductorController extends DBController {
             ContextExtension context = new ContextExtension();
 
             addCommand(-3, Recurrence.Sequence, new ContextInit(context));
-            addCommand(-2, Recurrence.Sequence, new PrevalenceCalculator(context, 0.8f));
+            addCommand(-2, Recurrence.Sequence, new PrevalenceCalculator(context, 0.9f));
             addCommand(2, Recurrence.Sequence, new PrevalenceBass(context));
             addCommand(0, Recurrence.Sequence, new PrevalenceDuet(context));
             addCommand(1, Recurrence.Sequence, new PrevalenceMelody(context));
