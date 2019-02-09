@@ -188,9 +188,10 @@ public class Trail {
             tPoint.intToY(tail.y, intFraction);
 
             // Trail aim
-            double speed = 5; // The speed of the trail flow
-            tPoint.aimToX(tail.x, fracExpRev * speed * mul);
-            tPoint.aimToY(tail.y, frac * speed * mul);
+            double speedX = 5;
+            double speedY = 5;
+            tPoint.aimToX(tail.x, fracExpRev * speedX * mul);
+            tPoint.aimToY(tail.y, frac * speedY * mul);
 
             // Trail slide
             double slide = 0.1;
