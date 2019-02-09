@@ -12,7 +12,7 @@ public enum BandRole {
     Carpet1((member) -> member::playCarpet1),
     Carpet2((member) -> member::playCarpet2),
     Carpet3((member) -> member::playCarpet3),
-    Rhythm(null) {
+    RhythmRandom(null) {
         private int counter = 0;
         private final GetterProducer getters[] = {
                 (member) -> member::playCarpet1,
@@ -25,6 +25,9 @@ public enum BandRole {
                 getters[counter++ % 3].apply(member);
         }
     },
+    RhythmIntense((member) -> member::playCarpet3),
+    RhythmMedium((member) -> member::playCarpet2),
+    RhythmRelaxed((member) -> member::playCarpet1),
     None(null);
 
     GetterProducer patternGetter;
