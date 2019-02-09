@@ -57,6 +57,7 @@ public class EventsBoleroStructure {
             }
 
             int numOfSeqs = 1 + (int)(yearRelativeDensity(yearData, stats) / 3);
+            if (year == minYear) numOfSeqs = 2;
             int[] sequenceEvents = new int[numOfSeqs];
 
             int eventsPerSeq = yearData.events() / numOfSeqs;

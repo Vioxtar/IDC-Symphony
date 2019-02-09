@@ -19,5 +19,9 @@ public enum Recurrence {
     /**
      * Execute command on every year parsed
      */
-    Year
+    Year,
+    /**
+     * Execute command after iteration on events finished
+     */
+    End
 }

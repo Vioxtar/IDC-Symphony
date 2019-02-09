@@ -16,7 +16,7 @@ public class DefaultRhythm extends AbstractRoleSetter {
     @Override
     public boolean execute(ConductorState state, Recurrence recurrence) {
         if (!state.sequenceContext().facultyHasRole(Band.RHYTHM_FACULTY)) {
-            setRole(state, Band.RHYTHM_FACULTY, BandRole.Rhythm);
+            setRole(state, Band.RHYTHM_FACULTY, BandRole.RhythmRandom);
         }
 
         return true;

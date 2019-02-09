@@ -5,6 +5,8 @@ import org.jfugue.midi.MidiDictionary;
 import org.jfugue.parser.ChainingParserListenerAdapter;
 import org.jfugue.theory.Note;
 
+import java.util.Arrays;
+
 /**
  * Wraps a given musical pattern by:
  * - Adding a time seek at the beginning of the pattern
@@ -51,6 +53,7 @@ public class SequenceTransformer extends ChainingParserListenerAdapter {
     @Override
     public void beforeParsingStarts() {
         super.beforeParsingStarts();
+        Arrays.fill(layerTimeChanged, false);
 
         // First and foremost - track
         if (voice != -1) {

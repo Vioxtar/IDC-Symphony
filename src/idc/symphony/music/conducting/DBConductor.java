@@ -116,7 +116,10 @@ public class DBConductor {
         }
 
         if (sequenceEventCounts.length == 0 && !state.emptyStreak && state.getWholesPerEmpty() > 0) {
-            state.emptyStreak = true;
+            if (state.currentYear >= state.structure.getMinYear() && state.currentYear <= state.structure.getMaxYear()) {
+                state.emptyStreak = true;
+            }
+
             executeCommands(Recurrence.EmptyYear);
             state.sequenceContext().reset();
             state.currentSequence++;
@@ -134,7 +137,7 @@ public class DBConductor {
         ResultSet EventSet = eventStatement.executeQuery();
 
         int yearMin = state.structure.getMinYear() - 1;
-        int yearMax = state.structure.getMaxYear();
+        int yearMax = state.structure.getMaxYear() + 1;
 
         for (state.currentYear = yearMin;
              state.currentYear <= yearMax;
@@ -144,6 +147,7 @@ public class DBConductor {
             state.yearContext().reset();
         }
 
+        executeCommands(Recurrence.End);
         return state.composition.getFinalComposition(state.tempo);
     }
 

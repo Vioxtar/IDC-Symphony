@@ -3,6 +3,7 @@ package idc.symphony.music.conducting;
 import idc.symphony.db.DBController;
 import idc.symphony.music.conducting.DBConductor;
 import idc.symphony.music.conducting.commands.Recurrence;
+import idc.symphony.music.conducting.commands.shared.ContextExtension;
 import idc.symphony.music.conducting.logging.EventLogger;
 import idc.symphony.music.conducting.logging.SequenceLogger;
 import idc.symphony.music.conducting.logging.YearLogger;
@@ -35,14 +36,19 @@ public class ConductorController extends DBController {
     private DBConductor createsNewMIDI = new DBConductor()
     {
         {
-            addCommand(0, Recurrence.Sequence, new DuetMelody());
-            addCommand(1, Recurrence.Sequence, new DefaultMelody());
-            addCommand(2, Recurrence.Sequence, new DefaultRhythm());
-            addCommand(3, Recurrence.Sequence, new DefaultCarpet());
-            addCommand(4, Recurrence.Sequence, new DefaultCarpet());
-            addCommand(5, Recurrence.Sequence, new DefaultCarpet());
+            ContextExtension context = new ContextExtension();
+
+            addCommand(-3, Recurrence.Sequence, new ContextInit(context));
+            addCommand(-2, Recurrence.Sequence, new PrevalenceCalculator(context, 0.9f));
+            addCommand(2, Recurrence.Sequence, new PrevalenceBass(context));
+            addCommand(0, Recurrence.Sequence, new PrevalenceDuet(context));
+            addCommand(1, Recurrence.Sequence, new PrevalenceMelody(context));
+            addCommand(2, Recurrence.Sequence, new IntensityRhythm(context));
+            addCommand(3, Recurrence.Sequence, new PrevalenceCarpet(context));
+            addCommand(4, Recurrence.Sequence, new PrevalenceCarpet(context));
+            addCommand(5, Recurrence.Sequence, new PrevalenceCarpet(context));
             addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
-            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm());
+            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(context));
             addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
             addCommand(0, Recurrence.Event, new LyricEvents());
         }
@@ -54,14 +60,18 @@ public class ConductorController extends DBController {
     private DBConductor preparesForExistingMIDI = new DBConductor()
     {
         {
-            addCommand(0, Recurrence.Sequence, new DuetMelody(false));
-            addCommand(1, Recurrence.Sequence, new DefaultMelody(false));
-            addCommand(2, Recurrence.Sequence, new DefaultRhythm(false));
-            addCommand(3, Recurrence.Sequence, new DefaultCarpet(false));
-            addCommand(4, Recurrence.Sequence, new DefaultCarpet(false));
-            addCommand(5, Recurrence.Sequence, new DefaultCarpet(false));
+            ContextExtension context = new ContextExtension();
+
+            addCommand(-3, Recurrence.Sequence, new ContextInit(context));
+            addCommand(-1, Recurrence.Sequence, new PrevalenceCalculator(context, 0.8f));
+            addCommand(0, Recurrence.Sequence, new PrevalenceDuet(context, false));
+            addCommand(1, Recurrence.Sequence, new PrevalenceMelody(context, false));
+            addCommand(2, Recurrence.Sequence, new IntensityRhythm(context,false));
+            addCommand(3, Recurrence.Sequence, new PrevalenceCarpet(context, false));
+            addCommand(4, Recurrence.Sequence, new PrevalenceCarpet(context, false));
+            addCommand(5, Recurrence.Sequence, new PrevalenceCarpet(context, false));
             addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
-            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(false));
+            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(context));
             addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
             addCommand(0, Recurrence.Event, new LyricEvents());
         }

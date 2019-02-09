@@ -69,8 +69,10 @@ public class Administration extends Faculty {
         Rhythm rhythm = new Rhythm();
         rhythm.addLayer("O.O.O.O.");
         rhythm.addLayer("......oo");
+        rhythm.addLayer("^.^.^.^.");
+        rhythm.addLayer("...`...`");
         rhythm.setLength(wholes);
-        return LayerMasterer.master(rhythm.getPattern(),1.1f, 1.1f);
+        return LayerMasterer.master(rhythm.getPattern(),1.1f, 1.1f, 0.6f, 0.6f);
 
     }
 

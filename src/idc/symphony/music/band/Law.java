@@ -26,7 +26,7 @@ public class Law extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 1, 0f, 0.5f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 8, 0.3f, 0.5f, 0.4f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
         return p;
@@ -36,7 +36,7 @@ public class Law extends Faculty {
     @Override
     public Pattern playSecondary(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
+        Pattern p = genMusic(key, wholes, 3, 8, 0.8f, 0.1f, 0.1f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
         return p;
