@@ -26,7 +26,7 @@ public class Psychology extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 15, 0.5f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 8, 0.4f, 0.2f, 0.5f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
 
@@ -37,7 +37,7 @@ public class Psychology extends Faculty {
     @Override
     public Pattern playSecondary(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 3, 10, 0.5f, 0.3f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 8, 0.5f, 0.3f, 0.2f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
 

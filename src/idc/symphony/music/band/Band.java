@@ -47,7 +47,7 @@ public class Band {
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("TREMOLO_STRINGS"));
 
         bmEntrepreneurship = new Entrepreneurship
-                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("CHOIR"));
+                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("TRUMPET"));
 
         bmAlumni = new Alumni
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("FIDDLE"));
@@ -65,7 +65,7 @@ public class Band {
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("STEEL_DRUMS"));
 
         bmPsychology = new Psychology
-                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("PAN_FLUTE"));
+                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("CLARINET"));
 
         bmSustainability = new Sustainability
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("PICCOLO"));

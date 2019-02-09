@@ -28,6 +28,9 @@ public enum BandRole {
     RhythmIntense((member) -> member::playCarpet3),
     RhythmMedium((member) -> member::playCarpet2),
     RhythmRelaxed((member) -> member::playCarpet1),
+    BassIntense((member) -> member::playCarpet3),
+    BassMedium((member) -> member::playCarpet2),
+    BassRelaxed((member) -> member::playCarpet1),
     None(null);
 
     GetterProducer patternGetter;
