@@ -17,10 +17,10 @@ import java.util.*;
  * Used for creating final composition via procedurally changing event statistics
  */
 public class ConductorState {
-    private static final int DEFAULT_TEMPO = 110;
-    private static final int DEFAULT_WHOLES_PER_SEQUENCE = 4;
-    private static final int DEFAULT_WHOLES_PER_EMPTY = 2;
-    private static final Key DEFAULT_SONG_KEY = new Key("G");
+    static final int DEFAULT_TEMPO = 110;
+    static final int DEFAULT_WHOLES_PER_SEQUENCE = 4;
+    static final int DEFAULT_WHOLES_PER_EMPTY = 2;
+    static final Key DEFAULT_SONG_KEY = new Key("G");
 
     /**
      * Conductor-decided length of normal sequence and empty year sequence.
@@ -100,7 +100,7 @@ public class ConductorState {
 
         boolean emptyStreak = false;
 
-        for (int year = structure.getMinYear() - 2; year <= structure.getMaxYear() + 1; year++) {
+        for (int year = structure.getMinYear() - 1; year <= structure.getMaxYear() + 1; year++) {
             int[] eventsPerSeq = structure.eventsPerSequence(year);
 
             if (eventsPerSeq.length > 0) {

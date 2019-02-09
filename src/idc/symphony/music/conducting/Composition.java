@@ -1,6 +1,7 @@
 package idc.symphony.music.conducting;
 
 import idc.symphony.music.transformers.SequenceTransformer;
+import idc.symphony.music.transformers.SequenceTrimmer;
 import org.jfugue.midi.MidiDefaults;
 import org.jfugue.pattern.Pattern;
 import org.staccato.StaccatoParserListener;
@@ -15,15 +16,14 @@ import java.util.List;
  * Synchronizes pattern sections according to expected started times.
  */
 public class Composition {
-    private List<List<Pattern>> tracks;
-    private int[] trackLengths;
-    private float[] sectionStartTimes;
+    private List<Section> sections;
 
     /**
      * Ensures start time of pattern is beginning of sequence,
      * allowing patterns to overlap while maintaining song structure.
      */
     private SequenceTransformer patternSequencer;
+    private SequenceTrimmer patternTrimmer;
 
     /**
      * Proxy pattern builder for transformers
@@ -35,40 +35,30 @@ public class Composition {
             throw new IllegalArgumentException("Track lengths should be non-empty array");
         }
 
-        this.trackLengths = Arrays.copyOf(trackLengths, trackLengths.length);
         patternSequencer = new SequenceTransformer();
+        patternTrimmer = new SequenceTrimmer();
         patternBuilder = new StaccatoParserListener();
         patternSequencer.addParserListener(patternBuilder);
-        initStartTimes();
-        initTracks();
-    }
+        patternTrimmer.addParserListener(patternBuilder);
+        sections = new ArrayList<>();
 
-    private void initTracks() {
-        tracks = new ArrayList<>(MidiDefaults.TRACKS);
-
-        for (int track = 0; track < MidiDefaults.TRACKS; track++) {
-            tracks.add(track, new ArrayList<>(trackLengths.length));
-
-            for (int pattern = 0; pattern < trackLengths.length; pattern++) {
-                tracks.get(track).add(pattern, null);
-            }
+        if (trackLengths != null && trackLengths.length != 0) {
+            initializeSections(trackLengths);
         }
     }
 
-    /**
-     * Translate section lengths to start times for each section - for start-time based time synchronization
-     */
-    private void initStartTimes() {
-        sectionStartTimes = new float[trackLengths.length];
-        sectionStartTimes[0] = 0;
-
-        for (int i = 1; i < trackLengths.length; i++) {
-            if (i > 1) {
-                sectionStartTimes[i] += sectionStartTimes[i - 1];
-            }
-
-            sectionStartTimes[i] += trackLengths[i - 1];
+    private void initializeSections(int[] trackLengths) {
+        for (int i = 0; i < trackLengths.length; i++) {
+            sections.add(new Section(trackLengths[i]));
         }
+    }
+
+    public void addSection(float length) {
+        addSection(sections.size(), length);
+    }
+
+    public void addSection(int index, float length) {
+        sections.add(index, new Section(length));
     }
 
     /**
@@ -79,11 +69,11 @@ public class Composition {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
         }
-        if (section < 0 || section >= sectionStartTimes.length) {
+        if (section < 0 || section >= sections.size()) {
             throw new IllegalArgumentException("Section index out of range");
         }
 
-        tracks.get(track).set(section, pattern);
+        sections.get(section).set(track, pattern);
     }
 
     /**
@@ -94,15 +84,14 @@ public class Composition {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
         }
-        if (section < 0 || section >= sectionStartTimes.length) {
+        if (section < 0 || section >= sections.size()) {
             throw new IllegalArgumentException("Section index out of range");
         }
 
-        List<Pattern> sections = tracks.get(track);
-        Pattern sectionPattern = sections.get(section);
+        Pattern sectionPattern = sections.get(section).get(track);
 
         if (sectionPattern == null) {
-            sections.set(section, pattern);
+            sections.get(section).set(track, pattern);
         } else {
             sectionPattern.prepend(pattern);
         }
@@ -116,15 +105,14 @@ public class Composition {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
         }
-        if (section < 0 || section >= sectionStartTimes.length) {
+        if (section < 0 || section >= sections.size()) {
             throw new IllegalArgumentException("Section index out of range");
         }
 
-        List<Pattern> sections = tracks.get(track);
-        Pattern sectionPattern = sections.get(section);
+        Pattern sectionPattern = sections.get(section).get(track);
 
         if (sectionPattern == null) {
-            sections.set(section, pattern);
+            sections.get(section).set(track, pattern);
         } else {
             sectionPattern.add(pattern);
         }
@@ -137,11 +125,11 @@ public class Composition {
         if (track < 0 || track >= (MidiDefaults.TRACKS)) {
             throw new IllegalArgumentException("Track index out of range");
         }
-        if (section < 0 || section >= sectionStartTimes.length) {
+        if (section < 0 || section >= sections.size()) {
             throw new IllegalArgumentException("Section index out of range");
         }
 
-        return tracks.get(track).get(section);
+        return sections.get(section).get(track);
     }
 
     public int getNumTracks() {
@@ -149,7 +137,7 @@ public class Composition {
     }
 
     public int getNumSections() {
-        return trackLengths.length;
+        return sections.size();
     }
 
     /**
@@ -162,23 +150,80 @@ public class Composition {
      */
     public Pattern getFinalComposition(int tempo) {
         Pattern finalPattern = new Pattern();
+        float startTime = 0;
 
-        for (int section = 0; section < sectionStartTimes.length; section++) {
-            for (int track = 0; track < tracks.size(); track++) {
-                List<Pattern> sectionList = tracks.get(track);
-                patternSequencer.setVoice((byte)track);
-                patternSequencer.setTime(sectionStartTimes[section]);
-                Pattern sectionPattern = sectionList.get(section);
+        for (int sectionNo = 0; sectionNo < sections.size(); sectionNo++) {
+            Section section = sections.get(sectionNo);
+            Section nextSection = (sectionNo < sections.size() - 1)
+                    ? sections.get(sectionNo + 1)
+                    : null;
+
+            for (int track = 0; track < MidiDefaults.TRACKS; track++) {
+                Pattern sectionPattern = section.get(track);
 
                 if (sectionPattern != null) {
-                    sectionPattern.transform(patternSequencer);
-                    finalPattern.add(patternBuilder.getPattern()).add("\n");
+                    float trimLength = section.length;
+
+                    if (nextSection == null || nextSection.isBreak) {
+                        if (nextSection == null) {
+                            trimLength += 1;
+                        } else {
+                            trimLength += nextSection.length;
+                        }
+                    }
+
+                    finalPattern.add(
+                            sequencePattern(trimPattern(sectionPattern, section.length), track, startTime).add("\n"));
                 }
             }
+
+            startTime += section.length;
         }
 
         finalPattern.setTempo(tempo);
 
         return finalPattern;
+    }
+
+    private Pattern trimPattern(Pattern pattern, double duration) {
+        patternTrimmer.setMaxDuration(duration);
+        pattern.transform(patternTrimmer);
+
+        return patternBuilder.getPattern();
+    }
+
+    private Pattern sequencePattern(Pattern pattern, int track, double time) {
+        patternSequencer.setVoice((byte) track);
+        patternSequencer.setTime(time);
+        pattern.transform(patternSequencer);
+
+        return patternBuilder.getPattern();
+    }
+
+    private class Section {
+        private Pattern[] patterns = new Pattern[MidiDefaults.TRACKS];
+        private float     length;
+        private boolean   isBreak;
+
+        private Section(float length) {
+            this.length = length;
+            isBreak = this.length < ConductorState.DEFAULT_WHOLES_PER_SEQUENCE;
+        }
+
+        private Pattern get(int track) {
+            if (track < 0 || track >= MidiDefaults.TRACKS) {
+                throw new IllegalArgumentException("Invalid track range - should be from 0 to 16, received " + track);
+            }
+
+            return patterns[track];
+        }
+
+        private void set(int track, Pattern pattern) {
+            if (track < 0 || track >= MidiDefaults.TRACKS) {
+                throw new IllegalArgumentException("Invalid track range - should be from 0 to 16, received " + track);
+            }
+
+            patterns[track] = pattern;
+        }
     }
 }

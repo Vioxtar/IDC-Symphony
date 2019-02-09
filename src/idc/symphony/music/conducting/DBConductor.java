@@ -136,7 +136,7 @@ public class DBConductor {
         PreparedStatement eventStatement = state.connection.prepareStatement(EventsQueries.SELECT_EVENTS);
         ResultSet EventSet = eventStatement.executeQuery();
 
-        int yearMin = state.structure.getMinYear() - 2;
+        int yearMin = state.structure.getMinYear() - 1;
         int yearMax = state.structure.getMaxYear() + 1;
 
         for (state.currentYear = yearMin;
