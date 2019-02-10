@@ -14,9 +14,9 @@ public class ContextExtension {
     public float getFactoredPrevalence(FacultyData faculty) {
         float result = facultyPrevalence.get(faculty);
 
-        if (!facultyPlayed.get(faculty)) {
+        /*if (!facultyPlayed.get(faculty)) {
             result *= 2f;
-        }
+        }*/
 
         return result;
     }
