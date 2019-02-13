@@ -28,7 +28,7 @@ public class Alumni extends Faculty {
         Pattern p = genMusic(key, wholes, 2, 4, 0.3f, 0.4f, 0.2f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
-        return p;
+        return melodyTuner.tune(p);
 
     }
 
@@ -38,7 +38,7 @@ public class Alumni extends Faculty {
         Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
-        return OctaveTransformer.OffsetOctave(p, -1);
+        return OctaveTransformer.OffsetOctave(melodyTuner.tune(p), -1);
 
     }
 

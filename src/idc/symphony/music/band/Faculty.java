@@ -1,6 +1,7 @@
 package idc.symphony.music.band;
 
 import idc.symphony.music.PatternLibrary;
+import idc.symphony.music.transformers.ChordMelodyTuner;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 import org.jfugue.theory.Note;
@@ -28,6 +29,12 @@ public class Faculty implements BandMember {
     final float AMP_CARPET3 = 0.55f;
     final float AMP_CARPET2 = 0.55f;
     final float AMP_CARPET1 = 0.7f;
+
+    protected ChordMelodyTuner melodyTuner =
+            new ChordMelodyTuner(
+                    new Pattern("Gw Ew Bw D"),
+                    Arrays.asList(true, false, false, true),
+                    new Random(500));
 
 
     /*************************************************************************************************
