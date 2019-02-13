@@ -32,7 +32,7 @@ public class CS extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(1.28f * AMP_MELODY, p);
 
-        return melodyTuner.tune(p);
+        return p;
 
     }
 
@@ -43,7 +43,7 @@ public class CS extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(1.28f * AMP_SECMELODY, p);
 
-        return OctaveTransformer.OffsetOctave(melodyTuner.tune(p), -1);
+        return OctaveTransformer.OffsetOctave(p, -1);
     }
 
     @Override

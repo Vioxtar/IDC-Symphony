@@ -19,6 +19,7 @@ import java.util.function.Predicate;
  * Tunes a given melody according to a given chord progression
  */
 public class ChordMelodyTuner extends ChainingParserListenerAdapter {
+    private static final int[]     MELODY_INTERVALS = new int[]{0, 2, 3, 4, 5};
     private static final Intervals MELODY_INTERVALS_MAJOR = new Intervals("1 3 4 5 6");
     private static final Intervals MELODY_INTERVALS_MINOR = new Intervals("1 b3 4 5 b6");
 
@@ -37,7 +38,7 @@ public class ChordMelodyTuner extends ChainingParserListenerAdapter {
      * @param chordRoots The root notes of the chord progression, along with the durations.
      * @param minorMajor True means major, false means minor.
      */
-    public ChordMelodyTuner(Pattern chordRoots, List<Boolean> minorMajor, Random seed) {
+    public ChordMelodyTuner(Pattern chordRoots, List<Boolean> minorMajor, Key key, Random seed) {
         this.seed = seed;
         this.chordHalfSteps = new ArrayList<>();
         this.chordRoots = new ArrayList<>();
@@ -48,23 +49,39 @@ public class ChordMelodyTuner extends ChainingParserListenerAdapter {
             throw new IllegalArgumentException("Chord root notes and minor major indicators must be of equal size");
         }
 
-        int noteIdx = 0;
+        List<Note> keyNotes = key.getScale().getIntervals().setRoot(key.getRoot()).getNotes();
+
         for (Token token : rootTokens) {
             if (token.getType() == Token.TokenType.NOTE) {
                 Note chordRoot = NoteProviderFactory.getNoteProvider().createNote(token.toString());
                 this.chordRoots.add(chordRoot);
 
-                if (minorMajor.get(noteIdx)) {
-                    chordHalfSteps.add(MELODY_INTERVALS_MAJOR.setRoot(chordRoot).toHalfstepArray());
-                } else {
-                    chordHalfSteps.add(MELODY_INTERVALS_MINOR.setRoot(chordRoot).toHalfstepArray());
+                int rootHalfStep = chordRoot.getPositionInOctave();
+                int interval = 0;
+                for (int i = 0; i < keyNotes.size(); i++ ){
+                    if (rootHalfStep == keyNotes.get(i).getPositionInOctave()) {
+                        interval = i + 1;
+                    }
                 }
-            }
 
-            noteIdx++;
+                int[] validHalfsteps = new int[MELODY_INTERVALS.length];
+
+                for (int i = 0; i < validHalfsteps.length; i++) {
+                    validHalfsteps[i] =
+                            keyNotes.get((interval + MELODY_INTERVALS[i]) % 7).getPositionInOctave();
+                }
+
+
+                chordHalfSteps.add(validHalfsteps);
+            }
         }
     }
 
+    /**
+     *
+     * @param melody
+     * @return
+     */
     public Pattern tune(Pattern melody) {
         StaccatoParserListener builder = new StaccatoParserListener();
         addParserListener(builder);
@@ -107,6 +124,9 @@ public class ChordMelodyTuner extends ChainingParserListenerAdapter {
         super.fireNoteParsed(note);
     }
 
+    /**
+     *
+     */
     private void advanceChord() {
         currentChord++;
 
