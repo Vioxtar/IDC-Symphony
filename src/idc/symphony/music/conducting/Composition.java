@@ -61,6 +61,14 @@ public class Composition {
         sections.add(index, new Section(length));
     }
 
+    public void removeSection(int index) {
+        if (index <= 0 || index >= sections.size()) {
+            throw new IllegalArgumentException("Section index out of range");
+        }
+
+        sections.remove(index);
+    }
+
     /**
      * Puts given pattern in given track at given section.
      * Overrides pattern if exists.

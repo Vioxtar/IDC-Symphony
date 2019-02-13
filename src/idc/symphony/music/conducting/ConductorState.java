@@ -17,9 +17,9 @@ import java.util.*;
  * Used for creating final composition via procedurally changing event statistics
  */
 public class ConductorState {
-    static final int DEFAULT_TEMPO = 110;
+    static final int DEFAULT_TEMPO = 135;
     static final int DEFAULT_WHOLES_PER_SEQUENCE = 4;
-    static final int DEFAULT_WHOLES_PER_EMPTY = 1;
+    static final int DEFAULT_WHOLES_PER_EMPTY = 2;
     static final Key DEFAULT_SONG_KEY = new Key("G");
 
     /**
@@ -130,6 +130,10 @@ public class ConductorState {
 
     public int getCurrentSequence() {
         return currentSequence;
+    }
+
+    public void moveCurrentSequence(int delta) {
+        currentSequence += delta;
     }
 
     public int getCurrentYear() {

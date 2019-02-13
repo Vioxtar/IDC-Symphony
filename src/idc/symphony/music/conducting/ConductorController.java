@@ -1,7 +1,6 @@
 package idc.symphony.music.conducting;
 
 import idc.symphony.db.DBController;
-import idc.symphony.music.conducting.DBConductor;
 import idc.symphony.music.conducting.commands.Recurrence;
 import idc.symphony.music.conducting.commands.shared.ContextExtension;
 import idc.symphony.music.conducting.logging.EventLogger;
@@ -15,7 +14,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import org.jfugue.midi.MidiFileManager;
 import org.jfugue.pattern.Pattern;
-import org.sqlite.SQLiteConfig;
 
 import java.io.File;
 import java.util.function.Consumer;
@@ -52,6 +50,7 @@ public class ConductorController extends DBController {
             addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
             addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(context));
             addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
+            addCommand(10, Recurrence.EmptyYear, new EmptyRemover(4));
             addCommand(0, Recurrence.Event, new LyricEvents());
         }
     };
