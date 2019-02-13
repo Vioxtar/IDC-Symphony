@@ -29,7 +29,7 @@ public class Band {
     public Band() {
 
         bmLaw = new Law
-                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("SYNTH_STRINGS_2"));
+                (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("BRIGHT_ACOUSTIC"));
 
         bmGovernDiplo = new GovernDiplo
                 (MidiDictionary.INSTRUMENT_STRING_TO_BYTE.get("TRUMPET"));

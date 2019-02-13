@@ -1,6 +1,7 @@
 package idc.symphony.music.band;
 
 import idc.symphony.music.transformers.AmplitudeTransformer;
+import idc.symphony.music.transformers.OctaveTransformer;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 
@@ -41,7 +42,7 @@ public class Sustainability extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 
@@ -52,7 +53,7 @@ public class Sustainability extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET3, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 
@@ -63,7 +64,7 @@ public class Sustainability extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET2, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 
@@ -74,7 +75,7 @@ public class Sustainability extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET1, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 }

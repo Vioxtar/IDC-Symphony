@@ -1,6 +1,7 @@
 package idc.symphony.music.band;
 
 import idc.symphony.music.transformers.AmplitudeTransformer;
+import idc.symphony.music.transformers.OctaveTransformer;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.theory.Key;
 
@@ -12,7 +13,7 @@ public class Business extends Faculty {
         this.instrument = instrument;
 
         // Set a seed for this generator
-        long seed = 1337;
+        long seed = 10000;
         this.gen.setSeed(seed);
     }
 
@@ -26,7 +27,7 @@ public class Business extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-        Pattern p = genMusic(key, wholes, 1, 15, 0.5f, 0.2f, 0.2f);
+        Pattern p = genMusic(key, wholes, 3, 24, 0.2f, 0.5f, 0.2f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_MELODY, p);
 
@@ -40,7 +41,7 @@ public class Business extends Faculty {
         Pattern p = genMusic(key, wholes, 3, 4, 0.8f, 0.1f, 0.1f);
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_SECMELODY, p);
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 
@@ -51,7 +52,7 @@ public class Business extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET3, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 
@@ -62,7 +63,7 @@ public class Business extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET2, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 
@@ -73,7 +74,7 @@ public class Business extends Faculty {
         p.setInstrument(instrument);
         p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET1, p);
 
-        return p;
+        return OctaveTransformer.OffsetOctave(p, -1);
 
     }
 }
