@@ -27,8 +27,7 @@ public class LyricFacultyRoles implements Command {
                 Pattern prepended = new Pattern();
                 Pattern appended = new Pattern();
 
-                if (lastYear != state.getCurrentYear() && state.getCurrentYear() >= state.getStructure().getMinYear() &&
-                        !yearTagged) {
+                if (lastYear != state.getCurrentYear() && !yearTagged && state.sequenceContext().getEventCount() > 0) {
                     lastYear = state.getCurrentYear();
                     prepended.add(String.format("'(YEAR:%d)", state.getCurrentYear()));
                     yearTagged = true;
