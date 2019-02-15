@@ -150,8 +150,6 @@ public class ConductorState {
         return wholesPerEmptyYear;
     }
 
-    public int getTempo() { return tempo; }
-
     public Key getSongKey() { return songKey; }
 
     public Band getBand() {
@@ -259,7 +257,7 @@ public class ConductorState {
             }
         }
 
-        public void reset() {
+        void reset() {
             facultyEvents.clear();
             facultyRoles.clear();
             existingRoles.clear();

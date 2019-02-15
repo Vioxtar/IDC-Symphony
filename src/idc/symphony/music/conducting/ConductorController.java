@@ -52,8 +52,6 @@ public class ConductorController extends DBController {
             addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
             addCommand(10, Recurrence.EmptyYear, new EmptyRemover(4));
             addCommand(0, Recurrence.Event, new LyricEvents());
-            addCommand(15, Recurrence.Sequence, new EndingFader(context));
-            addCommand(10, Recurrence.End, new LyricSongTermination());
         }
     };
 
@@ -74,7 +72,7 @@ public class ConductorController extends DBController {
             addCommand(4, Recurrence.Sequence, new PrevalenceCarpet(context, false));
             addCommand(5, Recurrence.Sequence, new PrevalenceCarpet(context, false));
             addCommand(9, Recurrence.Sequence, new LyricFacultyRoles());
-            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(context, false));
+            addCommand(0, Recurrence.EmptyYear, new EmptyRhythm(context));
             addCommand(9, Recurrence.EmptyYear, new LyricFacultyRoles());
             addCommand(0, Recurrence.Event, new LyricEvents());
         }

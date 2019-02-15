@@ -43,7 +43,6 @@ public class VisualEventFactory {
         converters.add(new FacultyJoinedConverter(facultyMap));
         converters.add(new FacultyRoleChangedConverter(facultyMap));
         converters.add(new YearChangedConverter());
-        converters.add(new SongTerminationConverter());
 
         return converters;
     }
@@ -155,26 +154,6 @@ public class VisualEventFactory {
             return Collections.singletonList(new YearChanged(
                     time,
                     Integer.parseInt(args[0])
-            ));
-        }
-    }
-
-    /**
-     * For year indicator
-     */
-    private static class SongTerminationConverter implements LyricEventConverter {
-        @Override
-        public boolean isMatch(String name) {
-            return "TERMINATE".equalsIgnoreCase(name);
-        }
-
-        @Override
-        public List<VisualEvent> convert(double time, String lyric) {
-            String[] args = lyric.split(LyricEventConverter.EVENT_ARG_DELIM, 1);
-
-            return Collections.singletonList(new SongTermination(
-                    time,
-                    Double.parseDouble(args[0])
             ));
         }
     }
