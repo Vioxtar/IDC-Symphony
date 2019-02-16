@@ -25,6 +25,8 @@ public class Trail {
         this.tail = new TPoint();
     }
 
+    String name;
+
     /**
      * The ID of the trail.
      */
@@ -35,7 +37,7 @@ public class Trail {
     /**
      * The maximum trail length.
      */
-    int maxTrailLength = 200;
+    int maxTrailLength = 100;
     public void setMaxTrailLength(int length) { maxTrailLength = length; }
 
     /**
@@ -107,6 +109,7 @@ public class Trail {
             newTarget.followers = new ArrayList<>();
         }
         newTarget.followers.add(this);
+
     }
     public Trail getFollowTarget(Trail followTarget) { return followTarget; }
     public ArrayList<Trail> getFollowers() { return followers; }
@@ -189,7 +192,7 @@ public class Trail {
 
             // Trail aim
             double speedX = 5;
-            double speedY = 5;
+            double speedY = 3;
             tPoint.aimToX(tail.x, fracExpRev * speedX * mul);
             tPoint.aimToY(tail.y, frac * speedY * mul);
 
@@ -227,7 +230,6 @@ public class Trail {
         Circle circ = new Circle();
         circ.relocate(head.x, head.y); circ.setRadius(head.r); circ.setFill(headColor);
         circles.getChildren().add(circ);
-
 
 
         // Nothing to work with if we don't have a trail

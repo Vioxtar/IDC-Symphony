@@ -4,12 +4,17 @@ import idc.symphony.data.FacultyData;
 import idc.symphony.visual.scheduling.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -20,6 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+import javax.xml.soap.Text;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +36,7 @@ public class Visualizer extends Pane {
     // Window constants
     final int CAN_WDTH = 720;
     final int CAN_HGHT = 680;
-    final Color BG_COLR = Color.BLACK;
+    final Color BG_COLR = new Color(0, 0, 0.2,1);
 
     // Spacing constants
     final double INFO_X_SPACE = 500;
@@ -47,6 +53,9 @@ public class Visualizer extends Pane {
     ArrayList<Infograph> infographs;
     ArrayList<Infograph> rightInfographs;
     ArrayList<Infograph> leftInfographs;
+
+    TextScroller yearText;
+    TextScroller eventsText;
 
     // Maps a faculty ID number to our own 'visID' number, set to be the same for
     // a trail and its corresponding infograph
@@ -85,12 +94,25 @@ public class Visualizer extends Pane {
         this.leftInfographs = new ArrayList<>();
         this.facIDtoVisID = new HashMap<>();
 
+        this.yearText = new TextScroller();
+        this.yearText.setMaxLines(1);
+        this.yearText.setTextSize(230);
+        this.yearText.setX(500);
+        this.yearText.setY(-500);
+
+        this.eventsText = new TextScroller();
+        this.eventsText.setMaxLines(8);
+        this.eventsText.setTextSize(100);
+        this.eventsText.setX(500);
+        this.eventsText.setY(0);
+        this.eventsText.setWrappingWidth(2500);
+
         // Start the main loop timer
         this.mainTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                simulationTick(now); // For simulation update calls
-                stageTick(now); // For drawing calls
+            simulationTick(now); // For simulation update calls
+            stageTick(now); // For drawing calls
             }
         };
         this.mainTimer.start();
@@ -160,7 +182,11 @@ public class Visualizer extends Pane {
         } else if (event instanceof EventOccured) {
 //            System.out.println("Event Occured");
 
-            // TODO: Display text alligned with the corresponding trail
+            EventOccured eventOccurance = (EventOccured)event;
+            String str = eventOccurance.year + " - " + eventOccurance.description;
+            Color col = getPrefferedColor(eventOccurance.facultyID);
+            col.interpolate(Color.WHITE, 0.3);
+            eventsText.addText(str, col);
 
         } else if (event instanceof FacultyRoleChanged) {
 //            System.out.println("Faculty Role Changed");
@@ -179,6 +205,8 @@ public class Visualizer extends Pane {
             Color facColor = getPrefferedColor(fD.ID);
 
             Trail trail = new Trail();
+
+            trail.name = fD.name;
 
             // Radius
             trail.setTargetRadius(20);
@@ -207,7 +235,6 @@ public class Visualizer extends Pane {
 
                 // Aim above the parent
                 trail.setTargetY(parent.getTargetY() - LAYER_HEIGHT);
-
 
             } else {
 
@@ -264,6 +291,8 @@ public class Visualizer extends Pane {
 //            System.out.println("Year Changed");
 
             // TODO: Do something in the background to show the year...?
+            YearChanged yearEvent = (YearChanged)event;
+            yearText.addText(String.valueOf(yearEvent.year), new Color(0.5, 0.5, 0.5, 1));
 
         }
     }
@@ -272,6 +301,7 @@ public class Visualizer extends Pane {
      * Performs a single simulation tick.
      * @param now
      */
+    double minX, maxX, minY, maxY;
     public void simulate(long now) {
 
         // Update the simulation time
@@ -296,57 +326,21 @@ public class Visualizer extends Pane {
             infG.update();
         });
 
-        // Obtain mins/maxs of all elements for framing purposes
-        double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
+        // Update the year infographic
+        yearText.update();
 
-        // Min/maxs of trails
-        for (Trail trail : trails) {
-            double[] mins = trail.getMins();
-            double mnX = mins[0], mnY = mins[1];
-            if (mnX < minX) {
-                minX = mnX;
-            }
-            if (mnY < minY) {
-                minY = mnY;
-            }
-            double[] maxs = trail.getMaxs();
-            double mxX = maxs[0], mxY = maxs[1];
-            if (mxX > maxX) {
-                maxX = mxX;
-            }
-            if (mxY > maxY) {
-                maxY = mxY;
-            }
-        }
+        // Update the events text
+        eventsText.update();
 
-        // Min/maxs of infographics
-        for (Infograph infG : infographs) {
-            double[] mins = infG.getMins();
-            double mnX = mins[0], mnY = mins[1];
-            if (mnX < minX) {
-                minX = mnX;
-            }
-            if (mnY < minY) {
-                minY = mnY;
-            }
-            double[] maxs = infG.getMaxs();
-            double mxX = maxs[0], mxY = maxs[1];
-            if (mxX > maxX) {
-                maxX = mxX;
-            }
-            if (mxY > maxY) {
-                maxY = mxY;
-            }
-        }
+        int camInterpolation = 500;
 
         // Camera center is always the average of our mins/maxs
-        camCenterX = (maxX + minX) / 2;
-        camCenterY = (maxY + minY) / 2;
+        camCenterX = (camCenterX * camInterpolation + (maxX + minX) / 2) / (camInterpolation + 1);
+        camCenterY = (camCenterY * camInterpolation + (maxY + minY) / 2) / (camInterpolation + 1);
 
         // Camera zoom is linearly correlated with the biggest span of the scene
         double dist = Math.min((maxX - minX), (maxY - minY));
-        camZoom = 1 / dist;
+        camZoom = (camZoom * camInterpolation + 1 / dist) / (camInterpolation + 1);
     }
 
     /**
@@ -368,24 +362,36 @@ public class Visualizer extends Pane {
             infG.draw(this);
         }
 
-        // We consider room (range) when framing ourselves
+        // Draw the year text
+        yearText.draw(this);
+
+        // Draw the events text
+        eventsText.draw(this);
+
         double roomW = this.getWidth();
         double roomH = this.getHeight();
+
+        // We consider room (range) when framing ourselves
         double minSceneRange = Math.min(roomW, roomH);
 
         // How much do we zoom out?
-        double scaleBuffer = 0.7;
+        double scaleBuffer = 0.8;
         double scale = camZoom * minSceneRange * scaleBuffer;
         scale = Math.min(scale, 1); // We can only zoom out from 1
         this.setScaleX(scale); this.setScaleY(scale);
+
+        // Update mins and maxs (to be used in the camera simulation tick)
+        Bounds b = this.getBoundsInLocal();
+        minX = b.getMinX();
+        maxX = b.getMaxX();
+        minY = b.getMinY();
+        maxY = b.getMaxY();
 
         // Finalize our placement
         double camX = camCenterX;
         double camY = camCenterY;
         this.setTranslateX(scale * -(camX - roomW / 2));
         this.setTranslateY(scale * -(camY - roomH / 2));
-
-        // TODO: Interpolate the camera movement... mainly good for fresh trail spawns?
 
     }
 
@@ -402,8 +408,51 @@ public class Visualizer extends Pane {
         int frac = 0;
         double spread = spreadByY(y);
         double leftMost = parent.getTargetX() - (spread * (size - 1)) / 2;
+
+        // Symmetry hardcoding start
+        Trail leftMostTrail = null;
+        Trail middleTrail = null;
+        Trail rightMostTrail = null;
+
+        Trail preferredLeftMostTrail = null;
+        Trail preferredMiddleTrail = null;
+        Trail preferredRightMostTrail = null;
+
+        String leftMostName = "Law";
+        String middleName = "Business";
+        String rightMostName = "Computer Science";
+        // Symmetry hardcoding finish
+
         for (Trail child : children) {
-            double targetX = leftMost + (spread * frac);
+
+            // Symmetry hardcoding
+            boolean isLeftMost = frac == 0;
+            boolean isMiddle = frac == (size / 2);
+            boolean isRightMost = frac == size - 1;
+
+            if (isLeftMost && !child.name.equals(leftMostName)) {
+                leftMostTrail = child;
+            } else if (isMiddle && !child.name.equals(middleName)) {
+                middleTrail = child;
+            } else if (isRightMost && !child.name.equals(rightMostName)) {
+                rightMostTrail = child;
+            }
+
+            if (child.name.equals(leftMostName)) {
+                preferredLeftMostTrail = child;
+            } else if (child.name.equals(middleName)) {
+                preferredMiddleTrail = child;
+            } else if (child.name.equals(rightMostName)) {
+                preferredRightMostTrail = child;
+            }
+            // Symmetry hardcoding finish
+
+            double targetX;
+            if (size > 1) {
+                 targetX = leftMost + (spread * frac);
+            } else {
+                 targetX = parent.getTargetX() + parent.getTargetX() * 0.25;
+            }
             child.setTargetX(targetX);
             frac++;
 
@@ -413,6 +462,29 @@ public class Visualizer extends Pane {
             // Shift infographs to account for the change
             shiftTrailsInfograph(child);
         }
+
+        // Symmetry hardcoding start
+        if (preferredLeftMostTrail != null && leftMostTrail != null) {
+            tradeXTargets(preferredLeftMostTrail, leftMostTrail);
+        }
+        if (preferredMiddleTrail != null && middleTrail != null) {
+            tradeXTargets(preferredMiddleTrail, middleTrail);
+        }
+        if (preferredRightMostTrail != null && rightMostTrail != null) {
+            tradeXTargets(preferredRightMostTrail, rightMostTrail);
+        }
+        // Symmetry hardcoding finish
+
+    }
+
+    private void tradeXTargets(Trail A, Trail B) {
+        double oldX = A.getTargetX();
+        A.setTargetX(B.getTargetX());
+        B.setTargetX(oldX);
+        organizeChildTrails(A, A.getTargetY());
+        shiftTrailsInfograph(A);
+        organizeChildTrails(B, B.getTargetY());
+        shiftTrailsInfograph(B);
     }
 
     /**
@@ -423,7 +495,11 @@ public class Visualizer extends Pane {
         // Shift each child's respective infographs
         Infograph infG = infographs.get(trail.getID());
         if (trail.getTargetX() >= 0) {
-            addInfographToRight(infG);
+            if (rightInfographs.size() <= leftInfographs.size()) {
+                addInfographToRight(infG);
+            } else {
+                addInfographToLeft(infG);
+            }
         } else {
             addInfographToLeft(infG);
         }
@@ -468,6 +544,13 @@ public class Visualizer extends Pane {
             }
 
         }
+
+        // Organize the events and year text while we're at it... :D
+        yearText.setX(rightMost + INFO_X_SPACE * 4);
+        yearText.setY(upMost - INFO_Y_OFFSET * 2);
+
+        eventsText.setX(rightMost + INFO_X_SPACE * 4);
+        eventsText.setY(upMost);
     }
 
     /**
@@ -500,7 +583,7 @@ public class Visualizer extends Pane {
      * @return
      */
     public double spreadByY(double y) {
-        return 300000 * (LAYER_HEIGHT / Math.pow(y, 2));
+        return 225 - y / 5;
     }
 
     HashMap<Integer, Color> prefFacColor;
