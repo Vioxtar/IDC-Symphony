@@ -60,7 +60,7 @@
             <Button fx:id="btnDBFile" mnemonicParsing="false" onAction="#chooseDBFile" text="..." GridPane.columnIndex="3" />
             <Button fx:id="btnMIDIFile" mnemonicParsing="false" onAction="#chooseMIDIFile" text="..." GridPane.columnIndex="3" GridPane.rowIndex="1" />
         </GridPane>
-        <TitledPane fx:id="visualizerPane" style="-fx-background: derive(-fx-base, -95%)" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="72.0" minWidth="128.0" prefHeight="1080.0" prefWidth="1920.0" text="Visualization">
+        <TitledPane fx:id="visualizerPane" style="-fx-background: derive(-fx-base, -95%)" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="72.0" minWidth="128.0" prefHeight="1440.0" prefWidth="1920.0" text="Visualization">
             <Visualizer fx:id="visualizer"/>
         </TitledPane>
     </VBox>
