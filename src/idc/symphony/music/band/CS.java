@@ -30,7 +30,7 @@ public class CS extends Faculty {
 
         Pattern p = genMusic(key, wholes, 3, 20, 0.3f, 0.4f, 0.2f);
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.28f * AMP_MELODY, p);
+        p = AmplitudeTransformer.setRelativeAmp(1.0f * AMP_MELODY, p);
 
         return p;
 
@@ -41,7 +41,7 @@ public class CS extends Faculty {
 
         Pattern p = genMusic(key, wholes, 3, 8, 0.4f, 0.2f, 0.1f);
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.28f * AMP_SECMELODY, p);
+        p = AmplitudeTransformer.setRelativeAmp(1.0f * AMP_SECMELODY, p);
 
         return OctaveTransformer.OffsetOctave(p, -1);
     }
@@ -51,7 +51,7 @@ public class CS extends Faculty {
         //Pattern p = getLibrary().getPattern("chords_prog_v1");
         Pattern p = new Pattern("Gw Ew Bw Dw");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.44f, p);
+        p = AmplitudeTransformer.setRelativeAmp(0.85f, p);
 
         return BassRhythmTransformer.toBassRhythm(p, new boolean[]{true, true, true, false, true, true, true, false});
     }
@@ -61,7 +61,7 @@ public class CS extends Faculty {
         //Pattern p = getLibrary().getPattern("chords_prog_v1");
         Pattern p = new Pattern("Gw Ew Bw Dw");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.44f, p);
+        p = AmplitudeTransformer.setRelativeAmp(0.85f, p);
 
         return BassRhythmTransformer.toBassRhythm(p, new boolean[]{true, true, true, true});
     }
@@ -71,7 +71,7 @@ public class CS extends Faculty {
         //Pattern p = getLibrary().getPattern("chords_prog_v1");
         Pattern p = new Pattern("Gw Ew Bw Dw");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.44f, p);
+        p = AmplitudeTransformer.setRelativeAmp(0.85f, p);
 
         return BassRhythmTransformer.toBassRhythm(p, new boolean[]{true, false, true, false});
     }

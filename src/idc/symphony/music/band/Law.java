@@ -49,7 +49,7 @@ public class Law extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET3, p);
+        p = AmplitudeTransformer.setRelativeAmp(1.25f * AMP_CARPET3, p);
         return OctaveTransformer.OffsetOctave(p, -1);
     }
 
@@ -58,7 +58,7 @@ public class Law extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET2, p);
+        p = AmplitudeTransformer.setRelativeAmp(1.25f * AMP_CARPET2, p);
         return OctaveTransformer.OffsetOctave(p, -1);
 
     }
@@ -68,7 +68,7 @@ public class Law extends Faculty {
 
         Pattern p = getLibrary().getPattern("chords_prog_v1");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(AMP_CARPET1, p);
+        p = AmplitudeTransformer.setRelativeAmp(1.25f * AMP_CARPET1, p);
         return OctaveTransformer.OffsetOctave(p, -1);
 
     }

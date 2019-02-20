@@ -33,7 +33,7 @@ public class Administration extends Faculty {
         rhythm.addLayer("`.^.`.^.^.^.`.^^");
         rhythm.addLayer(".``...`.```...`.");
         rhythm.setLength(wholes / 2);
-        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 1.1f, 0.8f, 0.8f, 0.4f, 0.4f);
+        return LayerMasterer.master(rhythm.getPattern(), 0.8f, 0.8f, 0.6f, 0.6f, 0.3f, 0.3f);
 
     }
 
@@ -46,7 +46,7 @@ public class Administration extends Faculty {
         rhythm.addLayer("`.^.`.^.");
         rhythm.addLayer(".``...`.");
         rhythm.setLength(wholes);
-        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 1.1f, 0.6f, 0.6f);
+        return LayerMasterer.master(rhythm.getPattern(), 0.8f, 0.8f, 0.4f, 0.4f);
 
     }
 
@@ -59,7 +59,7 @@ public class Administration extends Faculty {
         rhythm.addLayer(".`...``.");
         rhythm.setLength(wholes);
 
-        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 1.1f, 0.6f);
+        return LayerMasterer.master(rhythm.getPattern(), 0.8f, 0.8f, 0.4f);
 
     }
 
@@ -72,7 +72,7 @@ public class Administration extends Faculty {
         rhythm.addLayer("^.^.^.^.");
         rhythm.addLayer("...`...`");
         rhythm.setLength(wholes);
-        return LayerMasterer.master(rhythm.getPattern(),1.1f, 1.1f, 0.6f, 0.6f);
+        return LayerMasterer.master(rhythm.getPattern(),0.8f, 0.8f, 0.4f, 0.4f);
 
     }
 
@@ -84,7 +84,7 @@ public class Administration extends Faculty {
         rhythm.addLayer("^.^.^.^.");
         rhythm.addLayer("...`...`");
         rhythm.setLength(wholes);
-        return LayerMasterer.master(rhythm.getPattern(), 1.1f, 0.6f, 0.6f);
+        return LayerMasterer.master(rhythm.getPattern(), 0.8f, 0.4f, 0.4f);
 
     }
 }
