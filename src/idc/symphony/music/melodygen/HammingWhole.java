@@ -6,11 +6,11 @@ import org.jfugue.theory.Note;
 
 import java.util.*;
 
-public class WholeNode {
+public class HammingWhole {
     // Old implementation
     {
 //    Byte octave; // The octave
-//    int level; // Level is the hamming distance to the zero WholeNode
+//    int level; // Level is the hamming distance to the zero HammingWhole
 //    int notesCount; // The number of notes in this whole
 //    float soundDensity; // The sum of durations in this whole
 //
@@ -25,15 +25,15 @@ public class WholeNode {
 //    LinkedList<MelNote> notes; // The notes
 //
 //
-//    ArrayList<WholeNode> prev; // All WholeNodes with distance 1 whose level is below ours
-//    ArrayList<WholeNode> next; // All WholeNodes with distance 1 whose level is above ours
+//    ArrayList<HammingWhole> prev; // All WholeNodes with distance 1 whose level is below ours
+//    ArrayList<HammingWhole> next; // All WholeNodes with distance 1 whose level is above ours
 //
 //
 //    /**
-//     * Create a copy of an existing WholeNode.
+//     * Create a copy of an existing HammingWhole.
 //     * @param other
 //     */
-//    public WholeNode(WholeNode other) {
+//    public HammingWhole(HammingWhole other) {
 //        this.octave = other.octave;
 //        this.level = other.level;
 //        this.notesCount = other.notesCount;
@@ -48,11 +48,11 @@ public class WholeNode {
 //        }
 //    }
 //
-//    public int distance(WholeNode other) {
+//    public int distance(HammingWhole other) {
 //        int dist = 0;
 //
-//        WholeNode ourCopy = new WholeNode(this);
-//        WholeNode thrCopy = new WholeNode(other);
+//        HammingWhole ourCopy = new HammingWhole(this);
+//        HammingWhole thrCopy = new HammingWhole(other);
 //
 //        ListIterator<MelNote> ourIt = ourCopy.notes.listIterator();
 //        ListIterator<MelNote> thrIt = thrCopy.notes.listIterator();
@@ -111,21 +111,30 @@ public class WholeNode {
     // New implementation
     int[] noteValues;
     boolean[] isNewNote;
+    private int octave;
 
-    int slotsInWhole = 16;
+    Map<Integer, Note> notesMap;
+    int slotsInWhole = 32;
+    int maxNoteValue;
+    int minNoteValue;
+
 
     /**
-     * Construct a new WholeNode from a JFugue Pattern.
+     * Construct a new HammingWhole from a JFugue Pattern.
      * @param pattern
      */
-    public WholeNode(Pattern pattern, Map<Integer, Note> notesMap) {
+    public HammingWhole(int complexity, Pattern pattern, Map<Integer, Note> notesMap, int octave) {
+
+        this.slotsInWhole = complexity;
+        this.notesMap = notesMap;
+        this.octave = octave;
+
         noteValues = new int[slotsInWhole];
         isNewNote = new boolean[slotsInWhole];
 
-
         List<Token> tokens = pattern.getTokens();
 
-        double totalDur = 0; int slot = 0;
+        int slot = 0;
         for (int i = 0; i < tokens.size(); i++) {
             Token token = tokens.get(i);
             if (token.getType() != Token.TokenType.NOTE) {
@@ -135,7 +144,7 @@ public class WholeNode {
             // Obtain our note
             Note newNote = new Note(token.toString());
             Byte notePos = newNote.getPositionInOctave();
-            int newNoteKey = -1;
+            int newNoteKey = 0;
             if (!newNote.isRest()) {
                 // Look for its corresponding value
                 for (Map.Entry<Integer, Note> entry : notesMap.entrySet()) {
@@ -152,22 +161,39 @@ public class WholeNode {
             int slotsToFill = (int)Math.round(newNoteDur * slotsInWhole);
 
             for (int s = 0; s < slotsToFill; s++) {
+                if (slot + s >= slotsInWhole) break;
                 noteValues[slot + s] = newNoteKey;
             }
 
+            slot += slotsToFill;
+
+            if (slot < slotsInWhole) {
+                isNewNote[slot] = true;
+            }
 
         }
 
+        // Find the maximum note value (to be used as a clamper)
+        maxNoteValue = 0;
+        for (Integer noteVal : notesMap.keySet()) {
+            if (noteVal > maxNoteValue) {
+                maxNoteValue = noteVal;
+            }
+        }
 
+        // MinNoteValue is always the negative of the max note value, to signify rests
+        minNoteValue = -maxNoteValue;
 
     }
 
     /**
-     * Construct a new WholeNode by copying another.
+     * Construct a new HammingWhole by copying another.
      * @param other
      */
-    public WholeNode(WholeNode other) {
+    public HammingWhole(HammingWhole other) {
         // Copy the other
+        slotsInWhole = other.slotsInWhole;
+
         noteValues = new int[slotsInWhole];
         isNewNote = new boolean[slotsInWhole];
 
@@ -175,6 +201,12 @@ public class WholeNode {
             noteValues[i] = other.noteValues[i];
             isNewNote[i] = (i == 0) || other.isNewNote[i];
         }
+
+        octave = other.octave;
+
+        maxNoteValue = other.maxNoteValue;
+        minNoteValue = other.minNoteValue;
+        notesMap = other.notesMap;
     }
 
     /**
@@ -182,7 +214,8 @@ public class WholeNode {
      * @return
      */
     Pattern cachedPattern;
-    public Pattern toPattern(Map<Integer, Note> notesMap) {
+    public Pattern toPattern() {
+
         if (cachedPattern == null) {
             cachedPattern = new Pattern();
             Note note = null;
@@ -197,10 +230,12 @@ public class WholeNode {
                     dur = 0;
 
                     int noteVal = noteValues[i];
-                    if (noteVal == -1) {
+                    if (isRestVal(noteVal)) {
                         note = Note.createRest(0);
                     } else {
-                        note = notesMap.get(i);
+                        // Set the octave and create a new note
+                        byte newVal = notesMap.get(noteVal).getPositionInOctave();
+                        note = new Note((byte)(octave * 12 + newVal));
                     }
                 }
 
@@ -209,8 +244,10 @@ public class WholeNode {
             }
 
             // Add the last note
-            note.setDuration(dur / slotsInWhole);
-            cachedPattern.add(note);
+            if (note != null) {
+                note.setDuration(dur / slotsInWhole);
+                cachedPattern.add(note);
+            }
         }
         return cachedPattern;
     }
@@ -220,9 +257,10 @@ public class WholeNode {
      * @param other
      * @return
      */
-    public int distance(WholeNode other) {
+    public int distance(HammingWhole other) {
         int notesValDiffSum = 0;
         int notesCntDiffSum = 0;
+        int octaveDiff = Math.abs(octave - other.octave); // TODO: Should we zerofy this if we're all rest?
         for (int i = 0; i < slotsInWhole; i++) {
             int valDiff = noteValDifference(noteValues[i], other.noteValues[i]);
             boolean ourNewNote = isNewNote(i);
@@ -236,7 +274,11 @@ public class WholeNode {
                 notesCntDiffSum++;
             }
         }
-        return notesValDiffSum + notesCntDiffSum;
+        return notesValDiffSum + notesCntDiffSum + octaveDiff;
+    }
+
+    public boolean isRestVal(int noteVal) {
+        return noteVal < 0;
     }
 
     /**
@@ -244,7 +286,7 @@ public class WholeNode {
      * @param index
      * @return
      */
-    private boolean isNewNote(int index) {
+    public boolean isNewNote(int index) {
         if (index == 0) return true;
         if (isNewNote[index]) return true;
         if (index > 0) {
@@ -263,8 +305,164 @@ public class WholeNode {
      */
     private int noteValDifference(int a, int b) {
         if (a == b) { return 0; } // The notes are equal, distance is 0
-        if (a == -1 || b == -1) { return 1; } // One of the notes is a rest, distance is 1
+        if (isRestVal(a) || isRestVal(b)) { return 1; } // One of the notes is a rest, distance is 1
         return Math.abs(a - b); // Both notes aren't rest, return their difference
+    }
+
+    private int getLeftIndexOfNote(int middleIndex) {
+        int leftIndex = middleIndex;
+        // Stretch the left index...
+        while (!isNewNote(leftIndex)) {
+            leftIndex--;
+        }
+        return leftIndex;
+    }
+
+    private int getRightIndexOfNote(int middleIndex) {
+        int rightIndex = middleIndex;
+        // Stretch the right index...
+        while (rightIndex + 1 < slotsInWhole && !isNewNote(rightIndex + 1)) {
+            rightIndex++;
+        }
+        return rightIndex;
+    }
+
+    public void restifyNote(int indexInNote) {
+        int leftIndex = getLeftIndexOfNote(indexInNote);
+        int rightIndex = getRightIndexOfNote(indexInNote);
+        restifyRange(leftIndex, rightIndex);
+    }
+
+    public void unRestifyNote(int indexInNote) {
+        int leftIndex = getLeftIndexOfNote(indexInNote);
+        int rightIndex = getRightIndexOfNote(indexInNote);
+        unRestifyRange(leftIndex, rightIndex);
+    }
+
+    public void splitNote(int index) {
+        isNewNote[index] = true;
+    }
+
+    public void mergeNotes(int indexInLeftNode, int indexInRightNode) {
+        int leftToRight = getRightIndexOfNote(indexInLeftNode);
+        int rightToLeft = getLeftIndexOfNote(indexInRightNode);
+
+        // Only merge if we're adjacent...
+        if (rightToLeft - 1 != leftToRight) {
+            return;
+        }
+
+        // Only merge if we're the same value
+        if (noteValues[rightToLeft] != noteValues[leftToRight]) {
+            return;
+        }
+
+        isNewNote[rightToLeft] = false;
+    }
+
+    public void incrementNote(int indexInNote, int add) {
+        int leftIndex = getLeftIndexOfNote(indexInNote);
+        int rightIndex = getRightIndexOfNote(indexInNote);
+
+        for (int i = leftIndex; i <= rightIndex; i++) {
+
+            int noteVal = noteValues[i];
+            boolean wasRest = isRestVal(noteVal);
+
+            if (wasRest) {
+                noteVal = unRestifyVal(noteVal);
+            }
+
+            noteVal = Utils.clamp(noteVal + add, 0, maxNoteValue);
+
+            if (wasRest) {
+                noteVal = restifyVal(noteVal);
+            }
+
+            noteValues[i] = noteVal;
+
+        }
+    }
+
+    private void restifyRange(int startIndex, int endIndex) {
+
+        int left = startIndex;
+        int right = endIndex;
+
+        if (startIndex > endIndex) {
+            left = endIndex;
+            right = startIndex;
+        }
+
+        for (int i = left; i <= right; i++) {
+            if (0 > i || i >= slotsInWhole) {
+                continue;
+            }
+            noteValues[i] = restifyVal(noteValues[i]);
+        }
+    }
+
+    private void unRestifyRange(int startIndex, int endIndex) {
+
+        int left = startIndex;
+        int right = endIndex;
+
+        if (startIndex > endIndex) {
+            left = endIndex;
+            right = startIndex;
+        }
+
+        for (int i = left; i <= right; i++) {
+            if (0 > i || i >= slotsInWhole) {
+                continue;
+            }
+            noteValues[i] = unRestifyVal(noteValues[i]);
+        }
+    }
+
+    private int restifyVal(int val) {
+        if (isRestVal(val)) { return val; }
+        return val * -1;
+    }
+
+    private int unRestifyVal(int val) {
+        if (!isRestVal(val)) { return val; }
+        return val * -1;
+    }
+
+    int maxOctave = 7;
+    int minOctave = 3;
+    public void addOctave(int add) {
+        octave = Utils.clamp(octave + add, minOctave, maxOctave);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+
+        if (other == this) return true;
+
+        if (!(other instanceof HammingWhole)) return false;
+
+        HammingWhole othr = (HammingWhole)other;
+
+        if (slotsInWhole != othr.slotsInWhole) return false;
+        for (int i = 0; i < slotsInWhole; i++) {
+            if (noteValues[i] != othr.noteValues[i]) return false;
+            if (isNewNote(i) != othr.isNewNote(i)) return false;
+        }
+
+        return true;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < slotsInWhole; i++) {
+            if (i > 0 && isNewNote(i)) {
+                sb.append(" ");
+            }
+            sb.append(noteValues[i]);
+        }
+        return sb.toString();
     }
 }
 
