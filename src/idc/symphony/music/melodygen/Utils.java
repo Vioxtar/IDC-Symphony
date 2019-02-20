@@ -28,9 +28,6 @@ public class Utils {
         notesMap.put(1, new Note("Db"));
         notesMap.put(2, new Note("F"));
         notesMap.put(3, new Note("Ab"));
-        for (int i = 4; i <= 20; i++) {
-            notesMap.put(i, new Note("R"));
-        }
 
         // A 'starting' pattern to be given to our starting node
         Pattern pattern = new Pattern();
@@ -43,21 +40,14 @@ public class Utils {
         // Define a path traversal style
         PathStyle ps1 = new PathStyle(); ps1
                 .addCommand(PathStyle.GotoStartingNode)
-                .addCommand(PathStyle.GoForward, "10, 10").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "2, 2").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "1, 1").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "1, 1").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "10, 10").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "2, 2").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "1, 1").addCommand(PathStyle.Collect)
-                .addCommand(PathStyle.GoForward, "1, 1").addCommand(PathStyle.Collect)
-
+                .addCommand(PathStyle.GoForward, "7, 7").addCommand(PathStyle.Collect)
+                .addCommand(PathStyle.GoBackward, "2, 2").addCommand(PathStyle.Collect)
+                .addCommand(PathStyle.GoBackward, "1, 1").addCommand(PathStyle.Collect)
+                .addCommand(PathStyle.GoBackward, "1, 1").addCommand(PathStyle.Collect)
         ;
 
         // Perform the traversal
-        p.traverseWithStyle(n, ps1, 5918, 80);
-
-
+        p.traverseWithStyle(n, ps1, 13412, 4);
 
         // Play the result
         Player ply = new Player();
