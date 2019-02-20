@@ -35,7 +35,6 @@ public class CS extends Faculty {
     @Override
     public Pattern playMainMelody(int wholes, Key key) {
 
-
         HashMap<Integer, Note> notesMap = new HashMap<>();
 
         // Notes map, can create scales / our own notes that sound nice with ease
@@ -75,7 +74,6 @@ public class CS extends Faculty {
 
     @Override
     public Pattern playSecondary(int wholes, Key key) {
-
 
         HashMap<Integer, Note> notesMap = new HashMap<>();
 
@@ -118,7 +116,7 @@ public class CS extends Faculty {
         //Pattern p = getLibrary().getPattern("chords_prog_v1");
         Pattern p = new Pattern("Gw Ew Bw Dw");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.44f, p);
+        p = AmplitudeTransformer.setRelativeAmp(0.85f, p);
 
         return BassRhythmTransformer.toBassRhythm(p, new boolean[]{true, true, true, false, true, true, true, false});
     }
@@ -128,7 +126,7 @@ public class CS extends Faculty {
         //Pattern p = getLibrary().getPattern("chords_prog_v1");
         Pattern p = new Pattern("Gw Ew Bw Dw");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.44f, p);
+        p = AmplitudeTransformer.setRelativeAmp(0.85f, p);
 
         return BassRhythmTransformer.toBassRhythm(p, new boolean[]{true, true, true, true});
     }
@@ -138,7 +136,7 @@ public class CS extends Faculty {
         //Pattern p = getLibrary().getPattern("chords_prog_v1");
         Pattern p = new Pattern("Gw Ew Bw Dw");
         p.setInstrument(instrument);
-        p = AmplitudeTransformer.setRelativeAmp(1.44f, p);
+        p = AmplitudeTransformer.setRelativeAmp(0.85f, p);
 
         return BassRhythmTransformer.toBassRhythm(p, new boolean[]{true, false, true, false});
     }

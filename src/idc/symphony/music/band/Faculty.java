@@ -24,11 +24,11 @@ public class Faculty implements BandMember {
     }
 
 
-    final float AMP_MELODY = 1.0f;
-    final float AMP_SECMELODY = 0.9f;
-    final float AMP_CARPET3 = 0.55f;
-    final float AMP_CARPET2 = 0.55f;
-    final float AMP_CARPET1 = 0.7f;
+    final float AMP_MELODY = 0.85f;
+    final float AMP_SECMELODY = 0.7f;
+    final float AMP_CARPET3 = 0.44f;
+    final float AMP_CARPET2 = 0.44f;
+    final float AMP_CARPET1 = 0.44f;
 
 
     /*************************************************************************************************
