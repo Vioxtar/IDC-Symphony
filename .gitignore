@@ -13,3 +13,6 @@ idcsymphonizer.properties
 .idea/inspectionProfiles/Project_Default.xml
 cloc.exe
 .idea/artifacts/IDC_Symphony.xml
+testsrc/idc/symphony/music/StupidTest.java
+output.midi
+output.midi
