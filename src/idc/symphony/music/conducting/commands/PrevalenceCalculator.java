@@ -35,7 +35,6 @@ public class PrevalenceCalculator implements Command {
         }
 
         context.intensity = newIntensity;
-        System.out.println(String.format("Seq %d, Intensity %f", state.getCurrentSequence(), context.intensity));
         return true;
     }
 }
